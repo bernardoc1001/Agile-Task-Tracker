@@ -1,0 +1,2 @@
+This is a placeholder as git will not allow you to commit empty directories.
+Delete this file as soon as something else is placed in this directory
