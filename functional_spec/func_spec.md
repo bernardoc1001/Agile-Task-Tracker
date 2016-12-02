@@ -784,7 +784,7 @@ off. No more sprints and by extension, tasks, may be added to it.
 4. System Architecture
 ======================
 
-![](media/7ce0928c3f2cfa09f784a64c5c723f52.png)
+![](media/sysarch.png)
 
 **4.1 Agile Task Tracker Interface**
 
