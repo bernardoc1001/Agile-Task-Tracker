@@ -221,6 +221,8 @@ currently working on.
 -   Generate Burndown Chart
 
 
+
+
 -   **Sprint Master**
 
 >   A Sprint Master is in charge of managing the Sprints of a project. The have
@@ -240,6 +242,8 @@ currently working on.
 
     -   Create Sprint Reflection
 
+
+
 -   **Admin**
 
 >   The Administrator has the highest Permissions Level within an organisation.
@@ -257,6 +261,8 @@ currently working on.
 -   Assign Members/Sprint Masters to Project
 
 -   Close a Project
+
+
 
 **2.4 Constraints**
 -------------------
