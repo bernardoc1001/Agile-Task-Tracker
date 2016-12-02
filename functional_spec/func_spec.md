@@ -228,9 +228,9 @@ Agile development or using project management software.
 
       * Create Sprint
 
-         1. Set Sprint Start and End Date
+        * Set Sprint Start and End Date
 
-         2. Assign Sprint Man Hours
+        * Assign Sprint Man Hours
 
       * Add/Delete Task to/from Sprint
 
