@@ -833,7 +833,7 @@ Logical Data Model
 
 Activity Model
 --------------
-![](media/Activity Diagram.png)
+![](media/activity.png)
 
 
 6. Preliminary Schedule
