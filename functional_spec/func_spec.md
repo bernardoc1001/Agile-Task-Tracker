@@ -57,28 +57,28 @@ computing.
 
 -   **Epic**
 
-   A large task/feature that has to be broken up into smaller tasks to aid
-   completion in an Agile environment
+      A large task/feature that has to be broken up into smaller tasks to aid
+      completion in an Agile environment
 
 -   **Sprints**
 
-   The time period in which tasks are to be assigned to and completed. Highly
-   regulated.
+      The time period in which tasks are to be assigned to and completed. Highly
+      regulated.
 
 -   **Sprint Master**
 
-   A team leader in the non-traditional sense who is responsible for removing
-   impediments that will prevent developers from completing their tasks. In charge
-   of managing sprints in terms of tasks assigned to that particular sprint.
+      A team leader in the non-traditional sense who is responsible for removing
+      impediments that will prevent developers from completing their tasks. In charge
+      of managing sprints in terms of tasks assigned to that particular sprint.
 
 -   **Reflections**
 
-   Reflections are a look back generally done on completion of a sprint that
-   identifies approaches that should be continued, ones that should be dropped and ones that need to be adopted for future sprints.
+      Reflections are a look back generally done on completion of a sprint that
+      identifies approaches that should be continued, ones that should be dropped and ones that need to be adopted for future sprints.
 
 -   **Burndown Chart**
 
-   This chart visually shows how much work is left to do vs the time to do it.
+      This chart visually shows how much work is left to do vs the time to do it.
 
 **Tech terms**:
 
@@ -187,33 +187,34 @@ Agile development or using project management software.
 
 -   **Unregistered/Logged Out User**
 
-In order to use our system, the user must be signed in
+      In order to use our system, the user must be signed in
 
--   Register an account
+      * Register an account
 
--   Log into an account
+      * Log into an account
+
 
 -   Project member
 
-   A project member is just a user that has been assigned to a project by the
-   Sprint Master. They then inherit the following functions relating to the project they
-   are currently working on.
+      A project member is just a user that has been assigned to a project by the
+      Sprint Master. They then inherit the following functions relating to the project they
+      are currently working on.
 
--   View Projects they have been assigned to
+      * View Projects they have been assigned to
 
--   Update Task Status ie. To Do, In Progress, Completed.
+      * Update Task Status ie. To Do, In Progress, Completed.
 
--   Assign self to task
+      * Assign self to task
 
--   Edit task description
+      * Edit task description
 
--   Estimate time for task
+      * Estimate time for task
 
--   Log hours for task
+      * Log hours for task
 
--   Add/Delete task to/from Backlog
+      * Add/Delete task to/from Backlog
 
--   Generate Burndown Chart
+      * Generate Burndown Chart
 
 
 
@@ -223,19 +224,19 @@ In order to use our system, the user must be signed in
       A Sprint Master is in charge of managing the Sprints of a project. The have
       the same permissions as a project member in addition to the following:
 
--   Add a user in the organisation to the project
+      * Add a user in the organisation to the project
 
--   Create Sprint
+      * Create Sprint
 
-    -   Set Sprint Start and End Date
+         1. Set Sprint Start and End Date
 
-    -   Assign Sprint Man Hours
+         2. Assign Sprint Man Hours
 
--   Add/Delete Task to/from Sprint
+      * Add/Delete Task to/from Sprint
 
--   Complete Sprint
+      * Complete Sprint
 
-    -   Create Sprint Reflection
+      * Create Sprint Reflection
 
 
 
@@ -245,17 +246,17 @@ In order to use our system, the user must be signed in
       They have the same permissions as a Sprint Master in addition to the
       following:
 
--   Create an Organisation
+      * Create an Organisation
 
--   Create/Add member accounts to the Organisation
+      * Create/Add member accounts to the Organisation
 
--   View All Projects
+      * View All Projects
 
--   Create a Project
+      * Create a Project
 
--   Assign Members/Sprint Masters to Project
+      * Assign Members/Sprint Masters to Project
 
--   Close a Project
+      * Close a Project
 
 
 
@@ -284,10 +285,8 @@ prioritizing them over additional features.
 
 -   **Description:**
 
-In order to use the system, the user must be logged into an account. They will
-be
-
-given the option to register a new account or to log into an existing one.
+      In order to use the system, the user must be logged into an account. They will
+      be given the option to register a new account or to log into an existing one.
 
 -   **Criticality:**
 
