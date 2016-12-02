@@ -1,46 +1,46 @@
 **Table of Contents**  
 
-- [1 Introduction](#)
-	- [1.1 Overview:](#)
-	- [1.2 Business Context:](#)
-	- [1.3 Glossary ](#)
-- [2. General Description](#)
-	- [2.1 Product / System Functions](#)
-	- [2.2 User Characteristics and Objectives](#)
-	- [2.3 Operational Scenarios](#)
-	- [2.4 Constraints](#)
-- [3. Functional Requirements](#)
-	- [3.1 Register Account / Log into Existing Account](#)
-	- [3.2 Create Organisation](#)
-	- [3.3 Add members to Organisation](#)
-	- [3.4 View Projects](#)
-	- [3.5 Create Project](#)
-	- [3.6 View Project Backlog](#)
-	- [3.7 Create/Delete Tasks in backlog](#)
-	- [3.8 Create Sprint](#)
-	- [3.9 Assign Tasks from Backlog to Sprint](#)
-	- [3.10 Assign Members/Sprint Master to Project](#)
-	- [3.11 Update Task Status](#)
-	- [3.12 Assign self to task ](#)
-	- [3.13 Edit task description ](#)
-	- [3.14 Estimate time for task](#)
-	- [3.15 Log hours for task](#)
-	- [3.16 Remove Task from Sprint to Backlog](#)
-	- [3.18 Generate Burndown Chart](#)
-	- [3.19 Edit Project](#)
-	- [3.20 Close Project](#)
-- [4. System Architecture](#)
-- [5. High-Level Design](#)
-	- [Logical Data Model](#)
-	- [Activity Model](#)
-- [6. Preliminary Schedule](#)
-- [7. Appendices](#)
+- [1 Introduction](# )
+	- [1.1 Overview:](# )
+	- [1.2 Business Context:](# )
+	- [1.3 Glossary ](# )
+- [2. General Description](# )
+	- [2.1 Product / System Functions](# )
+	- [2.2 User Characteristics and Objectives](# )
+	- [2.3 Operational Scenarios](# )
+	- [2.4 Constraints](# )
+- [3. Functional Requirements](# )
+	- [3.1 Register Account / Log into Existing Account](# )
+	- [3.2 Create Organisation](# )
+	- [3.3 Add members to Organisation](# )
+	- [3.4 View Projects](# )
+	- [3.5 Create Project](# )
+	- [3.6 View Project Backlog](# )
+	- [3.7 Create/Delete Tasks in backlog](# )
+	- [3.8 Create Sprint](# )
+	- [3.9 Assign Tasks from Backlog to Sprint](# )
+	- [3.10 Assign Members/Sprint Master to Project](# )
+	- [3.11 Update Task Status](# )
+	- [3.12 Assign self to task ](# )
+	- [3.13 Edit task description ](# )
+	- [3.14 Estimate time for task](# )
+	- [3.15 Log hours for task](# )
+	- [3.16 Remove Task from Sprint to Backlog](# )
+	- [3.18 Generate Burndown Chart](# )
+	- [3.19 Edit Project](# )
+	- [3.20 Close Project](# )
+- [4. System Architecture](# )
+- [5. High-Level Design](# )
+	- [Logical Data Model](# )
+	- [Activity Model](# )
+- [6. Preliminary Schedule](# )
+- [7. Appendices](# )
 
 
-# 1 Introduction
+#  1 Introduction
 
 
-## 1.1 Overview:
+##  1.1 Overview:
 
 The system is a web based application that allows management of an agile
 development driven project with an emphasis on keeping it lightweight and
@@ -67,7 +67,7 @@ Another feature of the system will be the ability to produce burndown charts to
 get an idea of the progress of the project vs the man hours specified for it.
 This can be done on a sprint by sprint basis, or the project as a whole.
 
-## 1.2 Business Context:
+##  1.2 Business Context:
 The system will be able to be deployed in any agile development driven
 environment. It will be suitable to be used by both businesses and Universities.
 As each project will be self-contained in terms of sprints, tasks and project
@@ -77,7 +77,7 @@ It can be used by both professional software development teams and DCU students
 working on their 3rd and 4th year projects, particularly those in the school of
 computing.
 
-## 1.3 Glossary
+##  1.3 Glossary
 
 
 **Business Terms:**
@@ -149,10 +149,10 @@ computing.
 
       These are a variety of libraries used for the generation of graphs.
 
-# 2. General Description
+#  2. General Description
 
 
-## 2.1 Product / System Functions
+##  2.1 Product / System Functions
 
 
 The below describes the main functionality of our system. This list is
@@ -207,7 +207,7 @@ from our project supervisor.
 
 All the above requires a valid login, excluding the registration of an account.
 
-## 2.2 User Characteristics and Objectives
+##  2.2 User Characteristics and Objectives
 
 
 As stated previously we have two primary target audiences in mind, business
@@ -218,7 +218,7 @@ an agile methodology.
 The application should be simple to use, regardless of the user’s experience in
 Agile development or using project management software.
 
-##2.3 Operational Scenarios
+##  2.3 Operational Scenarios
 
 
 -   **Unregistered/Logged Out User**
@@ -296,7 +296,7 @@ Agile development or using project management software.
 
 
 
-##2.4 Constraints
+## 2.4 Constraints
 
 
 **Database/Server usage**
@@ -313,10 +313,10 @@ relevant technologies used in the development of the system. As such we aim to
 have the base functionality of the system ready for demonstration and will be
 prioritizing them over additional features.
 
-#3. Functional Requirements
+# 3. Functional Requirements
 
 
-##3.1 Register Account / Log into Existing Account
+## 3.1 Register Account / Log into Existing Account
 
 -   **Description:**
 
@@ -339,7 +339,7 @@ prioritizing them over additional features.
 
       None, this this is the first step a user must make to use our system.
 
-##3.2 Create Organisation
+## 3.2 Create Organisation
 
 -   **Description:**
 
@@ -364,7 +364,7 @@ prioritizing them over additional features.
 
       This action can only be performed by a logged in user.
 
-##3.3 Add members to Organisation
+## 3.3 Add members to Organisation
 
 
 -   **Description:**
@@ -389,7 +389,7 @@ prioritizing them over additional features.
       However the user being added to the organisation does not need to have an
       account, as the admin has the ability to create the account for the user.
 
-##3.4 View Projects
+## 3.4 View Projects
 
 -   **Description:**
 
@@ -418,7 +418,7 @@ prioritizing them over additional features.
       display a page stating that no projects are available, which is a valid
       scenario.
 
-##3.5 Create Project
+## 3.5 Create Project
 
 -   **Description:**
 
@@ -439,7 +439,7 @@ prioritizing them over additional features.
       A project can only be made within an organisation, and can only be made by
       an Admin.
 
-##3.6 View Project Backlog
+## 3.6 View Project Backlog
 
 -   **Description:**
 
@@ -463,7 +463,7 @@ prioritizing them over additional features.
 
       This depends on a project being created.
 
-##3.7 Create/Delete Tasks in backlog
+## 3.7 Create/Delete Tasks in backlog
 
 -   **Description:**
 
@@ -493,7 +493,7 @@ prioritizing them over additional features.
       user must also be able to view the project backlog in order to interact with
       it.
 
-##3.8 Create Sprint
+## 3.8 Create Sprint
 
 -   **Description:**
 
@@ -519,7 +519,7 @@ prioritizing them over additional features.
       This depends on the creation of a Project, as a sprints are made for a
       particular project.
 
-##3.9 Assign Tasks from Backlog to Sprint
+## 3.9 Assign Tasks from Backlog to Sprint
 
 -   **Description:**
 
@@ -545,7 +545,7 @@ prioritizing them over additional features.
       This depends on a project being created, a sprint being created, and a
       Sprint Master being assigned to the Project **(3.10)**
 
-##3.10 Assign Members/Sprint Master to Project
+## 3.10 Assign Members/Sprint Master to Project
 
 -   **Description:**
 
@@ -564,7 +564,7 @@ prioritizing them over additional features.
 
       This requires a project being created and users being added to the organisation.
 
-##3.11 Update Task Status
+## 3.11 Update Task Status
 
 -   **Description:**
 
@@ -586,7 +586,7 @@ prioritizing them over additional features.
       This depends on the creation of a sprint and the adding of a task from the
       backlog to a sprint.
 
-##3.12 Assign self to task
+## 3.12 Assign self to task
 
 -   **Description:**
 
@@ -610,7 +610,7 @@ prioritizing them over additional features.
       This depends on tasks being assigned to a sprint from the backlog **(3.9)**,
       as a user can only assign themselves to tasks in an active sprint.
 
-##3.13 Edit task description
+## 3.13 Edit task description
 
 -   **Description:**
 
@@ -630,7 +630,7 @@ prioritizing them over additional features.
 
     This depends on a task being made in the backlog.
 
-##3.14 Estimate time for task
+## 3.14 Estimate time for task
 
 -   **Description:**
 
@@ -656,7 +656,7 @@ prioritizing them over additional features.
       either during the estimate of the task, or after it has been made and is in
       the backlog.
 
-##3.15 Log hours for task
+## 3.15 Log hours for task
 
 -   **Description:**
 
@@ -683,7 +683,7 @@ prioritizing them over additional features.
       This will depend on a task being created, the task being added to a sprint,
       and the user being added as a project member.
 
-##3.16 Remove Task from Sprint to Backlog
+## 3.16 Remove Task from Sprint to Backlog
 
 -   **Description:**
 
@@ -705,7 +705,7 @@ prioritizing them over additional features.
 
       This will depend on a task first being added to a sprint.
 
-##3.17 Complete Sprint
+## 3.17 Complete Sprint
 
 -   **Description:**
 
@@ -730,7 +730,7 @@ prioritizing them over additional features.
       This will depend on an end date and time being set during the creation of
       the sprint. **(3.8)**
 
-##3.18 Generate Burndown Chart
+## 3.18 Generate Burndown Chart
 
 -   **Description:**
 
@@ -753,7 +753,7 @@ prioritizing them over additional features.
       This depends on the logging of hours to a task **(3.15),** estimating the
       time of a task **(3.14)** and the updating of a task status **(3.11)**.
 
-##3.19 Edit Project
+## 3.19 Edit Project
 
 -   **Description:**
 
@@ -774,7 +774,7 @@ prioritizing them over additional features.
 
       This depends on the creation of a project **(3.5)**
 
-##3.20 Close Project
+## 3.20 Close Project
 
 -   **Description:**
 
@@ -794,7 +794,7 @@ prioritizing them over additional features.
 
       This depends on the creation of a project **(3.5)**
 
-#4. System Architecture
+# 4. System Architecture
 
 
 ![](media/sysarch.png)
@@ -833,10 +833,10 @@ This is the database where we will be storing all of the information of the
 System. Data will be both stored to and fetched from the database via the
 frontend website.
 
-#5. High-Level Design
+# 5. High-Level Design
 
 
-##Logical Data Model
+## Logical Data Model
 
 
 ![](media/5456fa22f08a5693aab9c3472d958712.png)
@@ -844,12 +844,12 @@ frontend website.
 
 ----------------------------------------
 
-##Activity Model
+## Activity Model
 
 ![](media/activity.png)
 
 
-#6. Preliminary Schedule
+# 6. Preliminary Schedule
 
 
 ![](media/683584d1a8796c6e6abbaaed633c7d2d.png)
@@ -875,7 +875,7 @@ frontend website.
 | 31-Jan         | 08-Mar       | Unit/Integration Testing                   | 36                 |
 | 23-Jan         | 08-Mar       | Documentation of Tech spec and User Manual | 44                 |
 
-#7. Appendices
+# 7. Appendices
 
 
 -   Clojurescript: <http://clojurescript.org/   
