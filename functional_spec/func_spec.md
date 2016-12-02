@@ -194,7 +194,7 @@ In order to use our system, the user must be signed in
 
 -   Log into an account
 
--   **Project member**
+-   Project member
 
 A project member is just a user that has been assigned to a project by the
 Sprint
@@ -219,6 +219,7 @@ currently working on.
 -   Add/Delete task to/from Backlog
 
 -   Generate Burndown Chart
+
 
 -   **Sprint Master**
 
