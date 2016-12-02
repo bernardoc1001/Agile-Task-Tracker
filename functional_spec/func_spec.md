@@ -58,24 +58,23 @@ computing.
 -   **Epic**
 
    A large task/feature that has to be broken up into smaller tasks to aid
-completion in an Agile environment
+   completion in an Agile environment
 
 -   **Sprints**
 
    The time period in which tasks are to be assigned to and completed. Highly
-regulated.
+   regulated.
 
 -   **Sprint Master**
 
    A team leader in the non-traditional sense who is responsible for removing
-
    impediments that will prevent developers from completing their tasks. In charge
-of managing sprints in terms of tasks assigned to that particular sprint.
+   of managing sprints in terms of tasks assigned to that particular sprint.
 
 -   **Reflections**
 
    Reflections are a look back generally done on completion of a sprint that
-identifies approaches that should be continued, ones that should be dropped and ones that need to be adopted for future sprints.
+   identifies approaches that should be continued, ones that should be dropped and ones that need to be adopted for future sprints.
 
 -   **Burndown Chart**
 
@@ -108,11 +107,11 @@ identifies approaches that should be continued, ones that should be dropped and 
 
 -   **ElasticSearch**
 
-   ElasticSearch is a Lucene based datastore and datasearch engine.
+      ElasticSearch is a Lucene based datastore and datasearch engine.
 
 -   **Kibana/Grafana/D3.js**
 
-   These are a variety of libraries used for the generation of graphs.
+      These are a variety of libraries used for the generation of graphs.
 
 2. General Description
 ======================
@@ -196,13 +195,9 @@ In order to use our system, the user must be signed in
 
 -   Project member
 
-A project member is just a user that has been assigned to a project by the
-Sprint
-
-Master. They then inherit the following functions relating to the project they
-are
-
-currently working on.
+   A project member is just a user that has been assigned to a project by the
+   Sprint Master. They then inherit the following functions relating to the project they
+   are currently working on.
 
 -   View Projects they have been assigned to
 
@@ -308,21 +303,21 @@ given the option to register a new account or to log into an existing one.
 
 -   **Dependencies:**
 
-   None, this this is the first step a user must make to use our system.
+      None, this this is the first step a user must make to use our system.
 
 **3.2 Create Organisation**
 ---------------------------
 
 -   **Description:**
 
-   After registering and logging in the user will be given the option of creating
-an organisation as an Admin. They will be able to then add members and projects
-to tied to this organisation.
+      After registering and logging in the user will be given the option of creating
+      an organisation as an Admin. They will be able to then add members and projects
+      to tied to this organisation.
 
 -   **Criticality:**
 
-   To provide a necessary division/organisation to projects, for example each
-module in DCU could be given its own branch/organisation.
+      To provide a necessary division/organisation to projects, for example each
+      module in DCU could be given its own branch/organisation.
 
 -   **Technical issues:**
 
@@ -334,22 +329,20 @@ module in DCU could be given its own branch/organisation.
 
 -   **Dependencies:**
 
-    This action can only be performed by a logged in user.
+      This action can only be performed by a logged in user.
 
 **3.3 Add members to Organisation**
 -----------------------------------
 
 -   **Description:**
 
-   After the creation of an organisation, the admin can start adding users to that
-organisation so they can then be placed on projects relating to that
-organisation.
+      After the creation of an organisation, the admin can start adding users to that
+      organisation so they can then be placed on projects relating to that organisation.
 
 -   **Criticality:**
 
-   As no one can be assigned to a project without being a member of that
-organisation,
-this function will be critical.
+      As no one can be assigned to a project without being a member of that
+      organisation,this function will be critical.
 
 -   **Technical issues:**
 
@@ -398,13 +391,11 @@ this function will be critical.
 
 -   **Description:**
 
-   As an Admin you can add a project to an organisation and set a proposed
-deadline.
+      As an Admin you can add a project to an organisation and set a proposed deadline.
 
 -   **Criticality:**
 
-   Pretty vital, as you cannot set tasks or assign people to tasks without a
-project etc.
+      Pretty vital, as you cannot set tasks or assign people to tasks without a project etc.
 
 -   **Technical issues:**
 
@@ -422,14 +413,14 @@ project etc.
 
 -   **Description:**
 
-   Anyone assigned to the project can view the project backlog to see what tasks
-are to be completed.
+      Anyone assigned to the project can view the project backlog to see what tasks are to 
+      be completed.
 
 -   **Criticality:**
 
-   For project members this would be noncritical, however for admins and Sprint
-Master would be critical as they need to see the tasks that can possibly be assigned to
-a sprint
+      For project members this would be noncritical, however for admins and Sprint
+      Master would be critical as they need to see the tasks that can possibly be assigned to
+      a sprint
 
 -   **Technical issues:**
 
@@ -440,7 +431,7 @@ a sprint
 
 -   **Dependencies:**
 
-    This depends on a project being created.
+      This depends on a project being created.
 
 **3.7 Create/Delete Tasks in backlog**
 --------------------------------------
@@ -478,16 +469,14 @@ a sprint
 
 -   **Description:**
 
-   A Sprint Master may create a new sprint, assigning the start and end date of it,
-the
-
+      A Sprint Master may create a new sprint, assigning the start and end date of it,the
       man hours being assigned to it and choose tasks from the project backlog to
       be added to the sprint.
 
 -   **Criticality:**
 
-   As the application is based on Agile on methodology the creation and usage of
-   Sprints is vital. Without a sprint a task cannot be assigned from the backlog.
+      As the application is based on Agile on methodology the creation and usage of
+      Sprints is vital. Without a sprint a task cannot be assigned from the backlog.
 
 -   **Technical issues:**
 
@@ -534,20 +523,20 @@ the
 
 -   **Description:**
 
-   After a project has been created, an Admin can associate project members
-    and Sprint masters to a project.
+      After a project has been created, an Admin can associate project members
+      and Sprint masters to a project.
 
 -   **Criticality:**
 
-    Without assigning anyone to the project, no tasks can be completed.
+      Without assigning anyone to the project, no tasks can be completed.
 
 -   **Technical issues:**
 
-    On the database we must associate the user being assigned with the Project.
+      On the database we must associate the user being assigned with the Project.
 
 -   **Dependencies:**
 
-    This requires a project being created and users being added to the organisation.
+      This requires a project being created and users being added to the organisation.
 
 **3.11 Update Task Status**
 ---------------------------
@@ -565,7 +554,7 @@ the
 
 -   **Technical issues:**
 
-    Look into accessibility options for this feature.
+      Look into accessibility options for this feature.
 
 -   **Dependencies:**
 
@@ -583,8 +572,8 @@ the
 
 -   **Criticality:**
 
-   For accountability and transparency, it is vital that a user can assign
-themselves to a task. Having people take responsibility.
+      For accountability and transparency, it is vital that a user can assign
+      themselves to a task. Having people take responsibility.
 
 -   **Technical issues:**
 
@@ -607,7 +596,7 @@ themselves to a task. Having people take responsibility.
 
 -   **Criticality:**
 
-    As this feature is optional it has a low priority.
+      As this feature is optional it has a low priority.
 
 -   **Technical issues:**
 
@@ -677,12 +666,12 @@ themselves to a task. Having people take responsibility.
 
 -   **Description:**
 
-   If a task is accidentally added from the backlog to the current sprint, the
-Sprint Master has the ability to remove the task.
+      If a task is accidentally added from the backlog to the current sprint, the
+      Sprint Master has the ability to remove the task.
 
 -   **Criticality:**
 
-    For upkeep of the current sprint this task is of high importance.
+      For upkeep of the current sprint this task is of high importance.
 
 -   **Technical issues:**
 
@@ -693,7 +682,7 @@ Sprint Master has the ability to remove the task.
 
 -   **Dependencies:**
 
-    This will depend on a task first being added to a sprint.
+      This will depend on a task first being added to a sprint.
 
  **3.17 Complete Sprint**
 -------------------------
@@ -726,8 +715,8 @@ Sprint Master has the ability to remove the task.
 
 -   **Description:**
 
-    A burndown chart can be generated at any time by any project member so that they
-can visually see the progress of a sprint or the project as a whole.
+      A burndown chart can be generated at any time by any project member so that they
+      can visually see the progress of a sprint or the project as a whole.
 
 -   **Criticality:**
 
@@ -737,8 +726,8 @@ can visually see the progress of a sprint or the project as a whole.
 
 -   **Technical issues:**
 
-   This will require the use of data graphing libraries such as Kibana, Grafana or
-D3.js.
+      This will require the use of data graphing libraries such as Kibana, Grafana or
+      D3.js.
 
 -   **Dependencies:**
 
@@ -750,12 +739,12 @@ D3.js.
 
 -   **Description:**
 
-   In the scenario that a project description or deadline needs to be adjusted an
-Admin use this function to update the particular variables.
+      In the scenario that a project description or deadline needs to be adjusted an
+      Admin use this function to update the particular variables.
 
 -   **Criticality:**
 
-    High for base functionality.
+      High for base functionality.
 
 -   **Technical issues:**
 
@@ -765,19 +754,19 @@ Admin use this function to update the particular variables.
 
 -   **Dependencies:**
 
-    This depends on the creation of a project **(3.5)**
+      This depends on the creation of a project **(3.5)**
 
 **3.20 Close Project**
 ----------------------
 
 -   **Description:**
 
-   Upon a project reaching its deadline/being completed an Admin can then close it
-off. No more sprints and by extension, tasks, may be added to it.
+      Upon a project reaching its deadline/being completed an Admin can then close it
+      off. No more sprints and by extension, tasks, may be added to it.
 
 -   **Criticality:**
 
-    Base Functionality.
+      Base Functionality.
 
 -   **Technical issues:**
 
@@ -786,7 +775,7 @@ off. No more sprints and by extension, tasks, may be added to it.
 
 -   **Dependencies:**
 
-    This depends on the creation of a project **(3.5)**
+      This depends on the creation of a project **(3.5)**
 
 4. System Architecture
 ======================
