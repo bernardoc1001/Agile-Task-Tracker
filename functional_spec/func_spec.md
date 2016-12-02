@@ -607,6 +607,7 @@ prioritizing them over additional features.
     This depends on a task being made in the backlog.
 
 **3.14 Estimate time for task**
+-------------------------------
 
 -   **Description:**
 
