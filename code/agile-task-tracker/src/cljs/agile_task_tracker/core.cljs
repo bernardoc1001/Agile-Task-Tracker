@@ -1,26 +1,60 @@
 (ns agile-task-tracker.core
-  (:require
-   [reagent.core :as reagent]
-   ))
+  (:require-macros [secretary.core :refer [defroute]])
+  (:require [reagent.core :as r]
+            [secretary.core :as secretary]
+    ;[reagent.session :as session]
+            [agile-task-tracker.views.dashboard :as dashboard]
+            [agile-task-tracker.views.testpage2 :as testpage2]
+    ; [secretary.core :as secretary :refer-macros [defroute]]
+            [goog.events :as events]
+            [goog.history.EventType :as EventType])
+  (:import goog.History))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Vars
 
 (defonce debug?
-  ^boolean js/goog.DEBUG)
+         ^boolean js/goog.DEBUG)
 
 (defonce app-state
-  (reagent/atom
-   {:text "Hello, what is your name? "}))
+         (r/atom {}))
 
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Page
+;;;;;;;;;;;;;;
+;;History
+(defn hook-browser-navigation! []
+  (doto (History.)
+    (events/listen
+      EventType/NAVIGATE
+      (fn [event]
+        (secretary/dispatch! (.-token event))))
+    (.setEnabled true)))
 
-(defn page [ratom]
-  [:p (:text @ratom) "FIXME"])
+
+;;;;;;;;;;;;;;;
+;; Routes
+
+(defn app-routes []
+  (secretary/set-config! :prefix "#")
+
+  (defroute "/" []
+            (swap! app-state assoc :page :dashboard))
+
+  (defroute "/testpage2" []
+            (swap! app-state assoc :page :testpage2))
+
+  (hook-browser-navigation!))
+
+
+(defmulti current-page #(@app-state :page))
+(defmethod current-page :dashboard []
+  [dashboard/dashboard-page])
+(defmethod current-page :testpage2 []
+  [testpage2/testpage2-page])
+(defmethod current-page :default []
+  [:div ])
 
 
 
@@ -33,10 +67,8 @@
     (println "dev mode")
     ))
 
-(defn reload []
-  (reagent/render [page app-state]
-                  (.getElementById js/document "app")))
-
 (defn ^:export main []
   (dev-setup)
-  (reload))
+  (app-routes)
+  (r/render [current-page]
+            (.getElementById js/document "app")))
