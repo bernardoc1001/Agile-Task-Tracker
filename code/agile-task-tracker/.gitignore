@@ -16,3 +16,5 @@
 .nrepl-repl-history
 builds
 .cljs*
+*.log
+/resources/public/js
