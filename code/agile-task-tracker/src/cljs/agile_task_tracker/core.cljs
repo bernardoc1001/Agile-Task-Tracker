@@ -67,8 +67,11 @@
     (println "dev mode")
     ))
 
+(defn reload []
+  (r/render [current-page ]
+                  (.getElementById js/document "app")))
+
 (defn ^:export main []
   (dev-setup)
   (app-routes)
-  (r/render [current-page]
-            (.getElementById js/document "app")))
+  (reload))
