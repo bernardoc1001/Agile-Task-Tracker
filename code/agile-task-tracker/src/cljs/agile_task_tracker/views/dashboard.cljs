@@ -5,6 +5,8 @@
 (defn dashboard-page []
   [:div
    [:p "woozers testy test test hshs"]
-   [:p [:a {:href "#/testpage2"} "Click here"]]]
+   [:p [:a {:href "#/testpage2"} "Click here"]]
+   [:p [:a {:href "#/backlog"} "Go to backlog"]]
+   ]
   )
 
