@@ -2,10 +2,9 @@
   (:require-macros [secretary.core :refer [defroute]])
   (:require [reagent.core :as r]
             [secretary.core :as secretary]
-    ;[reagent.session :as session]
             [agile-task-tracker.views.dashboard :as dashboard]
             [agile-task-tracker.views.testpage2 :as testpage2]
-    ; [secretary.core :as secretary :refer-macros [defroute]]
+            [agile-task-tracker.views.backlog :as backlog]
             [goog.events :as events]
             [goog.history.EventType :as EventType])
   (:import goog.History))
@@ -44,6 +43,8 @@
 
   (defroute "/testpage2" []
             (swap! app-state assoc :page :testpage2))
+  (defroute "/backlog" []
+            (swap! app-state assoc :page :backlog))
 
   (hook-browser-navigation!))
 
@@ -53,8 +54,11 @@
   [dashboard/dashboard-page])
 (defmethod current-page :testpage2 []
   [testpage2/testpage2-page])
+(defmethod current-page :backlog []
+  [backlog/backlog-page])
 (defmethod current-page :default []
   [:div ])
+
 
 
 
