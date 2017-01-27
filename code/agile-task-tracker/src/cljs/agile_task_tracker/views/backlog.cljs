@@ -1,8 +1,17 @@
 (ns agile-task-tracker.views.backlog
-  (:require [reagent.core :as r]))
+  (:require [reagent.core :as r]
+            [reagent-modals.modals :as rmodals]))
 
 (defonce page-state
          (r/atom {:tasks []}))
+
+#_(defn modal-task-creation-content []
+  [:div])
+
+(defn modal-window-button []
+  [:div.btn.btn-primary
+   {:on-click #(rmodals/modal! [:div "some message to the user!"])}
+   "My Modal"])
 
 (defn backlog-page []
   [:div
@@ -63,6 +72,10 @@
                                      :name "logged-time"
                                      :on-change #(swap! page-state assoc-in
                                                         [:tasks 0 :logged-time] (-> % .-target .-value))}]]
+
+   [:div
+    [rmodals/modal-window]
+    [modal-window-button]]
 
    [:p [:a {:href "#/"} "Back to Dashboard"]]])
 
