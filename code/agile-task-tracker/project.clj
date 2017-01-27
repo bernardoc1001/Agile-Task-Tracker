@@ -1,6 +1,7 @@
 (defproject agile-task-tracker "0.1.0-SNAPSHOT"
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.9.229"]
+                 [org.clojars.frozenlock/reagent-modals "0.2.3"]
                  [reagent "0.6.0"]
                  [secretary "1.2.3"]]
 
