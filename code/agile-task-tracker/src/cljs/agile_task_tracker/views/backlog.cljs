@@ -1,7 +1,8 @@
 (ns agile-task-tracker.views.backlog
   (:require [reagent.core :as r]
             [reagent-modals.modals :as rmodals]
-            [agile-task-tracker.common :as common]))
+            [agile-task-tracker.common :as common]
+            [goog.string :as gstring]))
 
 (defonce page-state
          (r/atom {:tasks []}))
@@ -12,80 +13,55 @@
 (defn save-task-procedure
   [task]
   (let [updated-task-list (conj (:tasks @page-state) task)]
-    (println (str updated-task-list))
-    (reset! new-task {})
     (swap! page-state assoc-in [:tasks] updated-task-list)))
 
+(defn atom-input-field
+  ([label type atom path]
+   [:label label [:input {:type      type
+                          :name      label
+                          :on-change #(common/onclick-swap-atom! atom path %)}]])
+  ([label atom path]
+    (atom-input-field label "text" atom path)))
+
 (defn modal-task-creation-content []
-  (reset! new-task {})
   [:div
-   [:div {:class "modal-content"}
-    [:div {:class "modal-header"}
-     [:h5 {:class "modal-title"
-           :id "task-modal-title"}
-      "Create a task"]]
-    [:div {:class "modal-body"}
+   [:div {:class "modal-header"}
+    [:button {:type "button"
+              :class "close"
+              :data-dismiss "modal"
+              :aria-label "Close"}
+     [:span {:aria-hidden "true"} (gstring/unescapeEntities "&times;")]]
+    [:h4 {:class "modal-title"
+          :id "task-modal-title"}
+     "Create a task"]]
+   [:div {:class "modal-body"}
 
-     [:p " id" [:input {:type      "text"
-                              :name      "taskid"
-                              :on-change #(common/update-atom! new-task [:task-id] %)}]]
-
-     [:p " title" [:input {:type      "text"
-                        :name      "title"
-                        :on-change #(common/update-atom! new-task [:task-title] %)}]]
-
-     [:p " description" [:input {:type      "text"
-                                       :name      "description"
-                                       :on-change #(common/update-atom! new-task [:description] %)}]]
-
-
-     [:p " created-by" [:input {:type      "text"
-                                      :name      "created-by"
-                                      :on-change #(common/update-atom! new-task [:created-by] %)}]]
-
-     [:p " assignees" [:input {:type      "text"
-                                     :name      "assignees"
-                                     :on-change #(common/update-atom! new-task [:assignees] %)}]]
-
-     [:p " original estimate" [:input {:type      "text"
-                                             :name      "original-estimate"
-                                             :on-change #(common/update-atom! new-task [:original-estimate] %)}]]
-
-     [:p " remaining estimate" [:input {:type      "text"
-                                              :name      "remaining-estimate"
-                                              :on-change #(common/update-atom! new-task [:remaining-estimate] %)}]]
-     [:p " epic" [:input {:type      "text"
-                                :name      "epic"
-                                :on-change #(common/update-atom! new-task [:epic] %)}]]
-
-     [:p " assigned sprint" [:input {:type      "text"
-                                           :name      "assigned-sprint"
-                                           :on-change #(common/update-atom! new-task [:assigned-sprint] %)}]]
-
-
-     [:p " priority level" [:input {:type      "text"
-                                          :name      "priority-level"
-                                          :on-change #(common/update-atom! new-task [:priority-level] %)}]]
-
-     [:p " task state" [:input {:type      "text"
-                                      :name      "task-state"
-                                      :on-change #(common/update-atom! new-task [:task-state] %)}]]
-     [:p " logged time" [:input {:type      "text"
-                                       :name      "logged-time"
-                                       :on-change #(common/update-atom! new-task [:logged-time] %)}]]]
+    [:div [atom-input-field "Task ID: " new-task [:task-id]]]
+    [:div [atom-input-field "Title: " new-task [:task-title]]]
+    [:div [atom-input-field "Description: " new-task [:description]]]
+    [:div [atom-input-field "Created By: " new-task [:created-by]]]
+    [:div [atom-input-field "Assignees: " new-task [:assignees]]]
+    [:div [atom-input-field "Original Estimate: " new-task [:original-estimate]]]
+    [:div [atom-input-field "Remaining Estimate: " new-task [:remaining-estimate]]]
+    [:div [atom-input-field "Epic: " new-task [:epic]]]
+    [:div [atom-input-field "Assigned Sprint: " new-task [:assigned-sprint]]]
+    [:div [atom-input-field "Priority Level: " new-task [:priority-level]]]
+    [:div [atom-input-field "Task State: " new-task [:task-state]]]
+    [:div [atom-input-field "Logged Time: " new-task [:logged-time]]]
 
     [:div {:class "modal-footer"}
      [:div.btn.btn-secondary {:type         "button"
                               :data-dismiss "modal"}
       "Close"]
-     [:div.btn.btn-primary {:type     "button"
+     [:div.btn.btn-primary {:type         "button"
                             :data-dismiss "modal"
-                            :on-click #(save-task-procedure @new-task)}
+                            :on-click     #(save-task-procedure @new-task)}
       "Save"]]]])
 
 (defn modal-window-button []
   [:div.btn.btn-primary
-   {:on-click #(rmodals/modal! [modal-task-creation-content])}
+   {:on-click #(rmodals/modal! [modal-task-creation-content]
+                               {:show (reset! new-task {})})}
    "Create Task"])
 
 (defn backlog-page []
