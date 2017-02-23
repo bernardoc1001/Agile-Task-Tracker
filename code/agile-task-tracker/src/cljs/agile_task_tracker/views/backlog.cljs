@@ -63,16 +63,30 @@
    {:on-click #(rmodals/modal! [modal-task-creation-content]
                                {:show (reset! new-task {})})}
    "Create Task"])
-
+;;my shit
 (defn backlog-page []
-  [:div
-   [:p (str "page-state: " @page-state)]
-   [:p (str "new-task: " @new-task)]
-   [:p "backlog test"]
+       [:div
+        [:p (str "page-state: " @page-state)]
+        [:p (str "new-task: " @new-task)]
+        [:p "backlog test"]
 
-   [:div
-    [rmodals/modal-window]
-    [modal-window-button]]
+        [:div {:class "container"}
+         [:div {:class "row"}
+          [:div {:class "col-md-4"}
+           [:div {:class "panel panel-default"}
+            [:div {:class "panel-heading"} "Backlog"]
+            [:div {:class "panel-body"}
+             [:div {:class "panel panel-default"}
+              [:div {:class "panel-body"}
+               [:div
+                [rmodals/modal-window]
+                [modal-window-button]]]]]]]
 
-   [:p [:a {:href "#/"} "Back to Dashboard"]]])
+          [:div {:class "col-md-8"}
+           [:div {:class "panel panel-default"}
+            [:div {:class "panel-heading"} "Sprint Creation/Modification"]
+            [:div {:class "panel-body"} "Sprint creation info here"]]]]]
+
+        [:p [:a {:href "#/"} "Back to Homepage"]]])
+
 
