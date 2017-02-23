@@ -86,7 +86,7 @@
            [:div {:class "panel panel-default"}
             [:div {:class "panel-heading"} "Sprint Creation/Modification"]
             [:div {:class "panel-body"} "Sprint creation info here"]]]]]
-        [:p "Cash me outside"]
-        [:p [:a {:href "#/"} "How bou dat (back to homepage)"]]])
+
+        [:p [:a {:href "#/"} "Back to Homepage"]]])
 
 
