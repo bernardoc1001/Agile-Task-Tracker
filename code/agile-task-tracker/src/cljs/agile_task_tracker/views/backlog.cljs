@@ -63,7 +63,7 @@
    {:on-click #(rmodals/modal! [modal-task-creation-content]
                                {:show (reset! new-task {})})}
    "Create Task"])
-;;my shit
+
 (defn backlog-page []
        [:div
         [:p (str "page-state: " @page-state)]
@@ -80,13 +80,37 @@
               [:div {:class "panel-body"}
                [:div
                 [rmodals/modal-window]
-                [modal-window-button]]]]]]]
+                [modal-window-button]]
+               [:div {:id    "draggable"
+                      :class "ui-widget-content"
+                      :style {:width   "100px"
+                              :heigwht  "30px"
+                              :padding "0.5em"
+                              :zIndex "1"}}
+                [:p "Drag me"]]]]]]]
+
 
           [:div {:class "col-md-8"}
-           [:div {:class "panel panel-default"}
-            [:div {:class "panel-heading"} "Sprint Creation/Modification"]
-            [:div {:class "panel-body"} "Sprint creation info here"]]]]]
+            [:div {:class "panel panel-default"}
+               [:div {:class "panel-heading"} "Sprint Creation/Modification"]
+             [:div {:class "panel-body"}
+              [:div {:class "col-md-6"}
+               [:div {:class "panel panel-default"}
+                [:div {:class "panel-body"}
+                 [:div [rmodals/modal-window]
+                  [modal-window-button]]]]]
 
-        [:p [:a {:href "#/"} "Back to Homepage"]]])
+              [:div {:class "col-md-6"}
+               [:div {:class "panel panel-default"}
+                [:div {:class "panel-body"}
+                 [:div [atom-input-field "Sprint Name " new-task [:sprint-name]]]]]]]]]
+
+          [:a {:href "#/"} "Back to Homepage"]]]])
+
+(defn backlog-did-mount []
+  (.draggable (js/$ "#draggable")))
 
 
+(defn backlog []
+  (r/create-class {:reagent-render      backlog-page
+                   :component-did-mount backlog-did-mount}))
