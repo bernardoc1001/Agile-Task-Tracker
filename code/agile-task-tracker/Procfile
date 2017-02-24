@@ -1,0 +1,1 @@
+web: java $JVM_OPTS -cp target/agile-task-tracker.jar clojure.main -m agile-task-tracker.server

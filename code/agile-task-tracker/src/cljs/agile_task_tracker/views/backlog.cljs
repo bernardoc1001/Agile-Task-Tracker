@@ -105,7 +105,7 @@
                 [:div {:class "panel-body"}
                  [:div [atom-input-field "Sprint Name " new-task [:sprint-name]]]]]]]]]
 
-          [:a {:href "#/"} "Back to Homepage"]]]])
+          [:a {:href "/"} "Back to Homepage"]]]])
 
 (defn backlog-did-mount []
   (.draggable (js/$ "#draggable")))

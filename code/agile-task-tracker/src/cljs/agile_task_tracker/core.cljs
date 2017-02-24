@@ -1,75 +1,38 @@
 (ns agile-task-tracker.core
-  (:require-macros [secretary.core :refer [defroute]])
-  (:require [reagent.core :as r]
-            [secretary.core :as secretary]
-            [agile-task-tracker.views.dashboard :as dashboard]
-            [agile-task-tracker.views.backlog :as backlog]
-            [goog.events :as events]
-            [goog.history.EventType :as EventType])
-  (:import goog.History))
+    (:require [reagent.core :as reagent :refer [atom]]
+              [reagent.session :as session]
+              [secretary.core :as secretary :include-macros true]
+              [accountant.core :as accountant]
+              [agile-task-tracker.views.dashboard :as dashboard :refer [dashboard-page]]
+              [agile-task-tracker.views.backlog :as backlog :refer [backlog]]))
 
+;TODO add history-browser-navigation and # prefix with secretary
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Vars
+;; -------------------------
+;; Views
+(defn current-page []
+  [:div [(session/get :current-page)]])
 
-(defonce debug?
-         ^boolean js/goog.DEBUG)
-
-(defonce app-state
-         (r/atom {}))
-
-
-
-;;;;;;;;;;;;;;
-;;History
-(defn hook-browser-navigation! []
-  (doto (History.)
-    (events/listen
-      EventType/NAVIGATE
-      (fn [event]
-        (secretary/dispatch! (.-token event))))
-    (.setEnabled true)))
-
-
-;;;;;;;;;;;;;;;
+;; -------------------------
 ;; Routes
+(secretary/defroute "/" []
+  (session/put! :current-page #'dashboard-page))
 
-(defn app-routes []
-  (secretary/set-config! :prefix "#")
+(secretary/defroute "/backlog" []
+  (session/put! :current-page #'backlog))
 
-  (defroute "/" []
-            (swap! app-state assoc :page :dashboard))
-(defroute "/backlog" []
-            (swap! app-state assoc :page :backlog))
+;; -------------------------
+;; Initialize app
+(defn mount-root []
+  (reagent/render [current-page] (.getElementById js/document "app")))
 
-  (hook-browser-navigation!))
-
-
-(defmulti current-page #(@app-state :page))
-(defmethod current-page :dashboard []
-  [dashboard/dashboard-page])
-(defmethod current-page :backlog []
-  [backlog/backlog])
-(defmethod current-page :default [])
-
-
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Initialize App
-
-(defn dev-setup []
-  (when debug?
-    (enable-console-print!)
-    (println "dev mode")
-    ))
-
-(defn reload []
-  (r/render [current-page]
-                  (.getElementById js/document "app")))
-
-
-(defn ^:export main []
-  (dev-setup)
-  (app-routes)
-  (reload))
+(defn init! []
+  (accountant/configure-navigation!
+    {:nav-handler
+     (fn [path]
+       (secretary/dispatch! path))
+     :path-exists?
+     (fn [path]
+       (secretary/locate-route path))})
+  (accountant/dispatch-current!)
+  (mount-root))
