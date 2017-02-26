@@ -10,6 +10,7 @@
                  [reagent-utils "0.2.0"]
                  [ring "1.5.0"]
                  [ring/ring-defaults "0.2.1"]
+                 [ring-middleware-format "0.7.2"]
                  [compojure "1.5.1"]
                  [hiccup "1.0.5"]
                  [yogthos/config "0.8"]
@@ -18,7 +19,9 @@
                  [secretary "1.2.3"]
                  [venantius/accountant "0.1.7"
                   :exclusions [org.clojure/tools.reader]]
-                 [org.clojars.frozenlock/reagent-modals "0.2.3"]]
+                 [org.clojars.frozenlock/reagent-modals "0.2.3"]
+                 [cljs-ajax "0.5.8"]
+                 [clojurewerkz/elastisch "2.2.1"]]
 
   :plugins [[lein-environ "1.0.2"]
             [lein-cljsbuild "1.1.1"]
