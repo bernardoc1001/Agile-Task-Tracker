@@ -1,16 +1,17 @@
 (ns agile-task-tracker.handler
-  (:require [compojure.core :refer [GET defroutes]]
+  (:require [compojure.core :refer [GET POST defroutes]]
             [compojure.route :refer [not-found resources]]
+            [agile-task-tracker.elasticsearch :as attes]
             [hiccup.page :refer [include-js include-css html5]]
             [agile-task-tracker.middleware :refer [wrap-middleware]]
             [config.core :refer [env]]))
 
 (def mount-target
   [:div#app
-      [:h3 "ClojureScript has not been compiled!"]
-      [:p "please run "
-       [:b "lein figwheel"]
-       " in order to start the compiler"]])
+   [:h3 "ClojureScript has not been compiled!"]
+   [:p "please run "
+    [:b "lein figwheel"]
+    " in order to start the compiler"]])
 
 (defn head []
   [:head
@@ -37,9 +38,10 @@
 
 
 (defroutes routes
-  (GET "/" [] (loading-page))
-  (GET "/backlog" [] (loading-page))
-  (resources "/")
-  (not-found "Not Found, has it been included in both the handler.clj and core.cljs?")) ;TODO change not found message before demo
+           (GET "/" [] (loading-page))
+           (GET "/backlog" [] (loading-page))
+           (POST "/backlog" request (attes/post-index-doc (:params request)))
+           (resources "/")
+           (not-found "Not Found, has it been included in both the handler.clj and core.cljs?")) ;TODO change not found message before demo
 
 (def app (wrap-middleware #'routes))

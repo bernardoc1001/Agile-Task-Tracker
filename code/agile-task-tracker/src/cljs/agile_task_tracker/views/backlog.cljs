@@ -2,6 +2,7 @@
   (:require [reagent.core :as r]
             [reagent-modals.modals :as rmodals]
             [agile-task-tracker.common :as common]
+            [ajax.core :refer [GET POST]]
             [goog.string :as gstring]))
 
 (defonce page-state
@@ -9,11 +10,21 @@
 
 (defonce new-task
          (r/atom {}))
+;-----------test ajax stuff, refactor this -------------------------
+(defn handler [response]
+  (.log js/console (str response)))
 
+(defn error-handler [{:keys [status status-text]}]
+  (.log js/console (str "errorhandler- something bad happened: " status " " status-text)))
+;-------------------------------------------------------------------
 (defn save-task-procedure
   [task]
   (let [updated-task-list (conj (:tasks @page-state) task)]
-    (swap! page-state assoc-in [:tasks] updated-task-list)))
+    (swap! page-state assoc-in [:tasks] updated-task-list)
+    (POST "/backlog"
+          {:params        (hash-map :all-tasks (:tasks @page-state))
+           :handler       handler
+           :error-handler error-handler})))
 
 (defn atom-input-field
   ([label type atom path]
