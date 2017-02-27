@@ -43,7 +43,7 @@
 (defroutes routes
            (GET "/" [] (loading-page))
            (GET "/backlog" [] (loading-page))
-           (POST "/backlog" request (attes/post-index-doc (:params request)))
+           (POST "/backlog" request (attes/put-task-info (:params request)))
            (resources "/")
            (not-found "Not Found, has it been included in both the handler.clj and core.cljs?")) ;TODO change not found message before demo
 
