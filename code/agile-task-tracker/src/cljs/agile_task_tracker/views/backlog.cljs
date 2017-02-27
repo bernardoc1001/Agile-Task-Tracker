@@ -92,13 +92,13 @@
                [:div
                 [rmodals/modal-window]
                 [modal-window-button]]
-               [:div {:id    "draggable"
-                      :class "ui-widget-content"
-                      :style {:width   "100px"
-                              :heigwht  "30px"
-                              :padding "0.5em"
-                              :zIndex "1"}}
-                [:p "Drag me"]]]]]]]
+               ;portlet stuff
+                [:div
+                 [:div.column
+                  [:div.portlet
+                   [:div.portlet-header "Make Backlog page"]
+                   [:div.portlet-content "Shaun should have this
+                   finished already"]]]]]]]]]
 
 
           [:div {:class "col-md-8"}
@@ -108,8 +108,12 @@
               [:div {:class "col-md-6"}
                [:div {:class "panel panel-default"}
                 [:div {:class "panel-body"}
-                 [:div [rmodals/modal-window]
-                  [modal-window-button]]]]]
+                 ;portlet stuff sprint
+                 [:div.column
+                  [:div.portlet
+                   [:div.portlet-header "test"]
+                   [:div.portlet-content "This is all the work Shaun has
+                   done"]]]]]]
 
               [:div {:class "col-md-6"}
                [:div {:class "panel panel-default"}
@@ -119,7 +123,27 @@
           [:a {:href "/"} "Back to Homepage"]]]])
 
 (defn backlog-did-mount []
-  (.draggable (js/$ "#draggable")))
+  (js/$ (fn []
+          (.sortable (js/$ ".column") (clj->js {:connectWith ".column"
+                                                :handle ".portlet-header"
+                                                :cancel ".portlet-toggle"
+                                                :placeholder
+                                                             "portlet-placeholder ui-corner-all"}))
+          (.. (js/$ ".portlet")
+              (addClass "ui-widget ui-widget-content ui-helper-clearfix
+              ui-corner-all")
+              (find ".portlet-header")
+              (addClass. "ui-widget-header ui-corner-all")
+              (prepend "<span class='ui-icon ui-icon-plusthick
+              portlet-toggle'></span>"))
+
+          (.click (js/$ ".portlet-toggle")
+                  (fn []
+                    (this-as this
+                      (let [icon (js/$ this)]
+                            (.toggleClass icon "ui-icon-minusthick
+                            ui-icon-plusthick")
+                            (.toggle (.find (.closest icon ".portlet") ".portlet-content")))))))))
 
 
 (defn backlog []
