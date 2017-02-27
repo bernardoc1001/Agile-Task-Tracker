@@ -27,7 +27,10 @@
    (include-css "https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css")
    (include-js "https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js")
 
-   (include-css (if (env :dev) "/css/site.css" "/css/site.min.css"))])
+   (include-css (if (env :dev) "/css/site.css" "/css/site.min.css"))
+   ;; ===SideBar===
+   (include-css "/css/simple-sidebar.css")])
+
 
 (defn loading-page []
   (html5

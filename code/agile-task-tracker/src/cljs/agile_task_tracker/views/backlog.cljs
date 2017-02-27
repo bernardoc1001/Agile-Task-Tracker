@@ -3,7 +3,8 @@
             [reagent-modals.modals :as rmodals]
             [agile-task-tracker.common :as common]
             [ajax.core :refer [GET POST]]
-            [goog.string :as gstring]))
+            [goog.string :as gstring]
+						[agile-task-tracker.sidebar :as sidebar]))
 
 (defonce page-state
          (r/atom {:tasks []}))
@@ -77,50 +78,55 @@
 
 (defn backlog-page []
        [:div
-        [:p (str "page-state: " @page-state)]
-        [:p (str "new-task: " @new-task)]
-        [:p "backlog test"]
 
-        [:div {:class "container"}
-         [:div {:class "row"}
-          [:div {:class "col-md-4"}
-           [:div {:class "panel panel-default"}
-            [:div {:class "panel-heading"} "Backlog"]
-            [:div {:class "panel-body"}
-             [:div {:class "panel panel-default"}
-              [:div {:class "panel-body"}
-               [:div
-                [rmodals/modal-window]
-                [modal-window-button]]
-               ;portlet stuff
-                [:div
-                 [:div.column
-                  [:div.portlet
-                   [:div.portlet-header "Make Backlog page"]
-                   [:div.portlet-content "Shaun should have this
+				[:div#wrapper
+				 [sidebar/sidebar]
+
+				 [:div.page-content-wrapper>div.container>div.row>div.col-lg-12
+					[sidebar/menu-toggle]
+					[:p (str "page-state: " @page-state)]
+					[:p (str "new-task: " @new-task)]
+					[:p "backlog test"]
+
+					[:div {:class "row"}
+					 [:div {:class "col-sm-4"}
+						[:div {:class "panel panel-default"}
+						 [:div {:class "panel-heading"} "Backlog"]
+						 [:div {:class "panel-body"}
+							[:div {:class "panel panel-default"}
+							 [:div {:class "panel-body"}
+								[:div
+								 [rmodals/modal-window]
+								 [modal-window-button]]
+								;portlet stuff
+								[:div
+								 [:div.column
+									[:div.portlet
+									 [:div.portlet-header "Make Backlog page"]
+									 [:div.portlet-content "Shaun should have this
                    finished already"]]]]]]]]]
 
 
-          [:div {:class "col-md-8"}
-            [:div {:class "panel panel-default"}
-               [:div {:class "panel-heading"} "Sprint Creation/Modification"]
-             [:div {:class "panel-body"}
-              [:div {:class "col-md-6"}
-               [:div {:class "panel panel-default"}
-                [:div {:class "panel-body"}
-                 ;portlet stuff sprint
-                 [:div.column
-                  [:div.portlet
-                   [:div.portlet-header "test"]
-                   [:div.portlet-content "This is all the work Shaun has
+					 [:div {:class "col-sm-8"}
+						[:div {:class "panel panel-default"}
+						 [:div {:class "panel-heading"} "Sprint Creation/Modification"]
+						 [:div {:class "panel-body"}
+							[:div {:class "col-sm-6"}
+							 [:div {:class "panel panel-default"}
+								[:div {:class "panel-body"}
+								 ;portlet stuff sprint
+								 [:div.column
+									[:div.portlet
+									 [:div.portlet-header "test"]
+									 [:div.portlet-content "This is all the work Shaun has
                    done"]]]]]]
 
-              [:div {:class "col-md-6"}
-               [:div {:class "panel panel-default"}
-                [:div {:class "panel-body"}
-                 [:div [atom-input-field "Sprint Name " new-task [:sprint-name]]]]]]]]]
+							[:div {:class "col-sm-6"}
+							 [:div {:class "panel panel-default"}
+								[:div {:class "panel-body"}
+								 [:div [atom-input-field "Sprint Name " new-task [:sprint-name]]]]]]]]]
 
-          [:a {:href "/"} "Back to Homepage"]]]])
+					 [:a {:href "/"} "Back to Homepage"]]]]])
 
 (defn backlog-did-mount []
   (js/$ (fn []

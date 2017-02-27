@@ -33,6 +33,11 @@ a:hover {
   text-decoration: underline;
 }
 
+.page {
+  background-color: red;
+
+}
+
 /* Portlet stuff */
 
 body {
