@@ -10,7 +10,7 @@
          (r/atom {:tasks []}))
 
 (defonce new-task
-         (r/atom {}))
+         (r/atom {:body {}}))
 ;-----------test ajax stuff, refactor this -------------------------
 (defn handler [response]
   (.log js/console (str response)))
@@ -22,16 +22,25 @@
   [task]
   (let [updated-task-list (conj (:tasks @page-state) task)]
     (swap! page-state assoc-in [:tasks] updated-task-list)
+    (println "new task:" (str (:body @new-task)))
     (POST "/backlog"
-          {:params        (hash-map :all-tasks (:tasks @page-state))
-           :handler       handler
-           :error-handler error-handler})))
+         {:params  (:body @new-task)
+          :handler handler
+          :error-handler error-handler})))
 
 (defn atom-input-field
   ([label type atom path]
-   [:label label [:input {:type      type
-                          :name      label
-                          :on-change #(common/onclick-swap-atom! atom path %)}]])
+   (if (and (= type "number") (not= (first path) :priority-level))
+     ;take in times as a number accurate to 3 decimal places
+     [:label label [:input {:type      "number"
+                            :step      "0.001"
+                            :name      label
+                            :on-change #(common/onclick-swap-atom! atom path %)}]]
+
+     ;take in every other type (including non-time numbers , i.e priority-level)
+     [:label label [:input {:type      type
+                            :name      label
+                            :on-change #(common/onclick-swap-atom! atom path %)}]]))
   ([label atom path]
     (atom-input-field label "text" atom path)))
 
@@ -48,18 +57,18 @@
      "Create a task"]]
    [:div {:class "modal-body"}
 
-    [:div [atom-input-field "Task ID: " new-task [:task-id]]]
-    [:div [atom-input-field "Title: " new-task [:task-title]]]
-    [:div [atom-input-field "Description: " new-task [:description]]]
-    [:div [atom-input-field "Created By: " new-task [:created-by]]]
-    [:div [atom-input-field "Assignees: " new-task [:assignees]]]
-    [:div [atom-input-field "Original Estimate: " new-task [:original-estimate]]]
-    [:div [atom-input-field "Remaining Estimate: " new-task [:remaining-estimate]]]
-    [:div [atom-input-field "Epic: " new-task [:epic]]]
-    [:div [atom-input-field "Assigned Sprint: " new-task [:assigned-sprint]]]
-    [:div [atom-input-field "Priority Level: " new-task [:priority-level]]]
-    [:div [atom-input-field "Task State: " new-task [:task-state]]]
-    [:div [atom-input-field "Logged Time: " new-task [:logged-time]]]
+    [:div [atom-input-field "Task ID: " new-task [:body :task-id]]]
+    [:div [atom-input-field "Title: " new-task [:body :task-title]]]
+    [:div [atom-input-field "Description: " new-task [:body :description]]]
+    [:div [atom-input-field "Created By: " new-task [:body :created-by]]]
+    [:div [atom-input-field "Assignees: " new-task [:body :assignees]]]
+    [:div [atom-input-field "Original Estimate: " "number" new-task [:body :original-estimate]]]
+    [:div [atom-input-field "Remaining Estimate: " "number" new-task [:body :remaining-estimate]]]
+    [:div [atom-input-field "Epic: " new-task [:body :epic]]]
+    [:div [atom-input-field "Assigned Sprint: " new-task [:body :assigned-sprint]]]
+    [:div [atom-input-field "Priority Level: " "number" new-task [:body :priority-level]]]
+    [:div [atom-input-field "Task State: " new-task [:body :task-state]]]
+    [:div [atom-input-field "Logged Time: " "number" new-task [:body :logged-time]]]
 
     [:div {:class "modal-footer"}
      [:div.btn.btn-secondary {:type         "button"
