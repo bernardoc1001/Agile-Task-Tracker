@@ -10,13 +10,18 @@
          (r/atom {:tasks []}))
 
 (defonce new-task
-         (r/atom {:body {}}))
+         (r/atom {:data {}}))
 ;-----------test ajax stuff, refactor this -------------------------
 (defn handler
   [response]
-  (println (str (empty? response)))
-  (println (str (nil? response)))
   (.log js/console (str "handler response: " response)))
+
+(defn get-task-by-id-handler
+  [response]
+  ;TODO convert relevant strings to their respective number types
+  (println (str "access the id: " (get-in response [:_source :task-id])))
+  (println (str "access the title: " (get-in response [:_source :task-title])))
+  (.log js/console (str "get-task-by-id-handler response: " response)))
 
 (defn error-handler
   [response]
@@ -27,9 +32,8 @@
   [task]
   (let [updated-task-list (conj (:tasks @page-state) task)]
     (swap! page-state assoc-in [:tasks] updated-task-list)
-    (println "new task:" (str (:body @new-task)))
     (POST "/backlog"
-         {:params  (:body @new-task)
+         {:params  (:data @new-task)
           :handler handler
           :error-handler error-handler})))
 
@@ -62,18 +66,18 @@
      "Create a task"]]
    [:div {:class "modal-body"}
 
-    [:div [atom-input-field "Task ID: " new-task [:body :task-id]]]
-    [:div [atom-input-field "Title: " new-task [:body :task-title]]]
-    [:div [atom-input-field "Description: " new-task [:body :description]]]
-    [:div [atom-input-field "Created By: " new-task [:body :created-by]]]
-    [:div [atom-input-field "Assignees: " new-task [:body :assignees]]]
-    [:div [atom-input-field "Original Estimate: " "number" new-task [:body :original-estimate]]]
-    [:div [atom-input-field "Remaining Estimate: " "number" new-task [:body :remaining-estimate]]]
-    [:div [atom-input-field "Epic: " new-task [:body :epic]]]
-    [:div [atom-input-field "Assigned Sprint: " new-task [:body :assigned-sprint]]]
-    [:div [atom-input-field "Priority Level: " "number" new-task [:body :priority-level]]]
-    [:div [atom-input-field "Task State: " new-task [:body :task-state]]]
-    [:div [atom-input-field "Logged Time: " "number" new-task [:body :logged-time]]]
+    [:div [atom-input-field "Task ID: " new-task [:data :task-id]]]
+    [:div [atom-input-field "Title: " new-task [:data :task-title]]]
+    [:div [atom-input-field "Description: " new-task [:data :description]]]
+    [:div [atom-input-field "Created By: " new-task [:data :created-by]]]
+    [:div [atom-input-field "Assignees: " new-task [:data :assignees]]]
+    [:div [atom-input-field "Original Estimate: " "number" new-task [:data :original-estimate]]]
+    [:div [atom-input-field "Remaining Estimate: " "number" new-task [:data :remaining-estimate]]]
+    [:div [atom-input-field "Epic: " new-task [:data :epic]]]
+    [:div [atom-input-field "Assigned Sprint: " new-task [:data :assigned-sprint]]]
+    [:div [atom-input-field "Priority Level: " "number" new-task [:data :priority-level]]]
+    [:div [atom-input-field "Task State: " new-task [:data :task-state]]]
+    [:div [atom-input-field "Logged Time: " "number" new-task [:data :logged-time]]]
 
     [:div {:class "modal-footer"}
      [:div.btn.btn-secondary {:type         "button"
@@ -92,20 +96,14 @@
 
 
 ;;----------------Get doc by ID example -------------------------------------------
-(defn get-task-by-id-handler
-  [response]
-  (println (str "get-task-by-id-handler response: " response)))
 
-(defn handler2 [[ok response]]
-  (if ok
-    (.log js/console (str response))
-    (.error js/console (str response))))
+
 
 (defn get-task-by-id []
-  (swap! new-task assoc-in [:body :lookup-task] true)
   (POST "/backlog"
-        {:params  (:body @new-task)
-         :handler handler
+        {:params        {:data (:data @new-task)
+                         :method "get-by-id"}
+         :handler       get-task-by-id-handler
          :error-handler error-handler}))
 
 (defn modal-get-task-by-id []
@@ -121,7 +119,7 @@
      "Get a task"]]
    [:div {:class "modal-body"}
 
-    [:div [atom-input-field "Task ID: " new-task [:body :task-id]]]
+    [:div [atom-input-field "Task ID: " new-task [:data :task-id]]]
 
     [:div {:class "modal-footer"}
      [:div.btn.btn-secondary {:type         "button"
@@ -138,6 +136,46 @@
                                {:show (reset! new-task {})})}
    "Get Task By ID"])
 ;--------------------------------------------------------------------------------------
+
+;--------delete doc by id example------------------------------------------------------
+(defn delete-task-by-id []
+  (POST "/backlog"
+        {:params        {:data (:data @new-task)
+                         :method "delete-by-id"}
+         :handler       handler
+         :error-handler error-handler}))
+
+(defn modal-delete-task-by-id []
+  [:div
+   [:div {:class "modal-header"}
+    [:button {:type "button"
+              :class "close"
+              :data-dismiss "modal"
+              :aria-label "Close"}
+     [:span {:aria-hidden "true"} (gstring/unescapeEntities "&times;")]]
+    [:h4 {:class "modal-title"
+          :id "get-task-modal-title"}
+     "Delete a task"]]
+   [:div {:class "modal-body"}
+
+    [:div [atom-input-field "Task ID: " new-task [:data :task-id]]]
+
+    [:div {:class "modal-footer"}
+     [:div.btn.btn-secondary {:type         "button"
+                              :data-dismiss "modal"}
+      "Close"]
+     [:div.btn.btn-primary {:type         "button"
+                            :data-dismiss "modal"
+                            :on-click     #(delete-task-by-id)}
+      "Delete Task"]]]])
+
+(defn delete-task-button []
+  [:div.btn.btn-primary
+   {:on-click #(rmodals/modal! [modal-delete-task-by-id]
+                               {:show (reset! new-task {})})}
+   "Delete Task By ID"])
+;--------------------------------------------------------------------------------------
+
 (defn backlog-page []
        [:div
 
@@ -161,8 +199,14 @@
 								 [rmodals/modal-window]
 								 [modal-window-button]
 
+                 ;----------temporary examples-----------------------------
                  [rmodals/modal-window]
-                 [get-task-button]]
+                 [get-task-button]
+
+                 [rmodals/modal-window]
+                 [delete-task-button]
+                 ;---------------------------------------------------------
+                 ]
 								;portlet stuff
 								[:div
 								 [:div.column

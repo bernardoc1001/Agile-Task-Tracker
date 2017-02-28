@@ -36,4 +36,9 @@
   (let [conn (esr/connect db-address)]
     (esd/get conn index-name mapping id)))
 
+(defn delete-doc-by-id
+  [index-name mapping id]
+  (let [conn (esr/connect db-address)]
+    (esd/delete conn index-name mapping id)))
+
 
