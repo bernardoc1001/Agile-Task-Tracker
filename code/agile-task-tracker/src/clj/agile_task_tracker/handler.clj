@@ -47,15 +47,21 @@
 					 (GET "/sprints" [] (loading-page))
            (GET "/backlog" [] (loading-page))
            (POST "/backlog" request (cond
-                                      (= true (get-in request [:params :lookup-task]))
-                                      (let [response (attes/get-doc-by-id "task-info" "task-info-mapping" (get-in request [:params :task-id]))]
-                                        (if (= true (:found response))
+                                      (= "get-by-id" (get-in request [:params :method]))
+                                      (let [response (attes/get-doc-by-id "task-info" "task-info-mapping" (get-in request [:params :data :task-id]))]
+                                        (if (= true (:found response)) ;TODO make status checker functions and import from elasticsearch.clj
                                           {:status 200 :body response}
                                           response))
 
+                                      (= "delete-by-id" (get-in request [:params :method]))
+                                      (let [response (attes/delete-doc-by-id "task-info" "task-info-mapping" (get-in request [:params :data :task-id]))]
+                                        (if (= true (:found response)) ;TODO make status checker functions and import from elasticsearch.clj
+                                          {:status 200 :body response}
+                                          {:status 500 :body response}))
+
                                       :else
                                       (let [response (attes/put-task-info (:params request))]
-                                        (if (= true (contains? response :created))
+                                        (if (= true (contains? response :created)) ;TODO make status checker functions and import from elasticsearch.clj
                                           {:status 200 :body response}
                                           response))))
            #_(ANY "/backlog" request (attes/get-doc-by-id "task-info" "task-info-mapping" (get-in request [:params :body :task-id])))
