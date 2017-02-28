@@ -18,6 +18,7 @@
    [:meta {:charset "utf-8"}]
    [:meta {:name "viewport"
            :content "width=device-width, initial-scale=1"}]
+	 [:title "Agile Task Tracker"]
    ;; ===jQuery===
    (include-js "https://code.jquery.com/jquery-2.1.1.min.js")
    (include-css "http://code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.min.css")
@@ -42,6 +43,8 @@
 
 (defroutes routes
            (GET "/" [] (loading-page))
+					 (GET "/project" [] (loading-page))
+					 (GET "/sprints" [] (loading-page))
            (GET "/backlog" [] (loading-page))
            (POST "/backlog" request (cond
                                       (= true (get-in request [:params :lookup-task]))
@@ -56,6 +59,7 @@
                                           {:status 200 :body response}
                                           response))))
            #_(ANY "/backlog" request (attes/get-doc-by-id "task-info" "task-info-mapping" (get-in request [:params :body :task-id])))
+
            (resources "/")
            (not-found "Not Found, has it been included in both the handler.clj and core.cljs?")) ;TODO change not found message before demo
 

@@ -189,9 +189,7 @@
 							[:div {:class "col-sm-6"}
 							 [:div {:class "panel panel-default"}
 								[:div {:class "panel-body"}
-								 [:div [atom-input-field "Sprint Name " new-task [:sprint-name]]]]]]]]]
-
-					 [:a {:href "/"} "Back to Homepage"]]]]])
+								 [:div [atom-input-field "Sprint Name " new-task [:sprint-name]]]]]]]]]]]]])
 
 (defn backlog-did-mount []
   (js/$ (fn []

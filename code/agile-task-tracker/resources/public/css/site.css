@@ -37,6 +37,14 @@ a:hover {
   background-color: red;
 
 }
+img {
+  padding-left: 0px;
+  width: 100%;
+  position: relative;
+  text-indent: 0px;
+
+}
+
 
 /* Portlet stuff */
 
@@ -77,3 +85,8 @@ body {
 
 .ui-widget-header{
    background: #428bca;}
+
+.jumbotron {
+ min-height: 30px;
+ padding: 2px;
+}

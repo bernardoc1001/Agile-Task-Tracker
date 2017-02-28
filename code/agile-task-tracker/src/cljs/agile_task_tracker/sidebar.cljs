@@ -3,11 +3,13 @@
 
 (defn sidebar []
   [:div#sidebar-wrapper
-   [:ul.sidebar-nav
-    [:li.sidebar-brand>a {:href "#"} "Agile Task Tracker"]
-    [:li>a {:href "#"} "Home" ]
-    [:li>a {:href "#"} "Project" ]
-    [:li>a {:href "#"} "Backlog" ]]])
+	 [:a {:href "/"} [:img {:src "/images/logo.png"}]]
+	 [:ul.sidebar-nav
+
+    [:li>a {:href "/"} "Home" ]
+    [:li>a {:href "/project"} "Projects" ]
+    [:li>a {:href "/backlog"} "Backlog" ]
+		[:li>a {:href "/sprints"} "Sprints"]]])
 
 (defn menu-toggle-render []
   [:div.btn.btn-default "Toggle Menu"])
