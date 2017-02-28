@@ -10,22 +10,30 @@
   (let [conn (esr/connect db-address)
         index-name "task-info"
         id (:task-id doc)
-        mapping-types {"taskInfoMapping" {:properties {:task-id            {:type "string"}
-                                                         :task-title         {:type "string"}
-                                                         :description        {:type "string"}
-                                                         :created-by         {:type "string"}
-                                                         :assignees          {:type "string"}
-                                                         :original-estimate  {:type "double"}
-                                                         :remaining-estimate {:type "double"}
-                                                         :epic               {:type "string"}
-                                                         :assigned-sprint    {:type "string"}
-                                                         :priority-level     {:type "integer"}
-                                                         :task-state         {:type "string"}
-                                                         :logged-time        {:type "double"}}}}]
+        mapping "task-info-mapping"
+        mapping-types {mapping {:properties {:task-id            {:type "string"}
+                                             :task-title         {:type "string"}
+                                             :description        {:type "string"}
+                                             :created-by         {:type "string"}
+                                             :assignees          {:type "string"}
+                                             :original-estimate  {:type "double"}
+                                             :remaining-estimate {:type "double"}
+                                             :epic               {:type "string"}
+                                             :assigned-sprint    {:type "string"}
+                                             :priority-level     {:type "integer"}
+                                             :task-state         {:type "string"}
+                                             :logged-time        {:type "double"}}}}]
 
     (if (not (esi/exists? conn index-name))
-      (esi/create conn index-name :mappings mapping-types)) ;create index with mappings
+      ;create index with mappings
+      (esi/create conn index-name :mappings mapping-types))
 
-    (println (esd/put conn index-name "taskInfoMapping" id doc)) ;put the doc in the index
-    ))
+    ;put the doc in the index
+    (esd/put conn index-name mapping id doc)))
+
+(defn get-doc-by-id
+  [index-name mapping id]
+  (let [conn (esr/connect db-address)]
+    (esd/get conn index-name mapping id)))
+
 

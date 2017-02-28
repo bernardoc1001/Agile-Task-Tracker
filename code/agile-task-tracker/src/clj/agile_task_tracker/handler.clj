@@ -43,7 +43,19 @@
 (defroutes routes
            (GET "/" [] (loading-page))
            (GET "/backlog" [] (loading-page))
-           (POST "/backlog" request (attes/put-task-info (:params request)))
+           (POST "/backlog" request (cond
+                                      (= true (get-in request [:params :lookup-task]))
+                                      (let [response (attes/get-doc-by-id "task-info" "task-info-mapping" (get-in request [:params :task-id]))]
+                                        (if (= true (:found response))
+                                          {:status 200 :body response}
+                                          response))
+
+                                      :else
+                                      (let [response (attes/put-task-info (:params request))]
+                                        (if (= true (contains? response :created))
+                                          {:status 200 :body response}
+                                          response))))
+           #_(ANY "/backlog" request (attes/get-doc-by-id "task-info" "task-info-mapping" (get-in request [:params :body :task-id])))
            (resources "/")
            (not-found "Not Found, has it been included in both the handler.clj and core.cljs?")) ;TODO change not found message before demo
 

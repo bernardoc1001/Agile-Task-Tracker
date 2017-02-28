@@ -12,11 +12,16 @@
 (defonce new-task
          (r/atom {:body {}}))
 ;-----------test ajax stuff, refactor this -------------------------
-(defn handler [response]
-  (.log js/console (str response)))
+(defn handler
+  [response]
+  (println (str (empty? response)))
+  (println (str (nil? response)))
+  (.log js/console (str "handler response: " response)))
 
-(defn error-handler [{:keys [status status-text]}]
-  (.log js/console (str "errorhandler- something bad happened: " status " " status-text)))
+(defn error-handler
+  [response]
+  #_(.log js/console (str "errorhandler- something bad happened: " status " " status-text))
+  (.error js/console (str response)))
 ;-------------------------------------------------------------------
 (defn save-task-procedure
   [task]
@@ -85,6 +90,54 @@
                                {:show (reset! new-task {})})}
    "Create Task"])
 
+
+;;----------------Get doc by ID example -------------------------------------------
+(defn get-task-by-id-handler
+  [response]
+  (println (str "get-task-by-id-handler response: " response)))
+
+(defn handler2 [[ok response]]
+  (if ok
+    (.log js/console (str response))
+    (.error js/console (str response))))
+
+(defn get-task-by-id []
+  (swap! new-task assoc-in [:body :lookup-task] true)
+  (POST "/backlog"
+        {:params  (:body @new-task)
+         :handler handler
+         :error-handler error-handler}))
+
+(defn modal-get-task-by-id []
+  [:div
+   [:div {:class "modal-header"}
+    [:button {:type "button"
+              :class "close"
+              :data-dismiss "modal"
+              :aria-label "Close"}
+     [:span {:aria-hidden "true"} (gstring/unescapeEntities "&times;")]]
+    [:h4 {:class "modal-title"
+          :id "get-task-modal-title"}
+     "Get a task"]]
+   [:div {:class "modal-body"}
+
+    [:div [atom-input-field "Task ID: " new-task [:body :task-id]]]
+
+    [:div {:class "modal-footer"}
+     [:div.btn.btn-secondary {:type         "button"
+                              :data-dismiss "modal"}
+      "Close"]
+     [:div.btn.btn-primary {:type         "button"
+                            :data-dismiss "modal"
+                            :on-click     #(get-task-by-id)}
+      "Get Task"]]]])
+
+(defn get-task-button []
+  [:div.btn.btn-primary
+   {:on-click #(rmodals/modal! [modal-get-task-by-id]
+                               {:show (reset! new-task {})})}
+   "Get Task By ID"])
+;--------------------------------------------------------------------------------------
 (defn backlog-page []
        [:div
 
@@ -106,7 +159,10 @@
 							 [:div {:class "panel-body"}
 								[:div
 								 [rmodals/modal-window]
-								 [modal-window-button]]
+								 [modal-window-button]
+
+                 [rmodals/modal-window]
+                 [get-task-button]]
 								;portlet stuff
 								[:div
 								 [:div.column
