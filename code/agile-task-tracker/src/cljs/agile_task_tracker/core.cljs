@@ -3,8 +3,10 @@
               [reagent.session :as session]
               [secretary.core :as secretary :include-macros true]
               [accountant.core :as accountant]
-              [agile-task-tracker.views.dashboard :as dashboard :refer [dashboard-page]]
-              [agile-task-tracker.views.backlog :as backlog :refer [backlog]]))
+              [agile-task-tracker.views.dashboard :refer [dashboard-page]]
+              [agile-task-tracker.views.backlog :refer [backlog]]
+							[agile-task-tracker.views.project :refer [project-page]]
+							[agile-task-tracker.views.sprints :refer [sprints-page]]))
 
 ;TODO add history-browser-navigation and # prefix with secretary
 
@@ -20,6 +22,12 @@
 
 (secretary/defroute "/backlog" []
   (session/put! :current-page #'backlog))
+
+(secretary/defroute "/project" []
+	(session/put! :current-page #'project-page))
+
+(secretary/defroute "/sprints" []
+	(session/put! :current-page #'sprints-page))
 
 ;; -------------------------
 ;; Initialize app
