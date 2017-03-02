@@ -217,7 +217,10 @@
                  ]
 								;portlet stuff
 								[:div
-								 [:div.column {:id "backlog-col"}]]]]]]]
+								 [:div.column {:id "backlog-col"}
+                  #_(task-portlet/create-task-portlet {:task-id "1"
+                                                     :task-title "2"
+                                                     :description "Yep"})]]]]]]]
 
 
 					 [:div {:class "col-sm-8"}

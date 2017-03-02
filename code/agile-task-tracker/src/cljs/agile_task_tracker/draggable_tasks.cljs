@@ -27,4 +27,18 @@
         description (:description task-map)]
     [:div.portlet {:id id}
      [:div.portlet-header title]
-     [:div.portlet-content description]]))
+     [:div.portlet-content
+      [:div {:class "progress"}
+       [:div {:class "progress-bar"
+              :role "progressbar"
+              :aria-valuenow "70"
+              :aria-valuemin "0"
+              :aria-valuemax "100"
+              :style {:width "70%"}} "70% Complete"]] description ]]))
+
+
+
+
+
+(defn create-progress-bar [estimate progress]
+  ())
