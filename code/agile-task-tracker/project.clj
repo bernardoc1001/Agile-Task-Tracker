@@ -13,6 +13,7 @@
                  [ring-middleware-format "0.7.2"]
                  [compojure "1.5.1"]
                  [hiccup "1.0.5"]
+                 [hipo "0.5.2"]
                  [yogthos/config "0.8"]
                  [org.clojure/clojurescript "1.9.473"
                   :scope "provided"]

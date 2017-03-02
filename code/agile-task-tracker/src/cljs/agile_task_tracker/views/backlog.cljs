@@ -4,17 +4,28 @@
             [agile-task-tracker.common :as common]
             [ajax.core :refer [GET POST]]
             [goog.string :as gstring]
-						[agile-task-tracker.sidebar :as sidebar]))
+						[agile-task-tracker.sidebar :as sidebar]
+            [agile-task-tracker.draggable-tasks :as task-portlet]
+            [hipo.core :as hipo]))
 
 (defonce page-state
          (r/atom {:tasks []}))
 
 (defonce new-task
          (r/atom {:data {}}))
+
 ;-----------test ajax stuff, refactor this -------------------------
 (defn handler
   [response]
   (.log js/console (str "handler response: " response)))
+
+(defn put-task-by-id-handler
+  [response]
+  (.log js/console (str "put-task-handler response: " response))
+  (let [draggable-portlet (hipo/create (task-portlet/create-task-portlet (get-in @new-task [:data])))]
+    (swap! page-state assoc-in [:tasks] (conj (:tasks @page-state) (:data @new-task)))
+    (.appendChild (.getElementById js/document "backlog-col") draggable-portlet)
+    (task-portlet/make-tasks-draggable)))
 
 (defn get-task-by-id-handler
   [response]
@@ -28,14 +39,11 @@
   #_(.log js/console (str "errorhandler- something bad happened: " status " " status-text))
   (.error js/console (str response)))
 ;-------------------------------------------------------------------
-(defn save-task-procedure
-  [task]
-  (let [updated-task-list (conj (:tasks @page-state) task)]
-    (swap! page-state assoc-in [:tasks] updated-task-list)
-    (POST "/backlog"
-         {:params  (:data @new-task)
-          :handler handler
-          :error-handler error-handler})))
+(defn save-task-procedure []
+  (POST "/backlog"
+        {:params        (:data @new-task)
+         :handler       put-task-by-id-handler
+         :error-handler error-handler}))
 
 (defn atom-input-field
   ([label type atom path]
@@ -85,10 +93,10 @@
       "Close"]
      [:div.btn.btn-primary {:type         "button"
                             :data-dismiss "modal"
-                            :on-click     #(save-task-procedure @new-task)}
+                            :on-click     #(save-task-procedure)}
       "Save"]]]])
 
-(defn modal-window-button []
+(defn create-task-button []
   [:div.btn.btn-primary
    {:on-click #(rmodals/modal! [modal-task-creation-content]
                                {:show (reset! new-task {})})}
@@ -196,8 +204,8 @@
 							[:div {:class "panel panel-default"}
 							 [:div {:class "panel-body"}
 								[:div
-								 [rmodals/modal-window]
-								 [modal-window-button]
+                 [rmodals/modal-window]
+                 [create-task-button]
 
                  ;----------temporary examples-----------------------------
                  [rmodals/modal-window]
@@ -209,11 +217,7 @@
                  ]
 								;portlet stuff
 								[:div
-								 [:div.column
-									[:div.portlet
-									 [:div.portlet-header "Make Backlog page"]
-									 [:div.portlet-content "Shaun should have this
-                   finished already"]]]]]]]]]
+								 [:div.column {:id "backlog-col"}]]]]]]]
 
 
 					 [:div {:class "col-sm-8"}
@@ -224,11 +228,7 @@
 							 [:div {:class "panel panel-default"}
 								[:div {:class "panel-body"}
 								 ;portlet stuff sprint
-								 [:div.column
-									[:div.portlet
-									 [:div.portlet-header "test"]
-									 [:div.portlet-content "This is all the work Shaun has
-                   done"]]]]]]
+								 [:div.column {:id "create-sprint-col"}]]]]
 
 							[:div {:class "col-sm-6"}
 							 [:div {:class "panel panel-default"}
@@ -240,23 +240,7 @@
           (.sortable (js/$ ".column") (clj->js {:connectWith ".column"
                                                 :handle ".portlet-header"
                                                 :cancel ".portlet-toggle"
-                                                :placeholder
-                                                             "portlet-placeholder ui-corner-all"}))
-          (.. (js/$ ".portlet")
-              (addClass "ui-widget ui-widget-content ui-helper-clearfix
-              ui-corner-all")
-              (find ".portlet-header")
-              (addClass. "ui-widget-header ui-corner-all")
-              (prepend "<span class='ui-icon ui-icon-plusthick
-              portlet-toggle'></span>"))
-
-          (.click (js/$ ".portlet-toggle")
-                  (fn []
-                    (this-as this
-                      (let [icon (js/$ this)]
-                            (.toggleClass icon "ui-icon-minusthick
-                            ui-icon-plusthick")
-                            (.toggle (.find (.closest icon ".portlet") ".portlet-content")))))))))
+                                                :placeholder "portlet-placeholder ui-corner-all"})))))
 
 
 (defn backlog []
