@@ -25,7 +25,7 @@
   (let [draggable-portlet (hipo/create (task-portlet/create-task-portlet (get-in @new-task [:data])))]
     (swap! page-state assoc-in [:tasks] (conj (:tasks @page-state) (:data @new-task)))
     (.appendChild (.getElementById js/document "backlog-col") draggable-portlet)
-    (task-portlet/make-tasks-draggable)))
+    (task-portlet/make-tasks-toggleable (get-in @new-task [:data :task-id]))))
 
 (defn get-task-by-id-handler
   [response]
