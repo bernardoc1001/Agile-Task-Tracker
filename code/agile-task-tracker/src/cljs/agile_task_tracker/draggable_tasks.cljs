@@ -38,4 +38,12 @@
      [:div.portlet-content description
       [:div {:id (str "progressbar-" task-id)} ]]]))
 
+(defn delete-task-portlet
+  [task-id]
+  (let [target-task-portlet (.getElementById js/document task-id)]
+    (if (not (nil? target-task-portlet))
+      (do (.remove target-task-portlet)
+          true)
+      false)))
+
 

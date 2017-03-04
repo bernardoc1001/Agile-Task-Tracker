@@ -30,10 +30,13 @@
 
 (defn render-task
   [task-map col-id]
-  (let [draggable-portlet (hipo/create (task-portlet/create-task-portlet task-map))]
+  (task-portlet/delete-task-portlet (:task-id task-map))
+  (if (nil? (.getElementById js/document (:task-id task-map)))
+    (let [draggable-portlet (hipo/create (task-portlet/create-task-portlet task-map))]
 
-    (.appendChild (.getElementById js/document col-id) draggable-portlet)
-    (task-portlet/make-tasks-toggleable task-map)))
+      (.appendChild (.getElementById js/document col-id) draggable-portlet)
+      (task-portlet/make-tasks-toggleable task-map))
+    (.error js/console (str "Could not add task, old version of the task still exists"))))
 
 ;-----------test ajax stuff, refactor this -------------------------
 
@@ -52,7 +55,6 @@
 
 (defn get-task-by-id
   [task-id]
-  (.log js/console (str "get task by id single arity, id is: " task-id))
   (POST "/backlog"
         {:params        {:data   {:task-id task-id}
                          :method "get-by-id"}
@@ -65,13 +67,16 @@
   ;task will be rendered in the get response handler
   (get-task-by-id (:_id response)))
 
+(defn delete-task-by-id-handler
+  [response]
+  (.log js/console (str "delete-task-by-id-handler response: " response))
+  (task-portlet/delete-task-portlet (:_id response)))
+
 (defn query-tasks-by-sprint-handler
   [response]
   (.log js/console (str "query-task-handler response: " response))
   (let [hits-vector (get-in response [:hits :hits])]
-    #_(.log js/console (str "hits-vector: " hits-vector))
     (doseq [hit hits-vector]
-      #_(.log js/console (str "singular hit: " hit))
       (render-task (convert-to-task-format (:_source hit)) "backlog-col"))))
 
 
@@ -178,7 +183,7 @@
   (POST "/backlog"
         {:params        {:data (:data @new-task)
                          :method "delete-by-id"}
-         :handler       handler
+         :handler       delete-task-by-id-handler
          :error-handler error-handler}))
 
 (defn modal-delete-task-by-id []
@@ -213,7 +218,6 @@
 ;--------------------------------------------------------------------------------------
 ;--------------------query all tasks by assigned sprint example -----------------------
 (defn query-tasks-by-sprint [sprint-id]
-  (.log js/console (str "Input data: " sprint-id))
   (POST "/backlog"
         {:params        {:data {:sprint-id sprint-id}
                          :method "query-by-term"}
