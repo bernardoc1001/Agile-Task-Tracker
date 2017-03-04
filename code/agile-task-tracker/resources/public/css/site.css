@@ -89,6 +89,19 @@ body {
 
 /* Progress Bar */
 
-.progress-bar {
- float:
+.ui-progressbar {
+ height: 0.8em;
+}
+.ui-progressbar-value {
+ background: #00e500;
+
+}
+.ui-progressbar .ui-progressbar-value{
+ margin:0px;
+}
+
+/*buttons */
+.btn-backlog-col {
+ display: block;
+ margin: 1px;
 }

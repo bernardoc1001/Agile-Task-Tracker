@@ -16,8 +16,7 @@
                                              :description        {:type "string"}
                                              :created-by         {:type "string"}
                                              :assignees          {:type "string"}
-                                             :original-estimate  {:type "double"}
-                                             :remaining-estimate {:type "double"}
+                                             :estimated-time     {:type "double"}
                                              :epic               {:type "string"}
                                              :assigned-sprint    {:type "string"}
                                              :priority-level     {:type "integer"}
