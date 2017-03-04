@@ -22,10 +22,11 @@
 (defn put-task-by-id-handler
   [response]
   (.log js/console (str "put-task-handler response: " response))
-  (let [draggable-portlet (hipo/create (task-portlet/create-task-portlet (get-in @new-task [:data])))]
+  (let [draggable-portlet (hipo/create (task-portlet/create-task-portlet (get-in @new-task [:data])))
+        progressbar-div (.createElement js/document "div")]
     (swap! page-state assoc-in [:tasks] (conj (:tasks @page-state) (:data @new-task)))
     (.appendChild (.getElementById js/document "backlog-col") draggable-portlet)
-    (task-portlet/make-tasks-toggleable (get-in @new-task [:data :task-id]))))
+    (task-portlet/make-tasks-toggleable (get-in @new-task [:data]))))
 
 (defn get-task-by-id-handler
   [response]
@@ -79,8 +80,7 @@
     [:div [atom-input-field "Description: " new-task [:data :description]]]
     [:div [atom-input-field "Created By: " new-task [:data :created-by]]]
     [:div [atom-input-field "Assignees: " new-task [:data :assignees]]]
-    [:div [atom-input-field "Original Estimate: " "number" new-task [:data :original-estimate]]]
-    [:div [atom-input-field "Remaining Estimate: " "number" new-task [:data :remaining-estimate]]]
+    [:div [atom-input-field "Estimated Time: " "number" new-task [:data :estimated-time]]]
     [:div [atom-input-field "Epic: " new-task [:data :epic]]]
     [:div [atom-input-field "Assigned Sprint: " new-task [:data :assigned-sprint]]]
     [:div [atom-input-field "Priority Level: " "number" new-task [:data :priority-level]]]
@@ -97,7 +97,7 @@
       "Save"]]]])
 
 (defn create-task-button []
-  [:div.btn.btn-primary
+  [:div.btn.btn-primary.btn-backlog-col
    {:on-click #(rmodals/modal! [modal-task-creation-content]
                                {:show (reset! new-task {})})}
    "Create Task"])
@@ -139,7 +139,7 @@
       "Get Task"]]]])
 
 (defn get-task-button []
-  [:div.btn.btn-primary
+  [:div.btn.btn-primary.btn-backlog-col
    {:on-click #(rmodals/modal! [modal-get-task-by-id]
                                {:show (reset! new-task {})})}
    "Get Task By ID"])
@@ -178,7 +178,7 @@
       "Delete Task"]]]])
 
 (defn delete-task-button []
-  [:div.btn.btn-primary
+  [:div.btn.btn-primary.btn-backlog-col
    {:on-click #(rmodals/modal! [modal-delete-task-by-id]
                                {:show (reset! new-task {})})}
    "Delete Task By ID"])
@@ -231,7 +231,8 @@
 							 [:div {:class "panel panel-default"}
 								[:div {:class "panel-body"}
 								 ;portlet stuff sprint
-								 [:div.column {:id "create-sprint-col"}]]]]
+								 [:div.column {:id "create-sprint-col"}]
+                 [:div {:id "progressbar"} ]]]]
 
 							[:div {:class "col-sm-6"}
 							 [:div {:class "panel panel-default"}
@@ -243,7 +244,8 @@
           (.sortable (js/$ ".column") (clj->js {:connectWith ".column"
                                                 :handle ".portlet-header"
                                                 :cancel ".portlet-toggle"
-                                                :placeholder "portlet-placeholder ui-corner-all"})))))
+                                                :placeholder "portlet-placeholder ui-corner-all"}))
+          )))
 
 
 (defn backlog []
