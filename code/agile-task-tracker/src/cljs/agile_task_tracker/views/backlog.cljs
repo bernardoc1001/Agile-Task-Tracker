@@ -82,7 +82,7 @@
     [:div [atom-input-field "Assignees: " new-task [:data :assignees]]]
     [:div [atom-input-field "Estimated Time: " "number" new-task [:data :estimated-time]]]
     [:div [atom-input-field "Epic: " new-task [:data :epic]]]
-    [:div [atom-input-field "Assigned Sprint: " new-task [:data :assigned-sprint]]]
+    [:div [atom-input-field "Sprint ID: " new-task [:data :sprint-id]]]
     [:div [atom-input-field "Priority Level: " "number" new-task [:data :priority-level]]]
     [:div [atom-input-field "Task State: " new-task [:data :task-state]]]
     [:div [atom-input-field "Logged Time: " "number" new-task [:data :logged-time]]]
@@ -183,7 +183,45 @@
                                {:show (reset! new-task {})})}
    "Delete Task By ID"])
 ;--------------------------------------------------------------------------------------
+;--------------------query all tasks by assigned sprint example -----------------------
+(defn query-tasks-by-sprint []
+  (.log js/console (str "Input data: " (:data @new-task)))
+  (POST "/backlog"
+        {:params        {:data (:data @new-task)
+                         :method "query-by-term"}
+         :handler       handler
+         :error-handler error-handler}))
 
+(defn modal-query-tasks-by-sprint []
+  [:div
+   [:div {:class "modal-header"}
+    [:button {:type "button"
+              :class "close"
+              :data-dismiss "modal"
+              :aria-label "Close"}
+     [:span {:aria-hidden "true"} (gstring/unescapeEntities "&times;")]]
+    [:h4 {:class "modal-title"
+          :id "get-task-modal-title"}
+     "Query A Sprint"]]
+   [:div {:class "modal-body"}
+
+    [:div [atom-input-field "Sprint ID: " new-task [:data :sprint-id]]]
+
+    [:div {:class "modal-footer"}
+     [:div.btn.btn-secondary {:type         "button"
+                              :data-dismiss "modal"}
+      "Close"]
+     [:div.btn.btn-primary {:type         "button"
+                            :data-dismiss "modal"
+                            :on-click     #(query-tasks-by-sprint)}
+      "Query"]]]])
+
+(defn query-tasks-button []
+  [:div.btn.btn-primary
+   {:on-click #(rmodals/modal! [modal-query-tasks-by-sprint]
+                               {:show (reset! new-task {})})}
+   "Query By Sprint"])
+;--------------------------------------------------------------------------------------
 (defn backlog-page []
        [:div
 
@@ -213,6 +251,9 @@
 
                  [rmodals/modal-window]
                  [delete-task-button]
+
+                 [rmodals/modal-window]
+                 [query-tasks-button]
                  ;---------------------------------------------------------
                  ]
 								;portlet stuff
