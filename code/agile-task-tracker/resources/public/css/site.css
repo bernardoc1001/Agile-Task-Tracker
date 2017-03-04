@@ -59,10 +59,28 @@ body {
 
 .portlet-header {
     padding: 0.2em 0.3em;
-    margin-bottom: 0.5em;
     position: relative;
     color: #fff;
 }
+
+.portlet-header img {
+ width:10%;
+ float: left;
+ margin-right: 1%;
+ margin-left: 1%;
+ height: 1.5em;
+}
+.portlet-header p {
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 80%;
+  font-weight: 400;
+  vertical-align: middle;
+  font-size: 14px;
+
+}
+
 .portlet-toggle {
     position: absolute;
     top: 50%;
@@ -104,4 +122,10 @@ body {
 .btn-backlog-col {
  display: block;
  margin: 1px;
+}
+
+/* priority level */
+.prio-img{
+ height: 20px;
+ width: 20%;
 }

@@ -245,7 +245,7 @@
       "Query"]]]])
 
 (defn query-tasks-button []
-  [:div.btn.btn-primary
+  [:div.btn.btn-primary.btn-backlog-col
    {:on-click #(rmodals/modal! [modal-query-tasks-by-sprint]
                                {:show (reset! new-task {})})}
    "Query By Sprint"])
