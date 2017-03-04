@@ -59,12 +59,18 @@
                                           {:status 200 :body response}
                                           {:status 500 :body response}))
 
+                                      (= "query-by-term" (get-in request [:params :method]))
+                                      (let [response (attes/query-by-term "task-info" "task-info-mapping" (keyword "sprint-id") (get-in request [:params :data :sprint-id]))]
+                                        (if (>= (get-in response [:hits :total]) 0)
+                                          {:status 200 :body response}
+                                          {:status 500 :body response}))
+
                                       :else
                                       (let [response (attes/put-task-info (:params request))]
                                         (if (= true (contains? response :created)) ;TODO make status checker functions and import from elasticsearch.clj
                                           {:status 200 :body response}
                                           response))))
-           #_(ANY "/backlog" request (attes/get-doc-by-id "task-info" "task-info-mapping" (get-in request [:params :body :task-id])))
+
 
            (resources "/")
            (not-found "Not Found, has it been included in both the handler.clj and core.cljs?")) ;TODO change not found message before demo
