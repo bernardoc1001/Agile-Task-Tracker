@@ -14,33 +14,70 @@
 (defonce new-task
          (r/atom {:data {}}))
 
+(defn convert-to-task-format
+  [string-map]
+  (hash-map :task-id (:task-id string-map)
+            :task-title (:task-title string-map)
+            :description (:description string-map)
+            :created-by (:created-by string-map)
+            :assignees (:assignees string-map)
+            :estimated-time (js/parseFloat (:estimated-time string-map))
+            :epic (:epic string-map)
+            :sprint-id (:sprint-id string-map)
+            :priority-level (js/parseInt (:priority-level string-map))
+            :task-state (:task-state string-map)
+            :logged-time (js/parseFloat (:logged-time string-map))))
+
+(defn render-task
+  [task-map col-id]
+  (let [draggable-portlet (hipo/create (task-portlet/create-task-portlet task-map))]
+
+    (.appendChild (.getElementById js/document col-id) draggable-portlet)
+    (task-portlet/make-tasks-toggleable task-map)))
+
 ;-----------test ajax stuff, refactor this -------------------------
+
 (defn handler
   [response]
   (.log js/console (str "handler response: " response)))
 
-(defn put-task-by-id-handler
+(defn error-handler
   [response]
-  (.log js/console (str "put-task-handler response: " response))
-  (let [draggable-portlet (hipo/create (task-portlet/create-task-portlet (get-in @new-task [:data])))
-        progressbar-div (.createElement js/document "div")]
-    (swap! page-state assoc-in [:tasks] (conj (:tasks @page-state) (:data @new-task)))
-    (.appendChild (.getElementById js/document "backlog-col") draggable-portlet)
-    (task-portlet/make-tasks-toggleable (get-in @new-task [:data]))))
+  (.error js/console (str response)))
 
 (defn get-task-by-id-handler
   [response]
-  ;TODO convert relevant strings to their respective number types
-  (println (str "access the id: " (get-in response [:_source :task-id])))
-  (println (str "access the title: " (get-in response [:_source :task-title])))
-  (.log js/console (str "get-task-by-id-handler response: " response)))
+  (.log js/console (str "get-task-by-id-handler response: " response))
+  (render-task (convert-to-task-format (get-in response [:_source])) "backlog-col"))
 
-(defn error-handler
+(defn get-task-by-id
+  [task-id]
+  (.log js/console (str "get task by id single arity, id is: " task-id))
+  (POST "/backlog"
+        {:params        {:data   {:task-id task-id}
+                         :method "get-by-id"}
+         :handler       get-task-by-id-handler
+         :error-handler error-handler}))
+
+(defn put-task-by-id-handler
   [response]
-  #_(.log js/console (str "errorhandler- something bad happened: " status " " status-text))
-  (.error js/console (str response)))
+  (.log js/console (str "put-task-handler response: " response))
+  ;task will be rendered in the get response handler
+  (get-task-by-id (:_id response)))
+
+(defn query-tasks-by-sprint-handler
+  [response]
+  (.log js/console (str "query-task-handler response: " response))
+  (let [hits-vector (get-in response [:hits :hits])]
+    #_(.log js/console (str "hits-vector: " hits-vector))
+    (doseq [hit hits-vector]
+      #_(.log js/console (str "singular hit: " hit))
+      (render-task (convert-to-task-format (:_source hit)) "backlog-col"))))
+
+
 ;-------------------------------------------------------------------
 (defn save-task-procedure []
+  ;TODO make this single arity?
   (POST "/backlog"
         {:params        (:data @new-task)
          :handler       put-task-by-id-handler
@@ -48,7 +85,7 @@
 
 (defn atom-input-field
   ([label type atom path]
-   (if (and (= type "number") (not= (first path) :priority-level))
+   (if (= type "time")
      ;take in times as a number accurate to 3 decimal places
      [:label label [:input {:type      "number"
                             :step      "0.001"
@@ -85,7 +122,7 @@
     [:div [atom-input-field "Sprint ID: " new-task [:data :sprint-id]]]
     [:div [atom-input-field "Priority Level: " "number" new-task [:data :priority-level]]]
     [:div [atom-input-field "Task State: " new-task [:data :task-state]]]
-    [:div [atom-input-field "Logged Time: " "number" new-task [:data :logged-time]]]
+    [:div [atom-input-field "Logged Time: " "time" new-task [:data :logged-time]]]
 
     [:div {:class "modal-footer"}
      [:div.btn.btn-secondary {:type         "button"
@@ -104,15 +141,6 @@
 
 
 ;;----------------Get doc by ID example -------------------------------------------
-
-
-
-(defn get-task-by-id []
-  (POST "/backlog"
-        {:params        {:data (:data @new-task)
-                         :method "get-by-id"}
-         :handler       get-task-by-id-handler
-         :error-handler error-handler}))
 
 (defn modal-get-task-by-id []
   [:div
@@ -135,7 +163,7 @@
       "Close"]
      [:div.btn.btn-primary {:type         "button"
                             :data-dismiss "modal"
-                            :on-click     #(get-task-by-id)}
+                            :on-click     #(get-task-by-id (get-in @new-task [:data :task-id]))}
       "Get Task"]]]])
 
 (defn get-task-button []
@@ -184,12 +212,12 @@
    "Delete Task By ID"])
 ;--------------------------------------------------------------------------------------
 ;--------------------query all tasks by assigned sprint example -----------------------
-(defn query-tasks-by-sprint []
-  (.log js/console (str "Input data: " (:data @new-task)))
+(defn query-tasks-by-sprint [sprint-id]
+  (.log js/console (str "Input data: " sprint-id))
   (POST "/backlog"
-        {:params        {:data (:data @new-task)
+        {:params        {:data {:sprint-id sprint-id}
                          :method "query-by-term"}
-         :handler       handler
+         :handler       query-tasks-by-sprint-handler
          :error-handler error-handler}))
 
 (defn modal-query-tasks-by-sprint []
@@ -213,7 +241,7 @@
       "Close"]
      [:div.btn.btn-primary {:type         "button"
                             :data-dismiss "modal"
-                            :on-click     #(query-tasks-by-sprint)}
+                            :on-click     #(query-tasks-by-sprint (get-in @new-task [:data :sprint-id]))}
       "Query"]]]])
 
 (defn query-tasks-button []
@@ -258,10 +286,7 @@
                  ]
 								;portlet stuff
 								[:div
-								 [:div.column {:id "backlog-col"}
-                  #_(task-portlet/create-task-portlet {:task-id "1"
-                                                     :task-title "2"
-                                                     :description "Yep"})]]]]]]]
+								 [:div.column {:id "backlog-col"}]]]]]]]
 
 
 					 [:div {:class "col-sm-8"}
@@ -285,9 +310,7 @@
           (.sortable (js/$ ".column") (clj->js {:connectWith ".column"
                                                 :handle ".portlet-header"
                                                 :cancel ".portlet-toggle"
-                                                :placeholder "portlet-placeholder ui-corner-all"}))
-          )))
-
+                                                :placeholder "portlet-placeholder ui-corner-all"})))))
 
 (defn backlog []
   (r/create-class {:reagent-render      backlog-page
