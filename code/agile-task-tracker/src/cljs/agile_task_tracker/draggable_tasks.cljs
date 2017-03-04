@@ -28,9 +28,12 @@
   [task-map]
   (let [task-id (:task-id task-map)
         title (:task-title task-map)
-        description (:description task-map)]
+        description (:description task-map)
+        priority (:priority-level task-map)]
     [:div.portlet {:id task-id}
-     [:div.portlet-header title
+     [:div.portlet-header
+      [:img {:src (str "/images/" priority ".png")}]
+      [:p title]
       [:span {:class (str "ui-icon ui-icon-plusthick portlet-toggle "task-id)}]]
      [:div.portlet-content description
       [:div {:id (str "progressbar-" task-id)} ]]]))
