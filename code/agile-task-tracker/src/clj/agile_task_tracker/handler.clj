@@ -69,10 +69,9 @@
                                   (if (= true (contains? response :created)) ;TODO make status checker functions and import from elasticsearch.clj
                                     {:status 200 :body response}
                                     response))))
-
-					 (GET "/project" [] (loading-page))
-					 (GET "/sprints" [] (loading-page))
-           (GET "/backlog" [] (loading-page))
+           (GET "/project/:organisation-id" [organisation-id] (loading-page))
+           (GET "/sprints/:project-id" [project-id] (loading-page))
+           (GET "/backlog/:project-id" [project-id] (loading-page))
            (POST "/backlog" request (cond
                                       (= "get-by-id" (get-in request [:params :method]))
                                       (let [response (attes/get-doc-by-id "task-info" "task-info-mapping" (get-in request [:params :data :task-id]))]
@@ -97,8 +96,7 @@
                                         (if (= true (contains? response :created)) ;TODO make status checker functions and import from elasticsearch.clj
                                           {:status 200 :body response}
                                           response))))
-
-
+           
            (resources "/")
            (not-found "Not Found, has it been included in both the handler.clj and core.cljs?")) ;TODO change not found message before demo
 

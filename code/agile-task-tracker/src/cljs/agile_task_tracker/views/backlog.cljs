@@ -1,5 +1,6 @@
 (ns agile-task-tracker.views.backlog
   (:require [reagent.core :as r]
+            [reagent.session :as session]
             [reagent-modals.modals :as rmodals]
             [agile-task-tracker.common :as common]
             [ajax.core :refer [GET POST]]
@@ -26,7 +27,8 @@
             :sprint-id (:sprint-id string-map)
             :priority-level (js/parseInt (:priority-level string-map))
             :task-state (:task-state string-map)
-            :logged-time (js/parseFloat (:logged-time string-map))))
+            :logged-time (js/parseFloat (:logged-time string-map))
+            :project-id (:project-id string-map)))
 
 (defn render-task
   [task-map col-id]
@@ -113,6 +115,7 @@
     [:div [common/atom-input-field "Priority Level: " "number" new-task [:data :priority-level]]]
     [:div [common/atom-input-field "Task State: " new-task [:data :task-state]]]
     [:div [common/atom-input-field "Logged Time: " "time" new-task [:data :logged-time]]]
+    [:div [common/atom-input-field "Project-id: " new-task [:data :project-id]]]
 
     [:div {:class "modal-footer"}
      [:div.btn.btn-secondary {:type         "button"
@@ -292,8 +295,7 @@
 							[:div {:class "col-sm-6"}
 							 [:div {:class "panel panel-default"}
                 [:div {:class "panel-body"}
-                 [:div [common/atom-input-field "Sprint Name " new-task
-                        [:sprint-name]]]]]]]]]]]]])
+                 [:div [common/atom-input-field "Sprint Name " new-task [:sprint-name]]]]]]]]]]]]])
 
 (defn backlog-did-mount []
   (js/$ (fn []
