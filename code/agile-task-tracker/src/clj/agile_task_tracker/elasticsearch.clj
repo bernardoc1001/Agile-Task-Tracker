@@ -31,6 +31,22 @@
     ;put the doc in the index
     (esd/put conn index-name mapping id doc)))
 
+(defn put-org-info
+  [doc]
+  (let [conn (esr/connect db-address)
+        index-name "org-info"
+        id (:org-id doc)
+        mapping "org-info-mapping"
+        mapping-types {mapping {:properties {:org-id            {:type "string" :index "not_analyzed"} ;not analyzed allows for the exact term to be queried
+                                             :org-name          {:type "string"}}}}]
+
+    (if (not (esi/exists? conn index-name))
+      ;create index with mappings
+      (esi/create conn index-name :mappings mapping-types))
+
+    ;put the doc in the index
+    (esd/put conn index-name mapping id doc)))
+
 (defn get-doc-by-id
   [index-name mapping id]
   (let [conn (esr/connect db-address)]

@@ -43,6 +43,33 @@
 
 (defroutes routes
            (GET "/" [] (loading-page))
+           (POST "/"  request (cond
+                                (= "get-by-id" (get-in request [:params :method]))
+                                (let [response (attes/get-doc-by-id "org-info" "org-info-mapping" (get-in request [:params :data :org-id]))]
+                                  (if (= true (:found response))
+                                    {:status 200 :body response}
+                                    response))
+
+                                (= "delete-by-id" (get-in request [:params :method]))
+                                (let [response (attes/delete-doc-by-id
+                                                 "org-info"
+                                                 "org-info-mapping" (get-in request [:params :data :org-id]))]
+                                  (if (= true (:found response)) ;TODO make status checker functions and import from elasticsearch.clj
+                                    {:status 200 :body response}
+                                    {:status 500 :body response}))
+
+                                (= "query-by-term" (get-in request [:params :method]))
+                                (let [response (attes/query-by-term "org-info" "org-info-mapping" (keyword "org-id") (get-in request [:params :data :org-id]))]
+                                  (if (>= (get-in response [:hits :total]) 0)
+                                    {:status 200 :body response}
+                                    {:status 500 :body response}))
+
+                                :else
+                                (let [response (attes/put-org-info (:params request))]
+                                  (if (= true (contains? response :created)) ;TODO make status checker functions and import from elasticsearch.clj
+                                    {:status 200 :body response}
+                                    response))))
+
 					 (GET "/project" [] (loading-page))
 					 (GET "/sprints" [] (loading-page))
            (GET "/backlog" [] (loading-page))
