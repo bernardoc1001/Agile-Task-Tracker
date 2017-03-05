@@ -97,8 +97,15 @@ body {
     height: 50px;
 }
 
-.ui-widget-header{
-   background: #428bca;}
+.ui-widget-header {
+   background: #428bca;
+   border: 0;
+   margin: 1px;
+}
+
+.ui.widget-content-widget {
+
+}
 
 .jumbotron {
  min-height: 30px;

@@ -88,21 +88,6 @@
          :handler       put-task-by-id-handler
          :error-handler error-handler}))
 
-(defn atom-input-field
-  ([label type atom path]
-   (if (= type "time")
-     ;take in times as a number accurate to 3 decimal places
-     [:label label [:input {:type      "number"
-                            :step      "0.001"
-                            :name      label
-                            :on-change #(common/onclick-swap-atom! atom path %)}]]
-
-     ;take in every other type (including non-time numbers , i.e priority-level)
-     [:label label [:input {:type      type
-                            :name      label
-                            :on-change #(common/onclick-swap-atom! atom path %)}]]))
-  ([label atom path]
-    (atom-input-field label "text" atom path)))
 
 (defn modal-task-creation-content []
   [:div
@@ -117,17 +102,17 @@
      "Create a task"]]
    [:div {:class "modal-body"}
 
-    [:div [atom-input-field "Task ID: " new-task [:data :task-id]]]
-    [:div [atom-input-field "Title: " new-task [:data :task-title]]]
-    [:div [atom-input-field "Description: " new-task [:data :description]]]
-    [:div [atom-input-field "Created By: " new-task [:data :created-by]]]
-    [:div [atom-input-field "Assignees: " new-task [:data :assignees]]]
-    [:div [atom-input-field "Estimated Time: " "number" new-task [:data :estimated-time]]]
-    [:div [atom-input-field "Epic: " new-task [:data :epic]]]
-    [:div [atom-input-field "Sprint ID: " new-task [:data :sprint-id]]]
-    [:div [atom-input-field "Priority Level: " "number" new-task [:data :priority-level]]]
-    [:div [atom-input-field "Task State: " new-task [:data :task-state]]]
-    [:div [atom-input-field "Logged Time: " "time" new-task [:data :logged-time]]]
+    [:div [common/atom-input-field "Task ID: " new-task [:data :task-id]]]
+    [:div [common/atom-input-field "Title: " new-task [:data :task-title]]]
+    [:div [common/atom-input-field "Description: " new-task [:data :description]]]
+    [:div [common/atom-input-field "Created By: " new-task [:data :created-by]]]
+    [:div [common/atom-input-field "Assignees: " new-task [:data :assignees]]]
+    [:div [common/atom-input-field "Estimated Time: " "number" new-task [:data :estimated-time]]]
+    [:div [common/atom-input-field "Epic: " new-task [:data :epic]]]
+    [:div [common/atom-input-field "Sprint ID: " new-task [:data :sprint-id]]]
+    [:div [common/atom-input-field "Priority Level: " "number" new-task [:data :priority-level]]]
+    [:div [common/atom-input-field "Task State: " new-task [:data :task-state]]]
+    [:div [common/atom-input-field "Logged Time: " "time" new-task [:data :logged-time]]]
 
     [:div {:class "modal-footer"}
      [:div.btn.btn-secondary {:type         "button"
@@ -160,7 +145,7 @@
      "Get a task"]]
    [:div {:class "modal-body"}
 
-    [:div [atom-input-field "Task ID: " new-task [:data :task-id]]]
+     [:div [common/atom-input-field "Task ID: " new-task [:data :task-id]]]
 
     [:div {:class "modal-footer"}
      [:div.btn.btn-secondary {:type         "button"
@@ -199,7 +184,7 @@
      "Delete a task"]]
    [:div {:class "modal-body"}
 
-    [:div [atom-input-field "Task ID: " new-task [:data :task-id]]]
+    [:div [common/atom-input-field "Task ID: " new-task [:data :task-id]]]
 
     [:div {:class "modal-footer"}
      [:div.btn.btn-secondary {:type         "button"
@@ -237,7 +222,7 @@
      "Query A Sprint"]]
    [:div {:class "modal-body"}
 
-    [:div [atom-input-field "Sprint ID: " new-task [:data :sprint-id]]]
+    [:div [common/atom-input-field "Sprint ID: " new-task [:data :sprint-id]]]
 
     [:div {:class "modal-footer"}
      [:div.btn.btn-secondary {:type         "button"
@@ -306,8 +291,9 @@
 
 							[:div {:class "col-sm-6"}
 							 [:div {:class "panel panel-default"}
-								[:div {:class "panel-body"}
-								 [:div [atom-input-field "Sprint Name " new-task [:sprint-name]]]]]]]]]]]]])
+                [:div {:class "panel-body"}
+                 [:div [common/atom-input-field "Sprint Name " new-task
+                        [:sprint-name]]]]]]]]]]]]])
 
 (defn backlog-did-mount []
   (js/$ (fn []
