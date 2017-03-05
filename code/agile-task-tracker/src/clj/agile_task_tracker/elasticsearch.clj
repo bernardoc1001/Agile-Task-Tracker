@@ -19,10 +19,11 @@
                                              :assignees          {:type "string"}
                                              :estimated-time     {:type "double"}
                                              :epic               {:type "string"}
-                                             :sprint-id          {:type "string" :index "not_analyzed"} ;not analyzed allows for the exact term to be queried
+                                             :sprint-id          {:type "string" :index "not_analyzed"}
                                              :priority-level     {:type "integer"}
                                              :task-state         {:type "string"}
-                                             :logged-time        {:type "double"}}}}]
+                                             :logged-time        {:type "double"}
+                                             :project-id         {:type "string" :index "not_analyzed"}}}}]
 
     (if (not (esi/exists? conn index-name))
       ;create index with mappings

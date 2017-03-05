@@ -18,16 +18,19 @@
 ;; -------------------------
 ;; Routes
 (secretary/defroute "/" []
-  (session/put! :current-page #'dashboard-page))
+                    (session/put! :current-page #'dashboard-page))
 
-(secretary/defroute "/backlog" []
-  (session/put! :current-page #'backlog))
+(secretary/defroute "/backlog/:project-id" [project-id]
+                    (session/put! :project-id project-id)
+                    (session/put! :current-page #'backlog))
 
-(secretary/defroute "/project" []
-	(session/put! :current-page #'project-page))
+(secretary/defroute "/project/:organisation-id" [organisation-id]
+                    (session/put! :organisation-id organisation-id)
+                    (session/put! :current-page #'project-page))
 
-(secretary/defroute "/sprints" []
-	(session/put! :current-page #'sprints-page))
+(secretary/defroute "/sprints/:project-id" [project-id]
+                    (session/put! :project-id project-id)
+                    (session/put! :current-page #'sprints-page))
 
 ;; -------------------------
 ;; Initialize app
