@@ -241,61 +241,67 @@
    {:on-click #(rmodals/modal! [modal-query-tasks-by-sprint]
                                {:show (reset! new-task {})})}
    "Query By Sprint"])
+
+(defn refresh-tasks-button []
+  [:div.btn.btn-primary.btn-backlog-col
+   {:on-click #(query-tasks-by-sprint "backlog")}
+   "Refresh Tasks"])
 ;--------------------------------------------------------------------------------------
 (defn backlog-page []
-       [:div
+  [:div
+   [:div#wrapper
+    [sidebar/sidebar]
 
-				[:div#wrapper
-				 [sidebar/sidebar]
+    [:div.page-content-wrapper>div.container>div.row>div.col-lg-12
+     [sidebar/menu-toggle]
+     [:p (str "page-state: " @page-state)]
+     [:p (str "new-task: " @new-task)]
+     [:p "backlog test"]
 
-				 [:div.page-content-wrapper>div.container>div.row>div.col-lg-12
-					[sidebar/menu-toggle]
-					[:p (str "page-state: " @page-state)]
-					[:p (str "new-task: " @new-task)]
-					[:p "backlog test"]
+     [:div {:class "row"}
+      [:div {:class "col-sm-4"}
+       [:div {:class "panel panel-default"}
+        [:div {:class "panel-heading"} "Backlog"]
+        [:div {:class "panel-body"}
+         [:div {:class "panel panel-default"}
+          [:div {:class "panel-body"}
+           [:div
+            [rmodals/modal-window]
+            [create-task-button]
 
-					[:div {:class "row"}
-					 [:div {:class "col-sm-4"}
-						[:div {:class "panel panel-default"}
-						 [:div {:class "panel-heading"} "Backlog"]
-						 [:div {:class "panel-body"}
-							[:div {:class "panel panel-default"}
-							 [:div {:class "panel-body"}
-								[:div
-                 [rmodals/modal-window]
-                 [create-task-button]
+            ;----------temporary examples-----------------------------
+            [rmodals/modal-window]
+            [get-task-button]
 
-                 ;----------temporary examples-----------------------------
-                 [rmodals/modal-window]
-                 [get-task-button]
+            [rmodals/modal-window]
+            [delete-task-button]
 
-                 [rmodals/modal-window]
-                 [delete-task-button]
+            [rmodals/modal-window]
+            [query-tasks-button]
 
-                 [rmodals/modal-window]
-                 [query-tasks-button]
-                 ;---------------------------------------------------------
-                 ]
-								;portlet stuff
-								[:div
-								 [:div.column {:id "backlog-col"}]]]]]]]
+            [refresh-tasks-button]
+            ;---------------------------------------------------------
+            ]
+           ;portlet stuff
+           [:div
+            [:div.column {:id "backlog-col"}]]]]]]]
 
 
-					 [:div {:class "col-sm-8"}
-						[:div {:class "panel panel-default"}
-						 [:div {:class "panel-heading"} "Sprint Creation/Modification"]
-						 [:div {:class "panel-body"}
-							[:div {:class "col-sm-6"}
-							 [:div {:class "panel panel-default"}
-								[:div {:class "panel-body"}
-								 ;portlet stuff sprint
-								 [:div.column {:id "create-sprint-col"}]
-                 [:div {:id "progressbar"} ]]]]
+      [:div {:class "col-sm-8"}
+       [:div {:class "panel panel-default"}
+        [:div {:class "panel-heading"} "Sprint Creation/Modification"]
+        [:div {:class "panel-body"}
+         [:div {:class "col-sm-6"}
+          [:div {:class "panel panel-default"}
+           [:div {:class "panel-body"}
+            ;portlet stuff sprint
+            [:div.column {:id "create-sprint-col"}]
+            [:div {:id "progressbar"} ]]]]
 
-							[:div {:class "col-sm-6"}
-							 [:div {:class "panel panel-default"}
-                [:div {:class "panel-body"}
-                 [:div [common/atom-input-field "Sprint Name " new-task [:sprint-name]]]]]]]]]]]]])
+         [:div {:class "col-sm-6"}
+          [:div {:class "panel panel-default"}
+           [:div {:class "panel-body"}
+            [:div [common/atom-input-field "Sprint Name " new-task [:sprint-name]]]]]]]]]]]]])
 
 (defn backlog-did-mount []
   (js/$ (fn []
