@@ -48,6 +48,26 @@
     ;put the doc in the index
     (esd/put conn index-name mapping id doc)))
 
+(defn put-proj-info
+  [doc]
+  (let [conn (esr/connect db-address)
+        index-name "proj-info"
+        id (:proj-id doc)
+        mapping "proj-info-mapping"
+        mapping-types {mapping {:properties {:proj-id            {:type "string":index "not_analyzed"} ;not analyzed allows for the exact term to be queried
+                                             :proj-name          {:type "string"}
+                                             :org-id             {:type "string"}
+                                             :man-hours          {:type "double"}
+                                             :start-date         {:type "string"}
+                                             :end-date           {:type "string"}}}}]
+
+    (if (not (esi/exists? conn index-name))
+      ;create index with mappings
+      (esi/create conn index-name :mappings mapping-types))
+
+    ;put the doc in the index
+    (esd/put conn index-name mapping id doc)))
+
 (defn get-doc-by-id
   [index-name mapping id]
   (let [conn (esr/connect db-address)]

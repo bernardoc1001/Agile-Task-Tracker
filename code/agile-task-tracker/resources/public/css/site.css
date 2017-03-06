@@ -136,7 +136,7 @@ body {
 
 
 /* org-pill */
-.org-pill {
+.proj-org-pill {
  display: inline-block;
  height: 50px;
  width: 200px;
@@ -148,7 +148,7 @@ body {
  transition: .5s ease;
 }
 
-.org-pill a {
+.proj-org-pill a {
  height: 50px;
  width:  200px;
  color:#fff;
@@ -159,13 +159,12 @@ body {
  vertical-align: middle;
 }
 
-.org-pill:hover {
+.proj-org-pill:hover {
  opacity: 0.7;
  transition: .5 ease;
 }
-.org-pill a:hover {
+.proj-org-pill a:hover {
  transition: .5 ease;
  color: black;
-
 }
 
