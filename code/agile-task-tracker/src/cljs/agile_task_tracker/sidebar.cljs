@@ -3,7 +3,7 @@
 
 (defn sidebar []
   [:div#sidebar-wrapper
-	 [:a {:href "/"} [:img {:src "/images/logo.png"}]]
+	 [:a [:img {:src "/images/logo.png"}]]
 	 [:ul.sidebar-nav
 
     [:li>a {:href "/"} "Home" ]

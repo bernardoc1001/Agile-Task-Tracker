@@ -5,8 +5,8 @@
             [agile-task-tracker.common :as common]
             [ajax.core :refer [GET POST]]
             [goog.string :as gstring]
-            [agile-task-tracker.draggable-tasks :as task-portlet]
-            [hipo.core :as hipo]))
+            [hipo.core :as hipo]
+            [agile-task-tracker.proj-org :as proj-org]))
 
 (defonce new-org
          (r/atom {:data {}}))
@@ -14,18 +14,16 @@
 (defonce page-state
          (r/atom {:orgs []}))
 
+
+
+
 (defn render-org
-    [org-map col-id]
-    (task-portlet/delete-task-portlet (:org-id org-map))
-    (if (nil? (.getElementById js/document (:org-id org-map)))
-      (let [draggable-portlet (hipo/create (task-portlet/create-task-portlet org-map))]
+  [org-map col-id]
+  (if (nil? (.getElementById js/document (:org-id org-map)))
+    (let [org-pill (hipo/create (proj-org/create-org-pill org-map))]
 
-        (.appendChild (.getElementById js/document col-id) draggable-portlet)
-        (task-portlet/make-tasks-toggleable org-map))
-      (.error js/console (str "Could not add org, old version of the task still exists"))))
-
-;TODO
-
+      (.appendChild (.getElementById js/document col-id) org-pill))
+    (.error js/console (str "Could not add org, already exists"))))
 
 
 ;---------------------ajax stuff----------------------------
@@ -52,7 +50,7 @@
          :handler       get-org-by-id-handler
          :error-handler error-handler}))
 
-(defn put-task-by-id-handler
+(defn put-org-by-id-handler
   [response]
   (.log js/console (str "put-org-handler response: " response))
   ;task will be rendered in the get response handler
@@ -67,7 +65,7 @@
   ;TODO make this single arity?
   (POST "/"
         {:params        (:data @new-org)
-         :handler       put-task-by-id-handler
+         :handler       put-org-by-id-handler
          :error-handler error-handler}))
 
 (defn modal-org-creation-content []
@@ -83,8 +81,9 @@
      "Create an Organisation"]]
    [:div {:class "modal-body"}
 
-    [:div [common/atom-input-field "Org-id " new-org [:data :org-id]]]
-    [:div [common/atom-input-field "Organisation name" new-org [:data :org-name]]]
+    [:div [common/atom-input-field "Org-id: " new-org [:data :org-id]]]
+    [:div [common/atom-input-field "Organisation name: " new-org [:data
+                                                                 :org-name]]]
 
 
     [:div {:class "modal-footer"}
@@ -97,7 +96,7 @@
       "Save"]]]])
 
 (defn create-org-button []
-  [:div.btn.btn-primary.btn-backlog-col
+  [:div.btn.btn-primary
    {:on-click #(rmodals/modal! [modal-org-creation-content]
                                {:show (reset! new-org {})})}
    "Create Organisation"])
@@ -110,22 +109,18 @@
    [:div#wrapper
     [sidebar/sidebar]
 
-    [:div.page-content-wrapper>div.container>div.row>div.col-lg-12
+    [:div.page-content-wrapper>div.container-fluid>div.row>div.col-xs-12
      [sidebar/menu-toggle]
      [:p (str "page-state: " @page-state)]
      [:p (str "new-org: " @new-org)]
      [:p "org test"]
+     [:div {:class "panel panel-default"}
+      [:div {:class "panel-heading"} "Organisations"]
+      [:div {:class "panel-body"}
+       [:div {:class "row"}
+        [:div {:class "col-sm-12"}
+         [rmodals/modal-window]
+         [create-org-button]
+         [:div#org-col]]]]]]]])
 
-     [:div {:class "row"}
-      [:div {:class "col-sm-4"}
-       [:div {:class "panel panel-default"}
-        [:div {:class "panel-heading"} "Organisations"]
-        [:div {:class "panel-body"}
-         [:div {:class "panel panel-default"}
-          [:div {:class "panel-body"}
-           [:div
-            [rmodals/modal-window]
-            [create-org-button]]
-           ;portlet stuff
-           [:div
-            [:div.column {:id "org-col"}]]]]]]]]]]])
+
