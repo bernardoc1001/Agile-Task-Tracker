@@ -70,6 +70,32 @@
                                     {:status 200 :body response}
                                     response))))
            (GET "/project/:organisation-id" [organisation-id] (loading-page))
+           (POST "/project" request (cond
+                                      (= "get-by-id" (get-in request [:params :method]))
+                                      (let [response (attes/get-doc-by-id "proj-info" "proj-info-mapping" (get-in request [:params :data :proj-id]))]
+                                        (if (= true (:found response)) ;TODO make status checker functions and import from elasticsearch.clj
+                                          {:status 200 :body response}
+                                          response))
+
+                                      (= "delete-by-id" (get-in request [:params :method]))
+                                      (let [response (attes/delete-doc-by-id "proj-info" "proj-info-mapping" (get-in request [:params :data :proj-id]))]
+                                        (if (= true (:found response)) ;TODO make status checker functions and import from elasticsearch.clj
+                                          {:status 200 :body response}
+                                          {:status 500 :body response}))
+
+                                      (= "query-by-term" (get-in request [:params :method]))
+                                      ;TODO does this work?
+                                      (let [response (attes/query-by-term "proj-info" "proj-info-mapping" (keyword "org-id") (get-in request [:params :data :org-id]))]
+                                        (if (>= (get-in response [:hits :total]) 0)
+                                          {:status 200 :body response}
+                                          {:status 500 :body response}))
+
+                                      (= "put-by-id" (get-in request [:params :method]))
+                                      (let [response (attes/put-proj-info (get-in request [:params :data]))]
+                                        (if (= true (contains? response :created)) ;TODO make status checker functions and import from elasticsearch.clj
+                                          {:status 200 :body response}
+                                          response))))
+           
            (GET "/sprints/:project-id" [project-id] (loading-page))
            (GET "/backlog/:project-id" [project-id] (loading-page))
            (POST "/backlog" request (cond

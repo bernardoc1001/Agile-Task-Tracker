@@ -83,8 +83,7 @@
    [:div {:class "modal-body"}
 
     [:div [common/atom-input-field "Org-id: " new-org [:data :org-id]]]
-    [:div [common/atom-input-field "Organisation name: " new-org [:data
-                                                                 :org-name]]]
+    [:div [common/atom-input-field "Organisation name: " new-org [:data :org-name]]]
 
 
     [:div {:class "modal-footer"}
@@ -114,7 +113,6 @@
      [sidebar/menu-toggle]
      [:p (str "page-state: " @page-state)]
      [:p (str "new-org: " @new-org)]
-     [:p "org test"]
      [:div {:class "panel panel-default"}
       [:div {:class "panel-heading"} "Organisations"]
       [:div {:class "panel-body"}
