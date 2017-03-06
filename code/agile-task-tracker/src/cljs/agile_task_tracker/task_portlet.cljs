@@ -1,5 +1,21 @@
-(ns agile-task-tracker.draggable-tasks
-  (:require [reagent.core :as r]))
+(ns agile-task-tracker.task-portlet
+  (:require [reagent.core :as r]
+            [hipo.core :as hipo]))
+
+(defn convert-to-task-format
+  [string-map]
+  (hash-map :task-id (:task-id string-map)
+            :task-title (:task-title string-map)
+            :description (:description string-map)
+            :created-by (:created-by string-map)
+            :assignees (:assignees string-map)
+            :estimated-time (js/parseFloat (:estimated-time string-map))
+            :epic (:epic string-map)
+            :sprint-id (:sprint-id string-map)
+            :priority-level (:priority-level string-map)
+            :task-state (:task-state string-map)
+            :logged-time (js/parseFloat (:logged-time string-map))
+            :project-id (:project-id string-map)))
 
 (defn create-task-progressbar [task-map]
   (let [task-id (:task-id task-map)
@@ -46,4 +62,12 @@
           true)
       false)))
 
+(defn render-task
+  [task-map col-id]
+  (delete-task-portlet (:task-id task-map))
+  (if (nil? (.getElementById js/document (:task-id task-map)))
+    (let [draggable-portlet (hipo/create (create-task-portlet task-map))]
 
+      (.appendChild (.getElementById js/document col-id) draggable-portlet)
+      (make-tasks-toggleable task-map))
+    (.error js/console (str "Could not add task, old version of the task still exists"))))
