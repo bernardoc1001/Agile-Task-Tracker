@@ -25,7 +25,7 @@
             :estimated-time (js/parseFloat (:estimated-time string-map))
             :epic (:epic string-map)
             :sprint-id (:sprint-id string-map)
-            :priority-level (js/parseInt (:priority-level string-map))
+            :priority-level (:priority-level string-map)
             :task-state (:task-state string-map)
             :logged-time (js/parseFloat (:logged-time string-map))
             :project-id (:project-id string-map)))
@@ -112,7 +112,7 @@
     [:div [common/atom-input-field "Estimated Time: " "number" new-task [:data :estimated-time]]]
     [:div [common/atom-input-field "Epic: " new-task [:data :epic]]]
     [:div [common/atom-input-field "Sprint ID: " new-task [:data :sprint-id]]]
-    [:div [common/atom-input-field "Priority Level: " "number" new-task [:data :priority-level]]]
+    [:div [common/atom-input-field "Priority Level: " new-task [:data :priority-level]]]
     [:div [common/atom-input-field "Task State: " new-task [:data :task-state]]]
     [:div [common/atom-input-field "Logged Time: " "time" new-task [:data :logged-time]]]
     [:div [common/atom-input-field "Project-id: " new-task [:data :project-id]]]
@@ -302,6 +302,7 @@
           [:div {:class "panel panel-default"}
            [:div {:class "panel-body"}
             [:div [common/atom-input-field "Sprint Name " new-task [:sprint-name]]]]]]]]]]]]])
+
 
 (defn backlog-did-mount []
   (js/$ (fn []

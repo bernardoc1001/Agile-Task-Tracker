@@ -45,6 +45,12 @@ img {
 
 }
 
+.jumbotron {
+ min-height: 30px;
+ padding: 2px;
+}
+
+
 
 /* Portlet stuff */
 
@@ -103,15 +109,6 @@ body {
    margin: 1px;
 }
 
-.ui.widget-content-widget {
-
-}
-
-.jumbotron {
- min-height: 30px;
- padding: 2px;
-}
-
 /* Progress Bar */
 
 .ui-progressbar {
@@ -136,3 +133,39 @@ body {
  height: 20px;
  width: 20%;
 }
+
+
+/* org-pill */
+.org-pill {
+ display: inline-block;
+ height: 50px;
+ width: 200px;
+ margin-top: 10px;
+ margin-right: 10px;
+ background-color: #428bca;
+ text-align: center;
+ border-radius: 4px;
+ transition: .5s ease;
+}
+
+.org-pill a {
+ height: 50px;
+ width:  200px;
+ color:#fff;
+ text-decoration: none !important;
+ display: table-cell;
+ font-size: .9em;
+ word-wrap: break-word;
+ vertical-align: middle;
+}
+
+.org-pill:hover {
+ opacity: 0.7;
+ transition: .5 ease;
+}
+.org-pill a:hover {
+ transition: .5 ease;
+ color: black;
+
+}
+
