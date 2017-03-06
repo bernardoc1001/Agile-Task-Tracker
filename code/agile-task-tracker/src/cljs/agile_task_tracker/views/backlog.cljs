@@ -3,11 +3,10 @@
             [reagent.session :as session]
             [reagent-modals.modals :as rmodals]
             [agile-task-tracker.common :as common]
-            [ajax.core :refer [GET POST]]
             [goog.string :as gstring]
 						[agile-task-tracker.sidebar :as sidebar]
-            [agile-task-tracker.draggable-tasks :as task-portlet]
-            [hipo.core :as hipo]))
+            [agile-task-tracker.task-portlet :as task-portlet]
+            [agile-task-tracker.task-ajax :as task-ajax]))
 
 (defonce page-state
          (r/atom {:tasks []}))
@@ -15,81 +14,11 @@
 (defonce new-task
          (r/atom {:data {}}))
 
-(defn convert-to-task-format
-  [string-map]
-  (hash-map :task-id (:task-id string-map)
-            :task-title (:task-title string-map)
-            :description (:description string-map)
-            :created-by (:created-by string-map)
-            :assignees (:assignees string-map)
-            :estimated-time (js/parseFloat (:estimated-time string-map))
-            :epic (:epic string-map)
-            :sprint-id (:sprint-id string-map)
-            :priority-level (:priority-level string-map)
-            :task-state (:task-state string-map)
-            :logged-time (js/parseFloat (:logged-time string-map))
-            :project-id (:project-id string-map)))
-
-(defn render-task
-  [task-map col-id]
-  (task-portlet/delete-task-portlet (:task-id task-map))
-  (if (nil? (.getElementById js/document (:task-id task-map)))
-    (let [draggable-portlet (hipo/create (task-portlet/create-task-portlet task-map))]
-
-      (.appendChild (.getElementById js/document col-id) draggable-portlet)
-      (task-portlet/make-tasks-toggleable task-map))
-    (.error js/console (str "Could not add task, old version of the task still exists"))))
-
-;-----------test ajax stuff, refactor this -------------------------
-
-(defn handler
-  [response]
-  (.log js/console (str "handler response: " response)))
-
-(defn error-handler
-  [response]
-  (.error js/console (str response)))
-
-(defn get-task-by-id-handler
-  [response]
-  (.log js/console (str "get-task-by-id-handler response: " response))
-  (render-task (convert-to-task-format (get-in response [:_source])) "backlog-col"))
-
-(defn get-task-by-id
-  [task-id]
-  (POST "/backlog"
-        {:params        {:data   {:task-id task-id}
-                         :method "get-by-id"}
-         :handler       get-task-by-id-handler
-         :error-handler error-handler}))
-
-(defn put-task-by-id-handler
-  [response]
-  (.log js/console (str "put-task-handler response: " response))
-  ;task will be rendered in the get response handler
-  (get-task-by-id (:_id response)))
-
-(defn delete-task-by-id-handler
-  [response]
-  (.log js/console (str "delete-task-by-id-handler response: " response))
-  (task-portlet/delete-task-portlet (:_id response)))
-
-(defn query-tasks-by-sprint-handler
-  [response]
-  (.log js/console (str "query-task-handler response: " response))
-  (let [hits-vector (get-in response [:hits :hits])]
-    (doseq [hit hits-vector]
-      (render-task (convert-to-task-format (:_source hit)) "backlog-col"))))
-
-
-;-------------------------------------------------------------------
-(defn save-task-procedure []
-  ;TODO make this single arity?
-  (POST "/backlog"
-        {:params        (:data @new-task)
-         :handler       put-task-by-id-handler
-         :error-handler error-handler}))
-
+(defn refresh-tasks-button []
+  [:div.btn.btn-primary.btn-backlog-col
+   ;TODO query both backlog tasks and the active sprint
+   {:on-click #(task-ajax/query-tasks-by-sprint "/backlog" "backlog")}
+   "Refresh Tasks"])
 
 (defn modal-task-creation-content []
   [:div
@@ -123,7 +52,7 @@
       "Close"]
      [:div.btn.btn-primary {:type         "button"
                             :data-dismiss "modal"
-                            :on-click     #(save-task-procedure)}
+                            :on-click     #(task-ajax/put-task-by-id "/backlog" (:data @new-task))}
       "Save"]]]])
 
 (defn create-task-button []
@@ -156,7 +85,7 @@
       "Close"]
      [:div.btn.btn-primary {:type         "button"
                             :data-dismiss "modal"
-                            :on-click     #(get-task-by-id (get-in @new-task [:data :task-id]))}
+                            :on-click     #(task-ajax/get-task-by-id "/backlog" (get-in @new-task [:data :task-id]))}
       "Get Task"]]]])
 
 (defn get-task-button []
@@ -167,12 +96,7 @@
 ;--------------------------------------------------------------------------------------
 
 ;--------delete doc by id example------------------------------------------------------
-(defn delete-task-by-id []
-  (POST "/backlog"
-        {:params        {:data (:data @new-task)
-                         :method "delete-by-id"}
-         :handler       delete-task-by-id-handler
-         :error-handler error-handler}))
+
 
 (defn modal-delete-task-by-id []
   [:div
@@ -195,7 +119,7 @@
       "Close"]
      [:div.btn.btn-primary {:type         "button"
                             :data-dismiss "modal"
-                            :on-click     #(delete-task-by-id)}
+                            :on-click     #(task-ajax/delete-task-by-id "/backlog" (:data @new-task))}
       "Delete Task"]]]])
 
 (defn delete-task-button []
@@ -205,12 +129,7 @@
    "Delete Task By ID"])
 ;--------------------------------------------------------------------------------------
 ;--------------------query all tasks by assigned sprint example -----------------------
-(defn query-tasks-by-sprint [sprint-id]
-  (POST "/backlog"
-        {:params        {:data {:sprint-id sprint-id}
-                         :method "query-by-term"}
-         :handler       query-tasks-by-sprint-handler
-         :error-handler error-handler}))
+
 
 (defn modal-query-tasks-by-sprint []
   [:div
@@ -233,7 +152,7 @@
       "Close"]
      [:div.btn.btn-primary {:type         "button"
                             :data-dismiss "modal"
-                            :on-click     #(query-tasks-by-sprint (get-in @new-task [:data :sprint-id]))}
+                            :on-click     #(task-ajax/query-tasks-by-sprint "/backlog" (get-in @new-task [:data :sprint-id]))}
       "Query"]]]])
 
 (defn query-tasks-button []
@@ -242,11 +161,8 @@
                                {:show (reset! new-task {})})}
    "Query By Sprint"])
 
-(defn refresh-tasks-button []
-  [:div.btn.btn-primary.btn-backlog-col
-   {:on-click #(query-tasks-by-sprint "backlog")}
-   "Refresh Tasks"])
-;--------------------------------------------------------------------------------------
+
+;--------------------Backlog Page----------------------------------------------------------
 (defn backlog-page []
   [:div
    [:div#wrapper
@@ -278,9 +194,9 @@
 
             [rmodals/modal-window]
             [query-tasks-button]
-
-            [refresh-tasks-button]
             ;---------------------------------------------------------
+            [refresh-tasks-button]
+
             ]
            ;portlet stuff
            [:div

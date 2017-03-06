@@ -64,7 +64,8 @@
 (defn save-org-procedure []
   ;TODO make this single arity?
   (POST "/"
-        {:params        (:data @new-org)
+        {:params        {:data (:data @new-org)
+                         :method "put-by-id"}
          :handler       put-org-by-id-handler
          :error-handler error-handler}))
 

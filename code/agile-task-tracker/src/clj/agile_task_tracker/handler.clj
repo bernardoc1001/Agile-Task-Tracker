@@ -64,8 +64,8 @@
                                     {:status 200 :body response}
                                     {:status 500 :body response}))
 
-                                :else
-                                (let [response (attes/put-org-info (:params request))]
+                                (= "put-by-id" (get-in request [:params :method]))
+                                (let [response (attes/put-org-info (get-in request [:params :data]))]
                                   (if (= true (contains? response :created)) ;TODO make status checker functions and import from elasticsearch.clj
                                     {:status 200 :body response}
                                     response))))
@@ -91,8 +91,8 @@
                                           {:status 200 :body response}
                                           {:status 500 :body response}))
 
-                                      :else
-                                      (let [response (attes/put-task-info (:params request))]
+                                      (= "put-by-id" (get-in request [:params :method]))
+                                      (let [response (attes/put-task-info (get-in request [:params :data]))]
                                         (if (= true (contains? response :created)) ;TODO make status checker functions and import from elasticsearch.clj
                                           {:status 200 :body response}
                                           response))))
