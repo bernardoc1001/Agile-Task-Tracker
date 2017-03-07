@@ -1,6 +1,5 @@
 (ns agile-task-tracker.views.backlog
   (:require [reagent.core :as r]
-            [reagent.session :as session]
             [reagent-modals.modals :as rmodals]
             [agile-task-tracker.common :as common]
             [goog.string :as gstring]
