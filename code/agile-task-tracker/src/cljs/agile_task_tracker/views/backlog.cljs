@@ -6,7 +6,8 @@
             [goog.string :as gstring]
 						[agile-task-tracker.sidebar :as sidebar]
             [agile-task-tracker.task-ajax :as task-ajax]
-            [agile-task-tracker.sprint-ajax :as sprint-ajax]))
+            [agile-task-tracker.sprint-ajax :as sprint-ajax]
+            [agile-task-tracker.sortable :as sortable]))
 
 ;TODO rename atoms. This isn't turning yellow. THE SKY IS FALLING. Wait
 ; nevermind there we go
@@ -145,7 +146,7 @@
               :aria-label "Close"}
      [:span {:aria-hidden "true"} (gstring/unescapeEntities "&times;")]]
     [:h4 {:class "modal-title"
-          :id "get-task-modal-title"}
+          :id "delete-task-modal-title"}
      "Delete a task"]]
    [:div {:class "modal-body"}
 
@@ -178,7 +179,7 @@
               :aria-label "Close"}
      [:span {:aria-hidden "true"} (gstring/unescapeEntities "&times;")]]
     [:h4 {:class "modal-title"
-          :id "get-task-modal-title"}
+          :id "query-modal-title"}
      "Query A Sprint"]]
    [:div {:class "modal-body"}
 
@@ -259,12 +260,9 @@
      [:p (str "new-sprint: " @new-sprint)]]]])
 
 
+
 (defn backlog-did-mount []
-  (js/$ (fn []
-          (.sortable (js/$ ".column") (clj->js {:connectWith ".column"
-                                                :handle ".portlet-header"
-                                                :cancel ".portlet-toggle"
-                                                :placeholder "portlet-placeholder ui-corner-all"})))))
+  (sortable/sortable-column))
 
 (defn backlog []
   (r/create-class {:reagent-render      backlog-page
