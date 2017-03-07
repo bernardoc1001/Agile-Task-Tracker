@@ -4,7 +4,7 @@
 
 (defn convert-to-task-format
   [string-map]
-  (hash-map :task-id (:task-id string-map)
+  (hash-map  :task-id (:task-id string-map)
             :task-title (:task-title string-map)
             :description (:description string-map)
             :created-by (:created-by string-map)
@@ -71,3 +71,4 @@
       (.appendChild (.getElementById js/document col-id) draggable-portlet)
       (make-tasks-toggleable task-map))
     (.error js/console (str "Could not add task, old version of the task still exists"))))
+

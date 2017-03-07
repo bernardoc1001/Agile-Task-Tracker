@@ -11,11 +11,15 @@
   [response]
   (.error js/console (str response)))
 
+
+
 (defn get-task-by-id-handler
   [response]
   (.log js/console (str "get-task-by-id-handler response: " response))
   ;TODO for the render task call session get
-  (task-portlet/render-task (task-portlet/convert-to-task-format (get-in response [:_source])) "backlog-col"))
+  (let [task-map (task-portlet/convert-to-task-format (get-in response [:_source]))]
+    (task-portlet/render-task task-map "backlog-col")))
+
 
 (defn get-task-by-id
   [route task-id]
