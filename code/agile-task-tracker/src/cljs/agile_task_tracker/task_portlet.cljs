@@ -1,5 +1,6 @@
 (ns agile-task-tracker.task-portlet
-  (:require [reagent.core :as r]
+  (:require [clojure.string :as string]
+            [reagent.session :as session]
             [hipo.core :as hipo]))
 
 (defn convert-to-task-format
@@ -62,12 +63,25 @@
           true)
       false)))
 
+(defn get-column-id-to-render-in
+  [task-state]
+  (let [current-page (session/get :current-page)
+        backlog-page #'agile-task-tracker.views.backlog/backlog
+        ;TODO add in sprint page
+        ]
+    (cond
+      (and (= current-page backlog-page) (or (= task-state "backlog-col") (string/blank? task-state)))
+      (str "backlog-col")
+
+      (= current-page backlog-page)
+      (str "create-sprint-col"))))
+
 (defn render-task
-  [task-map col-id]
+  [task-map]
   (delete-task-portlet (:task-id task-map))
   (if (nil? (.getElementById js/document (:task-id task-map)))
-    (let [draggable-portlet (hipo/create (create-task-portlet task-map))]
-
+    (let [draggable-portlet (hipo/create (create-task-portlet task-map))
+          col-id (get-column-id-to-render-in (:task-state task-map))]
       (.appendChild (.getElementById js/document col-id) draggable-portlet)
       (make-tasks-toggleable task-map))
     (.error js/console (str "Could not add task, old version of the task still exists"))))

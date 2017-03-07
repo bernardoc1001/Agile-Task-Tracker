@@ -16,9 +16,8 @@
 (defn get-task-by-id-handler
   [response]
   (.log js/console (str "get-task-by-id-handler response: " response))
-  ;TODO for the render task call session get
   (let [task-map (task-portlet/convert-to-task-format (get-in response [:_source]))]
-    (task-portlet/render-task task-map "backlog-col")))
+    (task-portlet/render-task task-map)))
 
 
 (defn get-task-by-id
@@ -62,8 +61,7 @@
   (.log js/console (str "query-task-handler response: " response))
   (let [hits-vector (get-in response [:hits :hits])]
     (doseq [hit hits-vector]
-      ;TODO again make render task get which column to render task in
-      (task-portlet/render-task (task-portlet/convert-to-task-format (:_source hit)) "backlog-col"))))
+      (task-portlet/render-task (task-portlet/convert-to-task-format (:_source hit))))))
 
 (defn query-tasks-by-sprint
   [route sprint-id]
