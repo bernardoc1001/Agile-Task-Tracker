@@ -5,14 +5,16 @@
             [agile-task-tracker.common :as common]
             [goog.string :as gstring]
 						[agile-task-tracker.sidebar :as sidebar]
-            [agile-task-tracker.task-portlet :as task-portlet]
-            [agile-task-tracker.task-ajax :as task-ajax]))
+            [agile-task-tracker.task-ajax :as task-ajax]
+            [agile-task-tracker.sprint-ajax :as sprint-ajax]))
 
-(defonce page-state
-         (r/atom {:tasks []}))
-
+;TODO rename atoms. This isn't turning yellow. THE SKY IS FALLING. Wait
+; nevermind there we go
 (defonce new-task
          (r/atom {:data {}}))
+
+(defonce new-sprint
+         (r/atom {:sprint {}}))
 
 (defn refresh-tasks-button []
   [:div.btn.btn-primary.btn-backlog-col
@@ -44,7 +46,7 @@
     [:div [common/atom-input-field "Priority Level: " new-task [:data :priority-level]]]
     [:div [common/atom-input-field "Task State: " new-task [:data :task-state]]]
     [:div [common/atom-input-field "Logged Time: " "time" new-task [:data :logged-time]]]
-    [:div [common/atom-input-field "Project-id: " new-task [:data :project-id]]]
+    [:div [common/atom-input-field "Project-id: " new-task [:data :proj-id]]]
 
     [:div {:class "modal-footer"}
      [:div.btn.btn-secondary {:type         "button"
@@ -61,6 +63,42 @@
                                {:show (reset! new-task {})})}
    "Create Task"])
 
+
+(defn modal-sprint-creation-content []
+  [:div
+   [:div {:class "modal-header"}
+    [:button {:type "button"
+              :class "close"
+              :data-dismiss "modal"
+              :aria-label "Close"}
+     [:span {:aria-hidden "true"} (gstring/unescapeEntities "&times;")]]
+    [:h4 {:class "modal-title"
+          :id "sprint-modal-title"}
+     "Create a sprint"]]
+   [:div {:class "modal-body"}
+    ;TODO auto-gen removal. Sprint title or human friendly id to differ
+    ; between them
+    [:div [common/atom-input-field "sprint ID: " new-sprint [:data :sprint-id]]]
+    [:div [common/atom-input-field "Start-Date: " new-sprint [:data :start-date]]]
+    [:div [common/atom-input-field "End-Date: " new-sprint [:data :end-date]]]
+    [:div [common/atom-input-field "Project ID: " new-sprint [:data :proj-id]]]
+    [:div [common/atom-input-field "Sprint State: " new-sprint [:data :sprint-state]]]
+
+
+    [:div {:class "modal-footer"}
+     [:div.btn.btn-secondary {:type         "button"
+                              :data-dismiss "modal"}
+      "Close"]
+     [:div.btn.btn-primary {:type         "button"
+                            :data-dismiss "modal"
+                            :on-click     #(sprint-ajax/put-sprint-by-id "/backlog" (:data @new-sprint))}
+      "Save"]]]])
+
+(defn create-sprint-button []
+  [:div.btn.btn-primary.btn-backlog-col
+   {:on-click #(rmodals/modal! [modal-sprint-creation-content]
+                               {:show (reset! new-sprint {})})}
+   "Create Sprint"])
 
 ;;----------------Get doc by ID example -------------------------------------------
 
@@ -169,11 +207,6 @@
     [sidebar/sidebar]
 
     [:div.page-content-wrapper>div.container>div.row>div.col-lg-12
-     [sidebar/menu-toggle]
-     [:p (str "page-state: " @page-state)]
-     [:p (str "new-task: " @new-task)]
-     [:p "backlog test"]
-
      [:div {:class "row"}
       [:div {:class "col-sm-4"}
        [:div {:class "panel panel-default"}
@@ -212,12 +245,18 @@
            [:div {:class "panel-body"}
             ;portlet stuff sprint
             [:div.column {:id "create-sprint-col"}]
-            [:div {:id "progressbar"} ]]]]
+            ]]]
 
          [:div {:class "col-sm-6"}
           [:div {:class "panel panel-default"}
            [:div {:class "panel-body"}
-            [:div [common/atom-input-field "Sprint Name " new-task [:sprint-name]]]]]]]]]]]]])
+            [:div
+             [create-sprint-button]]]]]]]]]
+     
+     [sidebar/menu-toggle]
+     ;TODO ask Renaat about debug info
+     [:p (str "new-task: " @new-task)]
+     [:p (str "new-sprint: " @new-sprint)]]]])
 
 
 (defn backlog-did-mount []

@@ -68,6 +68,25 @@
     ;put the doc in the index
     (esd/put conn index-name mapping id doc)))
 
+(defn put-sprint-info
+  [doc]
+  (let [conn (esr/connect db-address)
+        index-name "sprint-info"
+        id (:sprint-id doc)
+        mapping "sprint-info-mapping"
+        mapping-types {mapping {:properties {:sprint-id          {:type "string":index "not_analyzed"} ;not analyzed allows for the exact term to be queried
+                                             :start-date         {:type "string"}
+                                             :end-date           {:type "string"}
+                                             :proj-id            {:type "double"}
+                                             :sprint-state       {:type "string"}}}}]
+
+    (if (not (esi/exists? conn index-name))
+      ;create index with mappings
+      (esi/create conn index-name :mappings mapping-types))
+
+    ;put the doc in the index
+    (esd/put conn index-name mapping id doc)))
+
 (defn get-doc-by-id
   [index-name mapping id]
   (let [conn (esr/connect db-address)]

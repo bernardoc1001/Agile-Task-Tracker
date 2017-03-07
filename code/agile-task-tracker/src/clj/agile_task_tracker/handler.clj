@@ -121,6 +121,18 @@
                                       (let [response (attes/put-task-info (get-in request [:params :data]))]
                                         (if (= true (contains? response :created)) ;TODO make status checker functions and import from elasticsearch.clj
                                           {:status 200 :body response}
+                                          response))
+
+                                      (= "get-sprint-by-id" (get-in request [:params :method]))
+                                      (let [response (attes/get-doc-by-id "sprint-info" "sprint-info-mapping" (get-in request [:params :data :sprint-id]))]
+                                        (if (= true (:found response))
+                                          {:status 200 :body response}
+                                          response))
+
+                                      (= "put-sprint-by-id" (get-in request [:params :method]))
+                                      (let [response (attes/put-sprint-info (get-in request [:params :data]))]
+                                        (if (= true (contains? response :created))
+                                          {:status 200 :body response}
                                           response))))
            
            (resources "/")
