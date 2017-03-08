@@ -1,7 +1,10 @@
 (ns agile-task-tracker.task-portlet
   (:require [clojure.string :as string]
             [reagent.session :as session]
-            [hipo.core :as hipo]))
+            [hipo.core :as hipo]
+            [reagent-modals.modals :as rmodals]
+            [ajax.core :refer [GET POST]]
+            [agile-task-tracker.ajax :refer [handler error-handler route-calculator]]))
 
 (defn convert-to-task-format
   [string-map]
@@ -41,6 +44,28 @@
                   (.toggle (.find (.closest icon ".portlet") ".portlet-content"))))))
     (create-task-progressbar task-map)))
 
+(defn delete-render-portlet
+  [task-id]
+  (let [target-task-portlet (.getElementById js/document task-id)]
+    (if (not (nil? target-task-portlet))
+      (do (.remove target-task-portlet)
+          true)
+      false)))
+
+(defn delete-task-by-id-handler
+  [response]
+  (.log js/console (str "delete-task-by-id-handler response: " response))
+  (delete-render-portlet (:_id response)))
+
+(defn delete-task-from-db
+  [task-map]
+  (POST (route-calculator)
+        {:params        {:data   task-map
+                         :method "delete-by-id"}
+         :handler       delete-task-by-id-handler
+         :error-handler error-handler}))
+
+
 (defn create-task-portlet
   [task-map]
   (let [task-id (:task-id task-map)
@@ -51,17 +76,15 @@
      [:div.portlet-header
       [:img {:src (str "/images/" priority ".png")}]
       [:p title]
-      [:span {:class (str "ui-icon ui-icon-plusthick portlet-toggle "task-id)}]]
+      [:span {:class (str "ui-icon ui-icon-close ui-icon-plusthick
+      portlet-toggle
+      "task-id)}]]
      [:div.portlet-content description
-      [:div {:id (str "progressbar-" task-id)} ]]]))
+      [:div {:id (str "progressbar-" task-id)}]
 
-(defn delete-task-portlet
-  [task-id]
-  (let [target-task-portlet (.getElementById js/document task-id)]
-    (if (not (nil? target-task-portlet))
-      (do (.remove target-task-portlet)
-          true)
-      false)))
+      [:div.btn.btn-primary.btn-tasklet
+       {:on-click #(delete-task-from-db task-map)} "Delete Task"]]]))
+
 
 (defn get-column-id-to-render-in
   [task-state]
@@ -77,7 +100,7 @@
 
 (defn render-task
   [task-map]
-  (delete-task-portlet (:task-id task-map))
+  (delete-render-portlet (:task-id task-map))
   (if (nil? (.getElementById js/document (:task-id task-map)))
     (let [draggable-portlet (hipo/create (create-task-portlet task-map))
           col-id (get-column-id-to-render-in (:task-state task-map))]

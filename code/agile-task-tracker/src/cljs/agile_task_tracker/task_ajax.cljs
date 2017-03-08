@@ -33,18 +33,6 @@
          :handler       put-task-by-id-handler
          :error-handler error-handler}))
 
-(defn delete-task-by-id-handler
-  [response]
-  (.log js/console (str "delete-task-by-id-handler response: " response))
-  (task-portlet/delete-task-portlet (:_id response)))
-
-(defn delete-task-by-id
-  [task-map]
-  (POST (route-calculator)
-        {:params        {:data   task-map
-                         :method "delete-by-id"}
-         :handler       delete-task-by-id-handler
-         :error-handler error-handler}))
 
 (defn query-tasks-by-sprint-handler
   [response]
