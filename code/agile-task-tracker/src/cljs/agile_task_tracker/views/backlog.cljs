@@ -158,58 +158,39 @@
       (sprint-ajax/put-sprint-by-id sprint-map))
     (js/alert "Please fill out required details")))
 
-(defn modal-sprint-creation-content []
+(defn sprint-creation-content []
   (swap! new-sprint assoc-in [:data :project-id] (session/get :project-id))
   (swap! new-sprint assoc-in [:data :sprint-state] "active")
   [:div
-   [:div {:class "modal-header"}
-    [:button {:type         "button"
-              :class        "close"
-              :data-dismiss "modal"
-              :aria-label   "Close"}
-     [:span {:aria-hidden "true"} (gstring/unescapeEntities "&times;")]]
-    [:h4 {:class "modal-title"
-          :id    "sprint-modal-title"}
-     "Create a sprint"]]
-   [:div {:class "modal-body"}
-    ;TODO auto-gen removal. Sprint title or human friendly id to differ
-    ; between them
-    [:form
-     [:div {:class "form-group"}
-      [:label {:for "sprint-id"} "Sprint ID: "]
-      [:input {:type        "text", :class "form-control", :id "sprint-id",
-               :placeholder "Enter Sprint ID" :on-change #(common/onclick-swap-atom! new-sprint [:data :sprint-id] %)}]
-      [:small {:class "form-text text-muted"} "Required"]]
 
-     [:div {:class "form-group"}
-      [:label {:for "sprint-name"} "Sprint Name: "]
-      [:input {:type        "text", :class "form-control", :id "sprint-name",
-               :placeholder "Name your Sprint" :on-change #(common/onclick-swap-atom! new-sprint [:data :sprint-name] %)}]
-      [:small {:class "form-text text-muted"} "Required"]]
+   [:form
+    [:div {:class "form-group"}
+     [:label {:for "sprint-id"} "Sprint ID: "]
+     [:input {:type        "text", :class "form-control", :id "sprint-id",
+              :placeholder "Enter Sprint ID" :on-change #(common/onclick-swap-atom! new-sprint [:data :sprint-id] %)}]
+     [:small {:class "form-text text-muted"} "Required"]]
 
-     [:div {:class "form-group"}
-      [:label {:for "start-date"} "Sprint Start-Date: "]
-      [:input {:type "date", :class "form-control", :id "start-date" :on-change #(common/onclick-swap-atom! new-sprint [:data :start-date] %)}]]
+    [:div {:class "form-group"}
+     [:label {:for "sprint-name"} "Sprint Name: "]
+     [:input {:type        "text", :class "form-control", :id "sprint-name",
+              :placeholder "Name your Sprint" :on-change #(common/onclick-swap-atom! new-sprint [:data :sprint-name] %)}]
+     [:small {:class "form-text text-muted"} "Required"]]
 
-     [:div {:class "form-group"}
-      [:label {:for "end-date"} "Sprint End-Date: "]
-      [:input {:type "date", :class "form-control", :id "end-date" :on-change #(common/onclick-swap-atom! new-sprint [:data :end-date] %)}]]]]
+    [:div {:class "form-group"}
+     [:label {:for "start-date"} "Sprint Start-Date: "]
+     [:input {:type "date", :class "form-control", :id "start-date" :on-change #(common/onclick-swap-atom! new-sprint [:data :start-date] %)}]]
+
+    [:div {:class "form-group"}
+     [:label {:for "end-date"} "Sprint End-Date: "]
+     [:input {:type "date", :class "form-control", :id "end-date" :on-change #(common/onclick-swap-atom! new-sprint [:data :end-date] %)}]]]
 
 
-   [:div {:class "modal-footer"}
-    [:div.btn.btn-secondary {:type         "button"
-                             :data-dismiss "modal"}
-     "Close"]
-    [:div.btn.btn-primary {:type         "button"
-                           :data-dismiss "modal"
-                           :on-click     #(save-sprint-procedure (:data @new-sprint))}
-     "Save"]]])
 
-(defn create-sprint-button []
-  [:div.btn.btn-primary.btn-backlog-col
-   {:on-click #(rmodals/modal! [modal-sprint-creation-content]
-                               {:show (reset! new-sprint {})})}
-   "Create Sprint"])
+   [:div.btn.btn-primary {:type         "button"
+                          :data-dismiss "modal"
+                          :on-click     #(save-sprint-procedure (:data @new-sprint))}
+    "Save"]])
+
 
 
 ;;----------------Get doc by ID example -------------------------------------------
@@ -299,10 +280,6 @@
             ;----------temporary examples-----------------------------
             [rmodals/modal-window]
             [get-task-button]
-
-            ;[rmodals/modal-window]
-            ;[delete-task-button]
-
             [rmodals/modal-window]
             [query-tasks-button]
             ;---------------------------------------------------------
@@ -329,14 +306,14 @@
           [:div {:class "panel panel-default"}
            [:div {:class "panel-body"}
             [:div
-             [create-sprint-button]]]]]]]]]
+             [sprint-creation-content]]]]]]]]]]
 
 
 
      [sidebar/menu-toggle]
      ;TODO ask Renaat about debug info
      [:p (str "new-task: " @new-task)]
-     [:p (str "new-sprint: " @new-sprint)]]]])
+     [:p (str "new-sprint: " @new-sprint)]]])
 
 
 
