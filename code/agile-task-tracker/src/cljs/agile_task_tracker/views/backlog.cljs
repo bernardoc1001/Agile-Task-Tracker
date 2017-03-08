@@ -46,7 +46,7 @@
 (defn modal-task-creation-content []
   (swap! new-task assoc-in [:data :sprint-id] "backlog")
   (swap! new-task assoc-in [:data :priority-level] "Low")
-  (swap! new-task assoc-in [:data :proj-id] (session/get :project-id))
+  (swap! new-task assoc-in [:data :project-id] (session/get :project-id))
 
   [:div
    [:div {:class "modal-header"}
@@ -136,7 +136,7 @@
   [sprint-map]
   (let  [sid-blank? (string/blank? (:sprint-id sprint-map))
          name-blank? (string/blank? (:sprint-name sprint-map))
-         proj-blank? (string/blank? (:proj-id sprint-map))]
+         proj-blank? (string/blank? (:project-id sprint-map))]
     (and (not sid-blank?) (not name-blank?) (not proj-blank?))))
 
 
@@ -149,6 +149,7 @@
     (js/alert "Please fill out required details")))
 
 (defn modal-sprint-creation-content []
+  (swap! new-sprint assoc-in [:data :project-id] (session/get :project-id))
   (swap! new-sprint assoc-in [:data :sprint-state] "active")
   [:div
    [:div {:class "modal-header"}
@@ -182,13 +183,7 @@
 
      [:div {:class "form-group"}
       [:label {:for "end-date"} "Sprint End-Date: "]
-      [:input {:type "date", :class "form-control", :id "end-date" :on-change #(common/onclick-swap-atom! new-sprint [:data :end-date] %)}]]
-
-     [:div {:class "form-group"}
-      [:label {:for "proj-id"} "Project ID: "]
-      [:input {:type        "text", :class "form-control", :id "proj-id",
-               :placeholder "Project Sprint belongs to" :on-change #(common/onclick-swap-atom! new-sprint [:data :proj-id] %)}]
-      [:small {:class "form-text text-muted"} "Required"]]]]
+      [:input {:type "date", :class "form-control", :id "end-date" :on-change #(common/onclick-swap-atom! new-sprint [:data :end-date] %)}]]]]
 
 
    [:div {:class "modal-footer"}
