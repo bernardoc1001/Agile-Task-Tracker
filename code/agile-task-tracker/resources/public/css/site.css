@@ -69,6 +69,10 @@ body {
     color: #fff;
 }
 
+.portlet {
+ margin-top: 1px;
+}
+
 .portlet-header img {
  width:10%;
  float: left;
@@ -106,7 +110,6 @@ body {
 .ui-widget-header {
    background: #428bca;
    border: 0;
-   margin: 1px;
 }
 
 /* Progress Bar */
@@ -168,3 +171,7 @@ body {
  color: black;
 }
 
+/* Muted text for modal forms */
+.text-muted {
+ color: red;
+}

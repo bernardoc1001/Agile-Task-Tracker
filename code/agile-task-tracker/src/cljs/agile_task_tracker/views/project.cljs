@@ -7,7 +7,8 @@
 						[goog.string :as gstring]
 						[agile-task-tracker.sidebar :as sidebar]
 						[hipo.core :as hipo]
-						[agile-task-tracker.proj-org :as proj-org]))
+						[agile-task-tracker.proj-org :as proj-org]
+						[reagent.session :as session]))
 
 
 (defonce new-proj
@@ -60,6 +61,7 @@
 
 
 (defn modal-proj-creation-content []
+	(swap! new-proj assoc-in [:data :org-id] (session/get :organisation-id))
 	[:div
 	 [:div {:class "modal-header"}
 		[:button {:type         "button"
@@ -71,16 +73,33 @@
 					:id    "proj-modal-title"}
 		 "Create an Project"]]
 	 [:div {:class "modal-body"}
-		;TODO remove auto-generated/NA
-		[:div [common/atom-input-field "proj-id: " new-proj [:data :proj-id]]]
-		[:div [common/atom-input-field "Project name: " new-proj [:data :proj-name]]]
-		[:div [common/atom-input-field "Org-id: " new-proj [:data :org-id]]]
-		[:div [common/atom-input-field "Man-hours available: " new-proj [:data :man-hours]]]
-		[:div [common/atom-input-field "Start-date: " new-proj [:data :start-date]]]
-		[:div [common/atom-input-field "End-date: " new-proj [:data :end-date]]]
+		;TODO Form validation
+		[:form
+		 [:div {:class "form-group"}
+			[:label {:for "proj-id-form"} "Project ID: "]
+			[:input {:type "text", :class "form-control", :id "proj-id-form",
+							 :placeholder "Enter Project ID" :on-change #(common/onclick-swap-atom! new-proj [:data :proj-id]%)}]
+			[:small {:class "form-text text-muted"} "Required"]]
 
+		 [:div {:class "form-group"}
+			[:label {:for "proj-name-form"} "Project name: "]
+			[:input {:type "text", :class "form-control", :name "proj-name-form",
+							 :placeholder "Enter Project name" :on-change #(common/onclick-swap-atom! new-proj [:data :proj-name]%)}]
+			[:small {:class "form-text text-muted"} "Required"]]
 
+		 [:div {:class "form-group"}
+			[:label {:for "man-hours-form"} "Man-hours: "]
+			[:input {:type "text", :class "form-control", :id "man-hours-form",
+							 :placeholder "Enter man-hours" :on-change #(common/onclick-swap-atom! new-proj [:data :man-hours]%)}]]
 
+		 [:div {:class "form-group"}
+			[:label {:for "start-date"} "Project Start-Date: "]
+			[:input {:type "date", :class "form-control", :id "start-date" :on-change #(common/onclick-swap-atom! new-proj [:data :start-date] %)}]]
+
+		 [:div {:class "form-group"}
+			[:label {:for "end-date"} "Project end-Date: "]
+			[:input {:type "date", :class "form-control", :id "end-date" :on-change #(common/onclick-swap-atom! new-proj [:data :end-date] %)}]]]
+		
 		[:div {:class "modal-footer"}
 		 [:div.btn.btn-secondary {:type         "button"
 															:data-dismiss "modal"}

@@ -57,9 +57,7 @@
          :handler       put-org-by-id-handler
          :error-handler error-handler}))
 
-
-;----------------------------------------------------------
-
+;TODO org validation
 (defn modal-org-creation-content []
   [:div
    [:div {:class "modal-header"}
@@ -73,10 +71,19 @@
      "Create an Organisation"]]
    [:div {:class "modal-body"}
 
-    [:div [common/atom-input-field "Org-id: " new-org [:data :org-id]]]
-    [:div [common/atom-input-field "Organisation name: " new-org [:data :org-name]]]
+    [:form
+     [:div {:class "form-group"}
+      [:label {:for "org-id-form"} "Organisation ID: "]
+      [:input {:type "text", :class "form-control", :id "org-id-form",
+               :placeholder "Enter Organisation ID" :on-change #(common/onclick-swap-atom! new-org [:data :org-id] %)}]
+      [:small {:class "form-text text-muted"} "Required"]]
 
-
+     [:div {:class "form-group"}
+      [:label {:for "org-name-form"} "Organisation name: "]
+      [:input {:type "text", :class "form-control", :id "org-id-form",
+               :placeholder "Enter Organisation Name" :on-change #(common/onclick-swap-atom! new-org [:data :org-name]%)}]
+      [:small {:class "form-text text-muted"} "Required"]]
+     ]
     [:div {:class "modal-footer"}
      [:div.btn.btn-secondary {:type         "button"
                               :data-dismiss "modal"}
