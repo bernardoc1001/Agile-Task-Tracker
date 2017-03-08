@@ -65,15 +65,14 @@
 
 (defn get-column-id-to-render-in
   [task-state]
-  (let [current-page (session/get :current-page)
-        backlog-page #'agile-task-tracker.views.backlog/backlog
+  (let [current-page-name (session/get :current-page-name)
         ;TODO add in sprint page
         ]
     (cond
-      (and (= current-page backlog-page) (or (= task-state "backlog-col") (string/blank? task-state)))
+      (and (= current-page-name "backlog-page") (or (= task-state "backlog-col") (string/blank? task-state)))
       (str "backlog-col")
 
-      (= current-page backlog-page)
+      (= current-page-name "backlog-page")
       (str "create-sprint-col"))))
 
 (defn render-task

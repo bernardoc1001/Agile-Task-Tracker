@@ -13,21 +13,16 @@
 (defn route-calculator
   "Returns a string representing the route of an ajax method"
   []
-  (let [current-page (session/get :current-page)
-        dashboard-page #'agile-task-tracker.views.dashboard/dashboard-page
-        project-page #'agile-task-tracker.views.project/project-page
-        sprints-page #'agile-task-tracker.views.sprints/sprints-page
-        backlog-page #'agile-task-tracker.views.backlog/backlog]
-
+  (let [current-page-name (session/get :current-page-name)]
     (cond
-      (= current-page backlog-page)
+      (= current-page-name "backlog-page")
       (str "/backlog")
 
-      (= current-page dashboard-page)
+      (= current-page-name "dashboard-page")
       (str "/")
 
-      (= current-page project-page)
+      (= current-page-name "project-page")
       (str "/project")
 
-      (= current-page sprints-page)
+      (= current-page-name "sprints-page")
       (str "/sprints"))))
