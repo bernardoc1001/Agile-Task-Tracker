@@ -20,7 +20,7 @@
 
 (defn render-org
   [org-map col-id]
-  (if (nil? (.getElementById js/document (:org-id org-map)))
+  (if (nil? (.getElementById js/document (:organisation-id org-map)))
     (let [org-pill (hipo/create (proj-org/create-org-pill org-map))]
 
       (.appendChild (.getElementById js/document col-id) org-pill))
@@ -35,9 +35,9 @@
   (render-org (get-in response [:_source]) "org-col"))
 
 (defn get-org-by-id
-  [org-id]
+  [organisation-id]
   (POST (route-calculator)
-        {:params        {:data   {:org-id org-id}
+        {:params        {:data   {:organisation-id organisation-id}
                          :method "get-by-id"}
          :handler       get-org-by-id-handler
          :error-handler error-handler}))
@@ -75,13 +75,13 @@
      [:div {:class "form-group"}
       [:label {:for "org-id-form"} "Organisation ID: "]
       [:input {:type "text", :class "form-control", :id "org-id-form",
-               :placeholder "Enter Organisation ID" :on-change #(common/onclick-swap-atom! new-org [:data :org-id] %)}]
+               :placeholder "Enter Organisation ID" :on-change #(common/onclick-swap-atom! new-org [:data :organisation-id] %)}]
       [:small {:class "form-text text-muted"} "Required"]]
 
      [:div {:class "form-group"}
       [:label {:for "org-name-form"} "Organisation name: "]
       [:input {:type "text", :class "form-control", :id "org-id-form",
-               :placeholder "Enter Organisation Name" :on-change #(common/onclick-swap-atom! new-org [:data :org-name]%)}]
+               :placeholder "Enter Organisation Name" :on-change #(common/onclick-swap-atom! new-org [:data :organisation-name]%)}]
       [:small {:class "form-text text-muted"} "Required"]]
      ]
     [:div {:class "modal-footer"}

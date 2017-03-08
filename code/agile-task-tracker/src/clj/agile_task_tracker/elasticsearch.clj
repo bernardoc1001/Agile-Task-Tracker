@@ -36,10 +36,10 @@
   [doc]
   (let [conn (esr/connect db-address)
         index-name "org-info"
-        id (:org-id doc)
+        id (:organisation-id doc)
         mapping "org-info-mapping"
-        mapping-types {mapping {:properties {:org-id            {:type "string" :index "not_analyzed"} ;not analyzed allows for the exact term to be queried
-                                             :org-name          {:type "string"}}}}]
+        mapping-types {mapping {:properties {:organisation-id          {:type "string" :index "not_analyzed"} ;not analyzed allows for the exact term to be queried
+                                             :organisation-name        {:type "string"}}}}]
 
     (if (not (esi/exists? conn index-name))
       ;create index with mappings
@@ -52,11 +52,11 @@
   [doc]
   (let [conn (esr/connect db-address)
         index-name "proj-info"
-        id (:proj-id doc)
+        id (:project-id doc)
         mapping "proj-info-mapping"
-        mapping-types {mapping {:properties {:proj-id            {:type "string":index "not_analyzed"} ;not analyzed allows for the exact term to be queried
-                                             :proj-name          {:type "string"}
-                                             :org-id             {:type "string"}
+        mapping-types {mapping {:properties {:project-id         {:type "string" :index "not_analyzed"} ;not analyzed allows for the exact term to be queried
+                                             :project-name       {:type "string"}
+                                             :organisation-id    {:type "string" :index "not_analyzed"}
                                              :man-hours          {:type "double"}
                                              :start-date         {:type "string"}
                                              :end-date           {:type "string"}}}}]
@@ -74,11 +74,11 @@
         index-name "sprint-info"
         id (:sprint-id doc)
         mapping "sprint-info-mapping"
-        mapping-types {mapping {:properties {:sprint-id          {:type "string":index "not_analyzed"} ;not analyzed allows for the exact term to be queried
+        mapping-types {mapping {:properties {:sprint-id          {:type "string" :index "not_analyzed"} ;not analyzed allows for the exact term to be queried
                                              :sprint-name        {:type "string"}
                                              :start-date         {:type "string"}
                                              :end-date           {:type "string"}
-                                             :proj-id            {:type "double"}
+                                             :project-id         {:type "string" :index "not_analyzed"}
                                              :sprint-state       {:type "string"}}}}]
 
     (if (not (esi/exists? conn index-name))
@@ -102,3 +102,7 @@
   [index-name mapping key value]
   (let [conn (esr/connect db-address)]
     (esd/search conn index-name mapping :query (q/term key value))))
+
+
+(defn query-active-sprint-tasks
+  [])

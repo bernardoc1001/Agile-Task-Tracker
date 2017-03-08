@@ -22,7 +22,7 @@
 
 (defn render-proj
 	[proj-map col-id]
-	(if (nil? (.getElementById js/document (:proj-id proj-map)))
+	(if (nil? (.getElementById js/document (:project-id proj-map)))
 		(let [proj-pill (hipo/create (proj-org/create-proj-pill proj-map))]
 
 			(.appendChild (.getElementById js/document col-id) proj-pill))
@@ -39,7 +39,7 @@
 (defn get-proj-by-id
 	[proj-id]
 	(POST (route-calculator)
-				{:params        {:data   {:proj-id proj-id}
+				{:params        {:data   {:project-id proj-id}
 												 :method "get-by-id"}
 				 :handler       get-proj-by-id-handler
 				 :error-handler error-handler}))
@@ -61,7 +61,7 @@
 
 
 (defn modal-proj-creation-content []
-	(swap! new-proj assoc-in [:data :org-id] (session/get :organisation-id))
+	(swap! new-proj assoc-in [:data :organisation-id] (session/get :organisation-id))
 	[:div
 	 [:div {:class "modal-header"}
 		[:button {:type         "button"
@@ -78,13 +78,13 @@
 		 [:div {:class "form-group"}
 			[:label {:for "proj-id-form"} "Project ID: "]
 			[:input {:type "text", :class "form-control", :id "proj-id-form",
-							 :placeholder "Enter Project ID" :on-change #(common/onclick-swap-atom! new-proj [:data :proj-id]%)}]
+							 :placeholder "Enter Project ID" :on-change #(common/onclick-swap-atom! new-proj [:data :project-id]%)}]
 			[:small {:class "form-text text-muted"} "Required"]]
 
 		 [:div {:class "form-group"}
 			[:label {:for "proj-name-form"} "Project name: "]
 			[:input {:type "text", :class "form-control", :name "proj-name-form",
-							 :placeholder "Enter Project name" :on-change #(common/onclick-swap-atom! new-proj [:data :proj-name]%)}]
+							 :placeholder "Enter Project name" :on-change #(common/onclick-swap-atom! new-proj [:data :project-name]%)}]
 			[:small {:class "form-text text-muted"} "Required"]]
 
 		 [:div {:class "form-group"}

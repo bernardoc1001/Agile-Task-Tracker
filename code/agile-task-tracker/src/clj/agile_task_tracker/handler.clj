@@ -45,7 +45,7 @@
            (GET "/" [] (loading-page))
            (POST "/"  request (cond
                                 (= "get-by-id" (get-in request [:params :method]))
-                                (let [response (attes/get-doc-by-id "org-info" "org-info-mapping" (get-in request [:params :data :org-id]))]
+                                (let [response (attes/get-doc-by-id "org-info" "org-info-mapping" (get-in request [:params :data :organisation-id]))]
                                   (if (= true (:found response))
                                     {:status 200 :body response}
                                     response))
@@ -53,13 +53,13 @@
                                 (= "delete-by-id" (get-in request [:params :method]))
                                 (let [response (attes/delete-doc-by-id
                                                  "org-info"
-                                                 "org-info-mapping" (get-in request [:params :data :org-id]))]
+                                                 "org-info-mapping" (get-in request [:params :data :organisation-id]))]
                                   (if (= true (:found response)) ;TODO make status checker functions and import from elasticsearch.clj
                                     {:status 200 :body response}
                                     {:status 500 :body response}))
 
                                 (= "query-by-term" (get-in request [:params :method]))
-                                (let [response (attes/query-by-term "org-info" "org-info-mapping" (keyword "org-id") (get-in request [:params :data :org-id]))]
+                                (let [response (attes/query-by-term "org-info" "org-info-mapping" (keyword "org-id") (get-in request [:params :data :organisation-id]))]
                                   (if (>= (get-in response [:hits :total]) 0)
                                     {:status 200 :body response}
                                     {:status 500 :body response}))
@@ -72,20 +72,20 @@
            (GET "/project/:organisation-id" [organisation-id] (loading-page))
            (POST "/project" request (cond
                                       (= "get-by-id" (get-in request [:params :method]))
-                                      (let [response (attes/get-doc-by-id "proj-info" "proj-info-mapping" (get-in request [:params :data :proj-id]))]
+                                      (let [response (attes/get-doc-by-id "proj-info" "proj-info-mapping" (get-in request [:params :data :project-id]))]
                                         (if (= true (:found response)) ;TODO make status checker functions and import from elasticsearch.clj
                                           {:status 200 :body response}
                                           response))
 
                                       (= "delete-by-id" (get-in request [:params :method]))
-                                      (let [response (attes/delete-doc-by-id "proj-info" "proj-info-mapping" (get-in request [:params :data :proj-id]))]
+                                      (let [response (attes/delete-doc-by-id "proj-info" "proj-info-mapping" (get-in request [:params :data :project-id]))]
                                         (if (= true (:found response)) ;TODO make status checker functions and import from elasticsearch.clj
                                           {:status 200 :body response}
                                           {:status 500 :body response}))
 
                                       (= "query-by-term" (get-in request [:params :method]))
                                       ;TODO does this work?
-                                      (let [response (attes/query-by-term "proj-info" "proj-info-mapping" (keyword "org-id") (get-in request [:params :data :org-id]))]
+                                      (let [response (attes/query-by-term "proj-info" "proj-info-mapping" (keyword "organisation-id") (get-in request [:params :data :organisation-id]))]
                                         (if (>= (get-in response [:hits :total]) 0)
                                           {:status 200 :body response}
                                           {:status 500 :body response}))
