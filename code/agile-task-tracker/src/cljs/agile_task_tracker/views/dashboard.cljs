@@ -7,7 +7,8 @@
             [agile-task-tracker.ajax :refer [handler error-handler route-calculator]]
             [goog.string :as gstring]
             [hipo.core :as hipo]
-            [agile-task-tracker.proj-org :as proj-org]))
+            [agile-task-tracker.proj-org :as proj-org]
+            [clojure.string :as string]))
 
 (defonce new-org
          (r/atom {:data {}}))
@@ -57,7 +58,25 @@
          :handler       put-org-by-id-handler
          :error-handler error-handler}))
 
-;TODO org validation
+(defn organisation-id-contains-white-space [organisation-map]
+  (boolean (re-find #" " (:organisation-id organisation-map))))
+
+(defn validate-organisation
+  "Checks organisation for required info, returns true if correct."
+  [organisation-map]
+  (let  [oid-blank? (string/blank? (:organisation-id organisation-map))
+         name-blank? (string/blank? (:organisation-name organisation-map))]
+    (and (not oid-blank?) (not name-blank?))))
+
+(defn save-organisation-procedure
+  "Posts organisation info if true, alerts user if false"
+  [organisation-map]
+  (if (validate-organisation organisation-map)
+    (if (organisation-id-contains-white-space organisation-map)
+      (js/alert "Please remove whitespace from id")
+      (put-org-by-id organisation-map))
+    (js/alert "Please fill out required details")))
+
 (defn modal-org-creation-content []
   [:div
    [:div {:class "modal-header"}
@@ -90,7 +109,7 @@
       "Close"]
      [:div.btn.btn-primary {:type         "button"
                             :data-dismiss "modal"
-                            :on-click     #(put-org-by-id (:data @new-org))}
+                            :on-click     #(save-organisation-procedure (:data @new-org))}
       "Save"]]]])
 
 (defn create-org-button []

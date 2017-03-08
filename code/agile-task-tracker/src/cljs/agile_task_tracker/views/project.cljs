@@ -3,12 +3,13 @@
 						[reagent-modals.modals :as rmodals]
 						[agile-task-tracker.common :as common]
 						[ajax.core :refer [GET POST]]
-            [agile-task-tracker.ajax :refer [handler error-handler route-calculator]]
+						[agile-task-tracker.ajax :refer [handler error-handler route-calculator]]
 						[goog.string :as gstring]
 						[agile-task-tracker.sidebar :as sidebar]
 						[hipo.core :as hipo]
 						[agile-task-tracker.proj-org :as proj-org]
-						[reagent.session :as session]))
+						[reagent.session :as session]
+						[clojure.string :as string]))
 
 
 (defonce new-proj
@@ -58,6 +59,24 @@
          :error-handler error-handler}))
 
 ;----------------------------------------------------------
+(defn project-id-contains-white-space [project-map]
+	(boolean (re-find #" " (:project-id project-map))))
+
+(defn validate-project
+	"Checks project for required info, returns true if correct."
+	[project-map]
+	(let  [pid-blank? (string/blank? (:project-id project-map))
+				 name-blank? (string/blank? (:project-name project-map))]
+		(and (not pid-blank?) (not name-blank?))))
+
+(defn save-project-procedure
+	"Posts project info if true, alerts user if false"
+	[project-map]
+	(if (validate-project project-map)
+		(if (project-id-contains-white-space project-map)
+			(js/alert "Please remove whitespace from id")
+			(put-proj-by-id project-map))
+		(js/alert "Please fill out required details")))
 
 
 (defn modal-proj-creation-content []
@@ -106,7 +125,7 @@
 			"Close"]
 		 [:div.btn.btn-primary {:type         "button"
 														:data-dismiss "modal"
-														:on-click     #(put-proj-by-id (:data @new-proj))}
+														:on-click     #(save-project-procedure (:data @new-proj))}
 			"Save"]]]])
 
 (defn create-proj-button []
