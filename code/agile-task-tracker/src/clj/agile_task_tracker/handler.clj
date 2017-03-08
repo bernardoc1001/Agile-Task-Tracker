@@ -95,7 +95,8 @@
                                         (if (= true (contains? response :created)) ;TODO make status checker functions and import from elasticsearch.clj
                                           {:status 200 :body response}
                                           response))))
-           
+
+           (GET "/current-sprint/:project-id" [project-id] (loading-page))
            (GET "/sprints/:project-id" [project-id] (loading-page))
            (GET "/backlog/:project-id" [project-id] (loading-page))
            (POST "/backlog" request (cond
