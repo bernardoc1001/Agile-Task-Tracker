@@ -8,7 +8,7 @@
 
 (defn convert-to-task-format
   [string-map]
-  (hash-map  :task-id (:task-id string-map)
+  (hash-map :task-id (:task-id string-map)
             :task-title (:task-title string-map)
             :description (:description string-map)
             :created-by (:created-by string-map)
@@ -71,16 +71,24 @@
   (let [task-id (:task-id task-map)
         title (:task-title task-map)
         description (:description task-map)
-        priority (:priority-level task-map)]
+        priority (:priority-level task-map)
+        assignees (:assignees task-map)
+        est (:estimated-time task-map)
+        logged (:logged-time task-map)
+        creator (:created-by task-map)
+        epic (:epic task-map)]
     [:div.portlet {:id task-id}
      [:div.portlet-header
       [:img {:src (str "/images/" priority ".png")}]
       [:p title]
-      [:span {:class (str "ui-icon ui-icon-close ui-icon-plusthick
-      portlet-toggle
-      "task-id)}]]
-     [:div.portlet-content description
+      [:span {:class (str "ui-icon ui-icon-plusthick portlet-toggle " task-id)}]]
+     [:div.portlet-content
+      [:p "Creator: " [:p creator]]
+      [:p "Assignees: " [:p assignees]]
+      [:p "Epic: " [:p epic]]
+      [:p "Description: " [:p description]]
       [:div {:id (str "progressbar-" task-id)}]
+      [:p (str logged " of " est " hours logged.")]
 
       [:div.btn.btn-primary.btn-tasklet
        {:on-click #(delete-task-from-db task-map)} "Delete Task"]]]))
