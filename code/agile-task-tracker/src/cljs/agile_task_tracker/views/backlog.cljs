@@ -21,7 +21,8 @@
 (defn refresh-tasks-button []
   [:div.btn.btn-primary.btn-backlog-col
    ;TODO query both backlog tasks and the active sprint
-   {:on-click #(task-ajax/query-tasks-by-sprint "backlog")}
+   {:on-click #(do (task-ajax/query-tasks-by-sprint-id "backlog")
+                   (task-ajax/query-active-sprint-tasks (session/get :project-id)))}
    "Refresh Tasks"])
 
 (defn task-id-contains-white-space [task-map]
@@ -249,7 +250,7 @@
       "Close"]
      [:div.btn.btn-primary {:type         "button"
                             :data-dismiss "modal"
-                            :on-click     #(task-ajax/query-tasks-by-sprint (get-in @new-task [:data :sprint-id]))}
+                            :on-click     #(task-ajax/query-tasks-by-sprint-id (get-in @new-task [:data :sprint-id]))}
       "Query"]]]])
 
 (defn query-tasks-button []

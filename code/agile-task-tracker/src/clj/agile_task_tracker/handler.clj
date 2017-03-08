@@ -54,7 +54,7 @@
                                 (let [response (attes/delete-doc-by-id
                                                  "org-info"
                                                  "org-info-mapping" (get-in request [:params :data :organisation-id]))]
-                                  (if (= true (:found response)) ;TODO make status checker functions and import from elasticsearch.clj
+                                  (if (= true (:found response))
                                     {:status 200 :body response}
                                     {:status 500 :body response}))
 
@@ -66,20 +66,20 @@
 
                                 (= "put-by-id" (get-in request [:params :method]))
                                 (let [response (attes/put-org-info (get-in request [:params :data]))]
-                                  (if (= true (contains? response :created)) ;TODO make status checker functions and import from elasticsearch.clj
+                                  (if (= true (contains? response :created))
                                     {:status 200 :body response}
                                     response))))
            (GET "/project/:organisation-id" [organisation-id] (loading-page))
            (POST "/project" request (cond
                                       (= "get-by-id" (get-in request [:params :method]))
                                       (let [response (attes/get-doc-by-id "proj-info" "proj-info-mapping" (get-in request [:params :data :project-id]))]
-                                        (if (= true (:found response)) ;TODO make status checker functions and import from elasticsearch.clj
+                                        (if (= true (:found response))
                                           {:status 200 :body response}
                                           response))
 
                                       (= "delete-by-id" (get-in request [:params :method]))
                                       (let [response (attes/delete-doc-by-id "proj-info" "proj-info-mapping" (get-in request [:params :data :project-id]))]
-                                        (if (= true (:found response)) ;TODO make status checker functions and import from elasticsearch.clj
+                                        (if (= true (:found response))
                                           {:status 200 :body response}
                                           {:status 500 :body response}))
 
@@ -92,7 +92,7 @@
 
                                       (= "put-by-id" (get-in request [:params :method]))
                                       (let [response (attes/put-proj-info (get-in request [:params :data]))]
-                                        (if (= true (contains? response :created)) ;TODO make status checker functions and import from elasticsearch.clj
+                                        (if (= true (contains? response :created))
                                           {:status 200 :body response}
                                           response))))
 
@@ -102,13 +102,13 @@
            (POST "/backlog" request (cond
                                       (= "get-by-id" (get-in request [:params :method]))
                                       (let [response (attes/get-doc-by-id "task-info" "task-info-mapping" (get-in request [:params :data :task-id]))]
-                                        (if (= true (:found response)) ;TODO make status checker functions and import from elasticsearch.clj
+                                        (if (= true (:found response))
                                           {:status 200 :body response}
                                           response))
 
                                       (= "delete-by-id" (get-in request [:params :method]))
                                       (let [response (attes/delete-doc-by-id "task-info" "task-info-mapping" (get-in request [:params :data :task-id]))]
-                                        (if (= true (:found response)) ;TODO make status checker functions and import from elasticsearch.clj
+                                        (if (= true (:found response))
                                           {:status 200 :body response}
                                           {:status 500 :body response}))
 
@@ -120,7 +120,7 @@
 
                                       (= "put-by-id" (get-in request [:params :method]))
                                       (let [response (attes/put-task-info (get-in request [:params :data]))]
-                                        (if (= true (contains? response :created)) ;TODO make status checker functions and import from elasticsearch.clj
+                                        (if (= true (contains? response :created))
                                           {:status 200 :body response}
                                           response))
 
@@ -134,7 +134,15 @@
                                       (let [response (attes/put-sprint-info (get-in request [:params :data]))]
                                         (if (= true (contains? response :created))
                                           {:status 200 :body response}
-                                          response))))
+                                          response))
+
+                                      ;TODO add this in for current sprint page
+                                      (= "get-active-sprint" (get-in request [:params :method]))
+                                      (let [response (attes/get-active-sprint "sprint-info" "sprint-info-mapping" (get-in request [:params :data :project-id]))
+                                            num-of-hits (get-in response [:hits :total])]
+                                        (if (= true (or (= 0 num-of-hits) (= 1 num-of-hits)))
+                                          {:status 200 :body response}
+                                          {:status 500 :body response}))))
            
            (resources "/")
            (not-found "Not Found, has it been included in both the handler.clj and core.cljs?")) ;TODO change not found message before demo

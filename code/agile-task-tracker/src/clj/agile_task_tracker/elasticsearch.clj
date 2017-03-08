@@ -88,6 +88,13 @@
     ;put the doc in the index
     (esd/put conn index-name mapping id doc)))
 
+(defn get-active-sprint
+  [index-name mapping project-id]
+  (let [conn (esr/connect db-address)]
+    (esd/search conn index-name mapping :query {:bool {:should [{:term {:project-id project-id}}
+                                                                {:term {:sprint-state "active"}}]
+                                                       :minimum_should_match 2}})))
+
 (defn get-doc-by-id
   [index-name mapping id]
   (let [conn (esr/connect db-address)]
