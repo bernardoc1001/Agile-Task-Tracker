@@ -1,17 +1,7 @@
 (ns agile-task-tracker.task-ajax
   (:require  [ajax.core :refer [GET POST]]
+             [agile-task-tracker.ajax :refer [handler error-handler route-calculator]]
              [agile-task-tracker.task-portlet :as task-portlet]))
-
-
-(defn handler
-  [response]
-  (.log js/console (str "handler response: " response)))
-
-(defn error-handler
-  [response]
-  (.error js/console (str response)))
-
-
 
 (defn get-task-by-id-handler
   [response]
@@ -21,8 +11,8 @@
 
 
 (defn get-task-by-id
-  [route task-id]
-  (POST route
+  [task-id]
+  (POST (route-calculator)
         {:params        {:data   {:task-id task-id}
                          :method "get-by-id"}
          :handler       get-task-by-id-handler
@@ -33,11 +23,11 @@
   (.log js/console (str "put-task-handler response: " response))
   ;task will be rendered in the get response handler
   ;TODO calculate the route here for get-task-by-id
-  (get-task-by-id "/backlog" (:_id response)))
+  (get-task-by-id (:_id response)))
 
 (defn put-task-by-id
-  [route task-map]
-  (POST route
+  [task-map]
+  (POST (route-calculator)
         {:params        {:data task-map
                          :method "put-by-id"}
          :handler       put-task-by-id-handler
@@ -49,8 +39,8 @@
   (task-portlet/delete-task-portlet (:_id response)))
 
 (defn delete-task-by-id
-  [route task-map]
-  (POST route
+  [task-map]
+  (POST (route-calculator)
         {:params        {:data   task-map
                          :method "delete-by-id"}
          :handler       delete-task-by-id-handler
@@ -64,8 +54,8 @@
       (task-portlet/render-task (task-portlet/convert-to-task-format (:_source hit))))))
 
 (defn query-tasks-by-sprint
-  [route sprint-id]
-  (POST route
+  [sprint-id]
+  (POST (route-calculator)
         {:params        {:data   {:sprint-id sprint-id}
                          :method "query-by-term"}
          :handler       query-tasks-by-sprint-handler

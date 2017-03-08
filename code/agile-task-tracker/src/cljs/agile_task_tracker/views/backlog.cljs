@@ -19,7 +19,7 @@
 (defn refresh-tasks-button []
   [:div.btn.btn-primary.btn-backlog-col
    ;TODO query both backlog tasks and the active sprint
-   {:on-click #(task-ajax/query-tasks-by-sprint "/backlog" "backlog")}
+   {:on-click #(task-ajax/query-tasks-by-sprint "backlog")}
    "Refresh Tasks"])
 
 (defn modal-task-creation-content []
@@ -54,7 +54,7 @@
       "Close"]
      [:div.btn.btn-primary {:type         "button"
                             :data-dismiss "modal"
-                            :on-click     #(task-ajax/put-task-by-id "/backlog" (:data @new-task))}
+                            :on-click     #(task-ajax/put-task-by-id (:data @new-task))}
       "Save"]]]])
 
 (defn create-task-button []
@@ -91,7 +91,7 @@
       "Close"]
      [:div.btn.btn-primary {:type         "button"
                             :data-dismiss "modal"
-                            :on-click     #(sprint-ajax/put-sprint-by-id "/backlog" (:data @new-sprint))}
+                            :on-click     #(sprint-ajax/put-sprint-by-id  (:data @new-sprint))}
       "Save"]]]])
 
 (defn create-sprint-button []
@@ -123,7 +123,7 @@
       "Close"]
      [:div.btn.btn-primary {:type         "button"
                             :data-dismiss "modal"
-                            :on-click     #(task-ajax/get-task-by-id "/backlog" (get-in @new-task [:data :task-id]))}
+                            :on-click     #(task-ajax/get-task-by-id (get-in @new-task [:data :task-id]))}
       "Get Task"]]]])
 
 (defn get-task-button []
@@ -157,7 +157,7 @@
       "Close"]
      [:div.btn.btn-primary {:type         "button"
                             :data-dismiss "modal"
-                            :on-click     #(task-ajax/delete-task-by-id "/backlog" (:data @new-task))}
+                            :on-click     #(task-ajax/delete-task-by-id (:data @new-task))}
       "Delete Task"]]]])
 
 (defn delete-task-button []
@@ -190,7 +190,7 @@
       "Close"]
      [:div.btn.btn-primary {:type         "button"
                             :data-dismiss "modal"
-                            :on-click     #(task-ajax/query-tasks-by-sprint "/backlog" (get-in @new-task [:data :sprint-id]))}
+                            :on-click     #(task-ajax/query-tasks-by-sprint (get-in @new-task [:data :sprint-id]))}
       "Query"]]]])
 
 (defn query-tasks-button []

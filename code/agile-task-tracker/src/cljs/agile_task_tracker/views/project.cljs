@@ -3,6 +3,7 @@
 						[reagent-modals.modals :as rmodals]
 						[agile-task-tracker.common :as common]
 						[ajax.core :refer [GET POST]]
+            [agile-task-tracker.ajax :refer [handler error-handler route-calculator]]
 						[goog.string :as gstring]
 						[agile-task-tracker.sidebar :as sidebar]
 						[hipo.core :as hipo]
@@ -28,16 +29,7 @@
 
 
 ;---------------------ajax stuff----------------------------
-;TODO refactor into common?
-
-(defn handler
-	[response]
-	(.log js/console (str "handler response: " response)))
-
-(defn error-handler
-	[response]
-	(.error js/console (str response)))
-
+;TODO refactor into another file?
 (defn get-proj-by-id-handler
 	[response]
 	(.log js/console (str "get-task-by-id-handler response: " response))
@@ -45,7 +37,7 @@
 
 (defn get-proj-by-id
 	[proj-id]
-	(POST "/project"
+	(POST (route-calculator)
 				{:params        {:data   {:proj-id proj-id}
 												 :method "get-by-id"}
 				 :handler       get-proj-by-id-handler
@@ -56,18 +48,16 @@
 	(.log js/console (str "put-proj-handler response: " response))
 	(get-proj-by-id (:_id response)))
 
-
-
-
+(defn put-proj-by-id
+  [project-map]
+  (POST (route-calculator)
+        {:params        {:data project-map
+                         :method "put-by-id"}
+         :handler       put-proj-by-id-handler
+         :error-handler error-handler}))
 
 ;----------------------------------------------------------
-(defn save-proj-procedure []
-	;TODO make this single arity?
-	(POST "/project"
-				{:params        {:data (:data @new-proj)
-												 :method "put-by-id"}
-				 :handler       put-proj-by-id-handler
-				 :error-handler error-handler}))
+
 
 (defn modal-proj-creation-content []
 	[:div
@@ -97,7 +87,7 @@
 			"Close"]
 		 [:div.btn.btn-primary {:type         "button"
 														:data-dismiss "modal"
-														:on-click     #(save-proj-procedure)}
+														:on-click     #(put-proj-by-id (:data @new-proj))}
 			"Save"]]]])
 
 (defn create-proj-button []

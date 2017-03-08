@@ -4,6 +4,7 @@
             [agile-task-tracker.sidebar :as sidebar]
             [agile-task-tracker.common :as common]
             [ajax.core :refer [GET POST]]
+            [agile-task-tracker.ajax :refer [handler error-handler route-calculator]]
             [goog.string :as gstring]
             [hipo.core :as hipo]
             [agile-task-tracker.proj-org :as proj-org]))
@@ -27,16 +28,7 @@
 
 
 ;---------------------ajax stuff----------------------------
-;TODO refactor into common?
-
-(defn handler
-  [response]
-  (.log js/console (str "handler response: " response)))
-
-(defn error-handler
-  [response]
-  (.error js/console (str response)))
-
+;TODO refactor into another file?
 (defn get-org-by-id-handler
   [response]
   (.log js/console (str "get-task-by-id-handler response: " response))
@@ -44,7 +36,7 @@
 
 (defn get-org-by-id
   [org-id]
-  (POST "/"
+  (POST (route-calculator)
         {:params        {:data   {:org-id org-id}
                          :method "get-by-id"}
          :handler       get-org-by-id-handler
@@ -57,17 +49,16 @@
   (get-org-by-id (:_id response)))
 
 
-
-
-
-;----------------------------------------------------------
-(defn save-org-procedure []
-  ;TODO make this single arity?
-  (POST "/"
-        {:params        {:data (:data @new-org)
+(defn put-org-by-id
+  [org-map]
+  (POST (route-calculator)
+        {:params        {:data org-map
                          :method "put-by-id"}
          :handler       put-org-by-id-handler
          :error-handler error-handler}))
+
+
+;----------------------------------------------------------
 
 (defn modal-org-creation-content []
   [:div
@@ -92,7 +83,7 @@
       "Close"]
      [:div.btn.btn-primary {:type         "button"
                             :data-dismiss "modal"
-                            :on-click     #(save-org-procedure)}
+                            :on-click     #(put-org-by-id (:data @new-org))}
       "Save"]]]])
 
 (defn create-org-button []
