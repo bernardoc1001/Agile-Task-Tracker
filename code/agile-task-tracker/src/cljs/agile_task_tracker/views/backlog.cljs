@@ -235,40 +235,6 @@
    "Get Task By ID"])
 ;--------------------------------------------------------------------------------------
 
-;--------delete doc by id example------------------------------------------------------
-
-
-(defn modal-delete-task-by-id []
-  [:div
-   [:div {:class "modal-header"}
-    [:button {:type "button"
-              :class "close"
-              :data-dismiss "modal"
-              :aria-label "Close"}
-     [:span {:aria-hidden "true"} (gstring/unescapeEntities "&times;")]]
-    [:h4 {:class "modal-title"
-          :id "delete-task-modal-title"}
-     "Delete a task"]]
-   [:div {:class "modal-body"}
-
-    [:div [common/atom-input-field "Task ID: " new-task [:data :task-id]]]
-
-    [:div {:class "modal-footer"}
-     [:div.btn.btn-secondary {:type         "button"
-                              :data-dismiss "modal"}
-      "Close"]
-     [:div.btn.btn-primary {:type         "button"
-                            :data-dismiss "modal"
-                            :on-click     #(task-ajax/delete-task-by-id (:data @new-task))}
-      "Delete Task"]]]])
-
-(defn delete-task-button []
-  [:div.btn.btn-primary.btn-backlog-col
-   {:on-click #(rmodals/modal! [modal-delete-task-by-id]
-                               {:show (reset! new-task {})})}
-   "Delete Task By ID"])
-;--------------------------------------------------------------------------------------
-;--------------------query all tasks by assigned sprint example -----------------------
 
 
 (defn modal-query-tasks-by-sprint []
@@ -324,8 +290,8 @@
             [rmodals/modal-window]
             [get-task-button]
 
-            [rmodals/modal-window]
-            [delete-task-button]
+            ;[rmodals/modal-window]
+            ;[delete-task-button]
 
             [rmodals/modal-window]
             [query-tasks-button]
@@ -354,6 +320,8 @@
            [:div {:class "panel-body"}
             [:div
              [create-sprint-button]]]]]]]]]
+
+
 
      [sidebar/menu-toggle]
      ;TODO ask Renaat about debug info

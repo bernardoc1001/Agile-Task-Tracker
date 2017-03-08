@@ -131,6 +131,12 @@ body {
  margin: 1px;
 }
 
+.btn-tasklet {
+ margin-top: 5px;
+ display: inline-block;
+ float: right;
+ margin-bottom: 5px;
+}
 /* priority level */
 .prio-img{
  height: 20px;
