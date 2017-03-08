@@ -6,6 +6,7 @@
               [agile-task-tracker.views.dashboard :refer [dashboard-page]]
               [agile-task-tracker.views.backlog :refer [backlog]]
 							[agile-task-tracker.views.project :refer [project-page]]
+              [agile-task-tracker.views.current-sprint :refer [current-sprint]]
 							[agile-task-tracker.views.sprints :refer [sprints-page]]))
 
 ;TODO add history-browser-navigation and # prefix with secretary
@@ -30,6 +31,11 @@
                     (session/put! :project-id project-id)
                     (session/put! :current-page #'backlog)
                     (session/put! :current-page-name "backlog-page"))
+
+(secretary/defroute "/current-sprint/:project-id" [project-id]
+                    (session/put! :project-id project-id)
+                    (session/put! :current-page #'current-sprint)
+                    (session/put! :current-page-name "current-sprint-page"))
 
 (secretary/defroute "/sprints/:project-id" [project-id]
                     (session/put! :project-id project-id)

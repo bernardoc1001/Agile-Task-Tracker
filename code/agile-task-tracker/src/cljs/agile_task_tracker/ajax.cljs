@@ -24,5 +24,8 @@
       (= current-page-name "project-page")
       (str "/project")
 
+      (= current-page-name "current-sprint-page")
+      (str "/current-sprint")
+
       (= current-page-name "sprints-page")
       (str "/sprints"))))
