@@ -24,6 +24,9 @@
    {:on-click #(task-ajax/query-tasks-by-sprint "backlog")}
    "Refresh Tasks"])
 
+(defn task-id-contains-white-space [task-map]
+  (boolean (re-find #" " (:task-id task-map))))
+
 (defn validate-task
   "Checks task for required info, returns true if correct."
   [task-map]
@@ -38,7 +41,9 @@
   ;TODO deactivate old sprints when creating new sprint
   [task-map]
   (if (validate-task task-map)
-    (task-ajax/put-task-by-id  task-map)
+    (if (task-id-contains-white-space task-map)
+      (js/alert "Please remove whitespace from id")
+      (task-ajax/put-task-by-id task-map))
     (js/alert "Please fill out required details")))
 
 
@@ -139,13 +144,18 @@
          proj-blank? (string/blank? (:project-id sprint-map))]
     (and (not sid-blank?) (not name-blank?) (not proj-blank?))))
 
+(defn sprint-id-contains-white-space [sprint-map]
+  (boolean (re-find #" " (:sprint-id sprint-map))))
 
 (defn save-sprint-procedure
   "Posts sprint info if true, alerts user if false"
   ;TODO deactivate old sprints when creating new sprint
   [sprint-map]
   (if (validate-sprint sprint-map)
-    (sprint-ajax/put-sprint-by-id sprint-map)
+    (if (sprint-id-contains-white-space sprint-map)
+      (js/alert "Please remove whitespace from id")
+
+      (sprint-ajax/put-sprint-by-id sprint-map))
     (js/alert "Please fill out required details")))
 
 (defn modal-sprint-creation-content []
