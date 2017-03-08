@@ -3,10 +3,12 @@
             [reagent-modals.modals :as rmodals]
             [agile-task-tracker.common :as common]
             [goog.string :as gstring]
-						[agile-task-tracker.sidebar :as sidebar]
+            [agile-task-tracker.sidebar :as sidebar]
             [agile-task-tracker.task-ajax :as task-ajax]
             [agile-task-tracker.sprint-ajax :as sprint-ajax]
-            [agile-task-tracker.sortable :as sortable]))
+            [agile-task-tracker.sortable :as sortable]
+            [reagent.session :as session]
+            [clojure.string :as string]))
 
 ;TODO rename atoms. This isn't turning yellow. THE SKY IS FALLING. Wait
 ; nevermind there we go
@@ -22,7 +24,30 @@
    {:on-click #(task-ajax/query-tasks-by-sprint "backlog")}
    "Refresh Tasks"])
 
+(defn validate-task
+  "Checks task for required info, returns true if correct."
+  [task-map]
+  (let  [tid-blank? (string/blank? (:task-id task-map))
+         name-blank? (string/blank? (:task-title task-map))
+         assign-blank? (string/blank? (:assignees task-map))]
+    (and (not tid-blank?) (not name-blank?) (not assign-blank?))))
+
+
+(defn save-task-procedure
+  "Posts task info if true, alerts user if false"
+  ;TODO deactivate old sprints when creating new sprint
+  [task-map]
+  (if (validate-task task-map)
+    (task-ajax/put-task-by-id  task-map)
+    (js/alert "Please fill out required details")))
+
+
+;TODO validate times.
 (defn modal-task-creation-content []
+  (swap! new-task assoc-in [:data :sprint-id] "backlog")
+  (swap! new-task assoc-in [:data :priority-level] "Low")
+  (swap! new-task assoc-in [:data :proj-id] (session/get :project-id))
+
   [:div
    [:div {:class "modal-header"}
     [:button {:type "button"
@@ -34,19 +59,60 @@
           :id "task-modal-title"}
      "Create a task"]]
    [:div {:class "modal-body"}
+    ;TODO remove white space from id
+    [:form
+     [:div {:class "form-group"}
+      [:label {:for "task-id-form"} "Task ID: "]
+      [:input {:type "text", :class "form-control", :id "task-id-form",
+               :placeholder "Enter Task ID" :on-change #(common/onclick-swap-atom! new-task [:data :task-id]%)}]
+      [:small {:class "form-text text-muted"} "Required"]]
 
-    [:div [common/atom-input-field "Task ID: " new-task [:data :task-id]]]
-    [:div [common/atom-input-field "Title: " new-task [:data :task-title]]]
-    [:div [common/atom-input-field "Description: " new-task [:data :description]]]
-    [:div [common/atom-input-field "Created By: " new-task [:data :created-by]]]
-    [:div [common/atom-input-field "Assignees: " new-task [:data :assignees]]]
-    [:div [common/atom-input-field "Estimated Time: " "number" new-task [:data :estimated-time]]]
-    [:div [common/atom-input-field "Epic: " new-task [:data :epic]]]
-    [:div [common/atom-input-field "Sprint ID: " new-task [:data :sprint-id]]]
-    [:div [common/atom-input-field "Priority Level: " new-task [:data :priority-level]]]
-    [:div [common/atom-input-field "Task State: " new-task [:data :task-state]]]
-    [:div [common/atom-input-field "Logged Time: " "time" new-task [:data :logged-time]]]
-    [:div [common/atom-input-field "Project-id: " new-task [:data :proj-id]]]
+     [:div {:class "form-group"}
+      [:label {:for "task-tile"} "Task Title: "]
+      [:input {:type "text", :class "form-control", :id "task-title",
+               :placeholder "Enter Task Title" :on-change #(common/onclick-swap-atom! new-task [:data :task-title]%)}]
+      [:small {:class "form-text text-muted"} "Required"]]
+
+     [:div {:class "form-group"}
+      [:label {:for "description"} "Description "]
+      [:input {:type "text", :class "form-control", :id "description",
+               :placeholder "Enter Description" :on-change #(common/onclick-swap-atom! new-task [:data :description]%)}]]
+
+     [:div {:class "form-group"}
+      [:label {:for "created-by"} "Created by: "]
+      [:input {:type "text", :class "form-control", :id "Created-by",
+               :placeholder "Enter Creator" :on-change #(common/onclick-swap-atom! new-task [:data :created-by]%)}]]
+
+     [:div {:class "form-group"}
+      [:label {:for "assignees"} "Assignees: "]
+      [:input {:type "text", :class "form-control", :id "Assignees",
+               :placeholder "Whoever is assigned to this task" :on-change #(common/onclick-swap-atom! new-task [:data :assignees]%)}]
+      [:small {:class "form-text text-muted"} "Required"]]
+
+     [:div {:class "form-group"}
+      [:label {:for "estimated-time"} "Estimated time: "]
+      [:input {:type "text", :class "form-control", :id "estimated-time",
+               :placeholder "Enter number of hours required" :on-change #(common/onclick-swap-atom! new-task [:data :estimated-time]%)}]
+      [:small {:class "form-text text-muted"} "Required"]]
+
+     [:div {:class "form-group"}
+      [:label {:for "priority-level"} "Priority Level:"]
+      [:select {:class "form-control" :id "priority" :defaultValue "Low" :on-change #(common/onclick-swap-atom! new-task [:data :priority-level]%)}
+       [:option {:value "Low"} "Low"]
+       [:option {:value "Medium"} "Medium"]
+       [:option {:value "High"} "High"]]]
+
+     [:div {:class "form-group"}
+      [:label {:for "epic"} "Epic: "]
+      [:input {:type "text", :class "form-control", :id "epic",
+               :placeholder "Enter Epic of task" :on-change #(common/onclick-swap-atom! new-task [:data :epic]%)}]]
+
+
+     [:div {:class "form-group"}
+      [:label {:for "logged-time"} "Logged-time: "]
+      [:input {:type "text", :class "form-control", :id "Logged-time",
+               :placeholder "Enter logged time on task" :on-change #(common/onclick-swap-atom! new-task [:data :logged-time]%)}]]]]
+
 
     [:div {:class "modal-footer"}
      [:div.btn.btn-secondary {:type         "button"
@@ -54,8 +120,10 @@
       "Close"]
      [:div.btn.btn-primary {:type         "button"
                             :data-dismiss "modal"
-                            :on-click     #(task-ajax/put-task-by-id (:data @new-task))}
-      "Save"]]]])
+
+                            :on-click     #(save-task-procedure (:data @new-task))}
+      "Save"]]])
+
 
 (defn create-task-button []
   [:div.btn.btn-primary.btn-backlog-col
@@ -63,36 +131,74 @@
                                {:show (reset! new-task {})})}
    "Create Task"])
 
+(defn validate-sprint
+  "Checks sprint for required info, returns true if correct."
+  [sprint-map]
+  (let  [sid-blank? (string/blank? (:sprint-id sprint-map))
+         name-blank? (string/blank? (:sprint-name sprint-map))
+         proj-blank? (string/blank? (:proj-id sprint-map))]
+    (and (not sid-blank?) (not name-blank?) (not proj-blank?))))
+
+
+(defn save-sprint-procedure
+  "Posts sprint info if true, alerts user if false"
+  ;TODO deactivate old sprints when creating new sprint
+  [sprint-map]
+  (if (validate-sprint sprint-map)
+    (sprint-ajax/put-sprint-by-id sprint-map)
+    (js/alert "Please fill out required details")))
 
 (defn modal-sprint-creation-content []
+  (swap! new-sprint assoc-in [:data :sprint-state] "active")
   [:div
    [:div {:class "modal-header"}
-    [:button {:type "button"
-              :class "close"
+    [:button {:type         "button"
+              :class        "close"
               :data-dismiss "modal"
-              :aria-label "Close"}
+              :aria-label   "Close"}
      [:span {:aria-hidden "true"} (gstring/unescapeEntities "&times;")]]
     [:h4 {:class "modal-title"
-          :id "sprint-modal-title"}
+          :id    "sprint-modal-title"}
      "Create a sprint"]]
    [:div {:class "modal-body"}
     ;TODO auto-gen removal. Sprint title or human friendly id to differ
     ; between them
-    [:div [common/atom-input-field "sprint ID: " new-sprint [:data :sprint-id]]]
-    [:div [common/atom-input-field "Start-Date: " new-sprint [:data :start-date]]]
-    [:div [common/atom-input-field "End-Date: " new-sprint [:data :end-date]]]
-    [:div [common/atom-input-field "Project ID: " new-sprint [:data :proj-id]]]
-    [:div [common/atom-input-field "Sprint State: " new-sprint [:data :sprint-state]]]
+    [:form
+     [:div {:class "form-group"}
+      [:label {:for "sprint-id"} "Sprint ID: "]
+      [:input {:type        "text", :class "form-control", :id "sprint-id",
+               :placeholder "Enter Sprint ID" :on-change #(common/onclick-swap-atom! new-sprint [:data :sprint-id] %)}]
+      [:small {:class "form-text text-muted"} "Required"]]
+
+     [:div {:class "form-group"}
+      [:label {:for "sprint-name"} "Sprint Name: "]
+      [:input {:type        "text", :class "form-control", :id "sprint-name",
+               :placeholder "Name your Sprint" :on-change #(common/onclick-swap-atom! new-sprint [:data :sprint-name] %)}]
+      [:small {:class "form-text text-muted"} "Required"]]
+
+     [:div {:class "form-group"}
+      [:label {:for "start-date"} "Sprint Start-Date: "]
+      [:input {:type "date", :class "form-control", :id "start-date" :on-change #(common/onclick-swap-atom! new-sprint [:data :start-date] %)}]]
+
+     [:div {:class "form-group"}
+      [:label {:for "end-date"} "Sprint End-Date: "]
+      [:input {:type "date", :class "form-control", :id "end-date" :on-change #(common/onclick-swap-atom! new-sprint [:data :end-date] %)}]]
+
+     [:div {:class "form-group"}
+      [:label {:for "proj-id"} "Project ID: "]
+      [:input {:type        "text", :class "form-control", :id "proj-id",
+               :placeholder "Project Sprint belongs to" :on-change #(common/onclick-swap-atom! new-sprint [:data :proj-id] %)}]
+      [:small {:class "form-text text-muted"} "Required"]]]]
 
 
-    [:div {:class "modal-footer"}
-     [:div.btn.btn-secondary {:type         "button"
-                              :data-dismiss "modal"}
-      "Close"]
-     [:div.btn.btn-primary {:type         "button"
-                            :data-dismiss "modal"
-                            :on-click     #(sprint-ajax/put-sprint-by-id  (:data @new-sprint))}
-      "Save"]]]])
+   [:div {:class "modal-footer"}
+    [:div.btn.btn-secondary {:type         "button"
+                             :data-dismiss "modal"}
+     "Close"]
+    [:div.btn.btn-primary {:type         "button"
+                           :data-dismiss "modal"
+                           :on-click     #(save-sprint-procedure (:data @new-sprint))}
+     "Save"]]])
 
 (defn create-sprint-button []
   [:div.btn.btn-primary.btn-backlog-col
@@ -100,22 +206,23 @@
                                {:show (reset! new-sprint {})})}
    "Create Sprint"])
 
+
 ;;----------------Get doc by ID example -------------------------------------------
 
 (defn modal-get-task-by-id []
   [:div
    [:div {:class "modal-header"}
-    [:button {:type "button"
-              :class "close"
+    [:button {:type         "button"
+              :class        "close"
               :data-dismiss "modal"
-              :aria-label "Close"}
+              :aria-label   "Close"}
      [:span {:aria-hidden "true"} (gstring/unescapeEntities "&times;")]]
     [:h4 {:class "modal-title"
-          :id "get-task-modal-title"}
+          :id    "get-task-modal-title"}
      "Get a task"]]
    [:div {:class "modal-body"}
 
-     [:div [common/atom-input-field "Task ID: " new-task [:data :task-id]]]
+    [:div [common/atom-input-field "Task ID: " new-task [:data :task-id]]]
 
     [:div {:class "modal-footer"}
      [:div.btn.btn-secondary {:type         "button"
@@ -252,7 +359,7 @@
            [:div {:class "panel-body"}
             [:div
              [create-sprint-button]]]]]]]]]
-     
+
      [sidebar/menu-toggle]
      ;TODO ask Renaat about debug info
      [:p (str "new-task: " @new-task)]

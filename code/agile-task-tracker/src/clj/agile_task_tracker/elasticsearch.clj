@@ -75,6 +75,7 @@
         id (:sprint-id doc)
         mapping "sprint-info-mapping"
         mapping-types {mapping {:properties {:sprint-id          {:type "string":index "not_analyzed"} ;not analyzed allows for the exact term to be queried
+                                             :sprint-name        {:type "string"}
                                              :start-date         {:type "string"}
                                              :end-date           {:type "string"}
                                              :proj-id            {:type "double"}
