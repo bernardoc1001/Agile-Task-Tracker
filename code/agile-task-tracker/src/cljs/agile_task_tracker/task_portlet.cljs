@@ -28,13 +28,28 @@
             :project-id (:project-id string-map)))
 
 (declare render-task)
-(defn get-edit-task-by-id-handler
+(declare modal-task-editing-content)
+
+(defn get-edit-task-for-modal-handler
   [response]
-  (.log js/console (str "get-edit-task-by-id-handler response: " response))
+  (.log js/console (str "get-edit-task-for-modal response: " response))
   (let [task-map (convert-to-task-format (get-in response [:_source]))]
     (swap! edit-task assoc :data task-map)
-    (.log js/console (str (:data @edit-task)))))
+    (rmodals/modal! [modal-task-editing-content])))
 
+(defn get-edit-task-for-modal
+  [task-id]
+  (POST (route-calculator)
+        {:params        {:data   {:task-id task-id}
+                         :method "get-by-id"}
+         :handler       get-edit-task-for-modal-handler
+         :error-handler error-handler}))
+
+(defn get-edit-task-by-id-handler
+  [response]
+  (.log js/console (str "get-edit-task-by-id response: " response))
+  (let [task-map (convert-to-task-format (get-in response [:_source]))]
+    (swap! edit-task assoc :data task-map)))
 
 (defn get-edit-task-by-id
   [task-id]
@@ -118,42 +133,42 @@
    [:div {:class "modal-body"}
     [:form
      [:div {:class "form-group"}
-      [:label {:for "task-tile"} "Task Title: "]
-      [:input {:type "text", :class "form-control", :id "task-title",
-               :default-Value (:task-title @edit-task),
-               :placeholder "Enter Task Title" :on-change #(common/onclick-swap-atom! edit-task [:data :task-title] %)}]
+      [:label {:for "task-title"} "Task Title: "]
+      [:input {:type  "text", :class "form-control", :id "task-title",
+               :value (get-in @edit-task [:data :task-title]),
+                      :on-change #(common/onclick-swap-atom! edit-task [:data :task-title] %)}]
       [:small {:class "form-text text-muted"} "Required"]]
 
      [:div {:class "form-group"}
       [:label {:for "description"} "Description "]
       [:input {:type "text", :class "form-control", :id "description",
-               :default-Value (:description @edit-task),
+               :default-Value (get-in @edit-task [:data :description]),
                :placeholder "Enter Description" :on-change #(common/onclick-swap-atom! edit-task [:data :description] %)}]]
 
      [:div {:class "form-group"}
       [:label {:for "created-by"} "Created by: "]
       [:input {:type "text", :class "form-control", :id "Created-by",
-               :default-Value (:created-by @edit-task),
+               :default-Value (get-in @edit-task [:data :created-by]),
                :placeholder "Enter Creator" :on-change #(common/onclick-swap-atom! edit-task [:data :created-by] %)}]]
 
      [:div {:class "form-group"}
       [:label {:for "assignees"} "Assignees: "]
       [:input {:type "text", :class "form-control", :id "Assignees",
-               :default-Value (:assignees @edit-task),
+               :default-Value (get-in @edit-task [:data :assignees]),
                :placeholder "Whoever is assigned to this task" :on-change #(common/onclick-swap-atom! edit-task [:data :assignees] %)}]
       [:small {:class "form-text text-muted"} "Required"]]
 
      [:div {:class "form-group"}
       [:label {:for "estimated-time"} "Estimated time: "]
       [:input {:type "text", :class "form-control", :id "estimated-time",
-               :default-Value (:estimated-time @edit-task),
+               :default-Value (get-in @edit-task [:data :estimated-time]),
                :placeholder "Enter number of hours required" :on-change #(common/onclick-swap-atom! edit-task [:data :estimated-time] %)}]
       [:small {:class "form-text text-muted"} "Required"]]
 
      [:div {:class "form-group"}
       [:label {:for "priority-level"} "Priority Level:"]
       [:select {:class "form-control" :id "priority"
-                :defaultValue (:priority-level @edit-task),  :on-change #(common/onclick-swap-atom! edit-task [:data :priority-level] %)}
+                :defaultValue (get-in @edit-task [:data :priority-level]),  :on-change #(common/onclick-swap-atom! edit-task [:data :priority-level] %)}
        [:option {:value "Low"} "Low"]
        [:option {:value "Medium"} "Medium"]
        [:option {:value "High"} "High"]]]
@@ -161,14 +176,14 @@
      [:div {:class "form-group"}
       [:label {:for "epic"} "Epic: "]
       [:input {:type "text", :class "form-control", :id "epic",
-               :default-Value (:epic @edit-task),
+               :default-Value (get-in @edit-task [:data :epic]),
                :placeholder "Enter Epic of task" :on-change #(common/onclick-swap-atom! edit-task [:data :epic] %)}]]
 
 
      [:div {:class "form-group"}
       [:label {:for "logged-time"} "Logged-time: "]
       [:input {:type "text", :class "form-control", :id "Logged-time",
-               :default-Value (:logged-time @edit-task),
+               :default-Value (get-in @edit-task [:data :logged-time]),
                :placeholder "Enter logged time on task" :on-change #(common/onclick-swap-atom! edit-task [:data :logged-time] %)}]]]]
 
 
@@ -209,9 +224,7 @@
       [:div.btn.btn-primary.btn-tasklet
        {:on-click #(delete-task-from-db task-map)} "Delete Task"]
       [:div.btn.btn-primary.btn-tasklet
-       {:on-click #(do (get-edit-task-by-id task-id)
-                       (rmodals/modal! [modal-task-editing-content]))} "Edit
-                       Tasks"]]]))
+       {:on-click #(get-edit-task-for-modal task-id)} "Edit Tasks"]]]))
 
 
 
