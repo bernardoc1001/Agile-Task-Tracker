@@ -57,6 +57,7 @@
              {:output-to "target/cljsbuild/public/js/app.js"
               :output-dir "target/uberjar"
               :optimizations :advanced
+              :externs ["resources/public/js/includes/externs.js"]
               :pretty-print  false}}
             :app
             {:source-paths ["src/cljs" "src/cljc" "env/dev/cljs"]
@@ -117,6 +118,9 @@
                    :env {:dev true}}
 
              :uberjar {:hooks [minify-assets.plugin/hooks]
+                       :dependencies [[ring/ring-mock "0.3.0"]
+                                      [ring/ring-devel "1.5.0"]
+                                      [prone "1.1.4"]]
                        :source-paths ["env/prod/clj"]
                        :prep-tasks ["compile" ["cljsbuild" "once" "min"]]
                        :env {:production true}
