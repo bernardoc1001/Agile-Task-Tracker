@@ -317,9 +317,8 @@
             [create-task-button]
 
             ;----------temporary examples-----------------------------
-            [rmodals/modal-window]
+
             [get-task-button]
-            [rmodals/modal-window]
             [query-tasks-button]
             ;---------------------------------------------------------
             [refresh-backlog-tasks-button]
