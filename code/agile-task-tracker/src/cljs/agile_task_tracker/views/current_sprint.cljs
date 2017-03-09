@@ -30,6 +30,7 @@
          [:div {:class "panel panel-default"}
           [:div {:class "panel-body"}
            [:div
+            [rmodals/modal-window]
             [refresh-current-tasks-button]
             ]
            ;portlet stuff
