@@ -238,6 +238,9 @@
       (and (= current-page-name "backlog-page") (or (= task-state "backlog-col") (string/blank? task-state)))
       (str "backlog-col")
 
+      (and (= current-page-name "backlog-page") (= task-state "completed-col"))
+      (str "do-not-render")
+
       (= current-page-name "backlog-page")
       (str "create-sprint-col")
 
@@ -256,7 +259,8 @@
   (if (nil? (.getElementById js/document (:task-id task-map)))
     (let [draggable-portlet (hipo/create (create-task-portlet task-map))
           col-id (get-column-id-to-render-in (:task-state task-map))]
-      (.appendChild (.getElementById js/document col-id) draggable-portlet)
-      (make-tasks-toggleable task-map))
+      (if (not (= "do-not-render" col-id))
+        (do (.appendChild (.getElementById js/document col-id) draggable-portlet)
+            (make-tasks-toggleable task-map))))
     (.error js/console (str "Could not add task, old version of the task still exists"))))
 
