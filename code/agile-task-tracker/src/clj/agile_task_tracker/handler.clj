@@ -60,8 +60,8 @@
                                     {:status 200 :body response}
                                     {:status 500 :body response}))
 
-                                (= "query-by-term" (get-in request [:params :method]))
-                                (let [response (attes/query-by-term "org-info" "org-info-mapping" (keyword "org-id") (get-in request [:params :data :organisation-id]))]
+                                (= "get-all-from-index" (get-in request [:params :method]))
+                                (let [response (attes/get-all-from-index "org-info" "org-info-mapping")]
                                   (if (>= (get-in response [:hits :total]) 0)
                                     {:status 200 :body response}
                                     {:status 500 :body response}))
@@ -88,7 +88,6 @@
                                           {:status 500 :body response}))
 
                                       (= "query-by-term" (get-in request [:params :method]))
-                                      ;TODO does this work?
                                       (let [response (attes/query-by-term "proj-info" "proj-info-mapping" (keyword "organisation-id") (get-in request [:params :data :organisation-id]))]
                                         (if (>= (get-in response [:hits :total]) 0)
                                           {:status 200 :body response}

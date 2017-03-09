@@ -133,6 +133,10 @@
                                                                 {:term {:task-state "create-sprint-col"}}]
                                                        :minimum_should_match 2}})))
 
+(defn get-all-from-index
+  [index-name mapping]
+  (let [conn (esr/connect db-address)]
+    (esd/search conn index-name mapping :query {:bool {:must [{:match_all {}}]}})))
 
 (defn get-doc-by-id
   [index-name mapping id]

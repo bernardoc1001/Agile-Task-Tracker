@@ -58,6 +58,27 @@
          :handler       put-org-by-id-handler
          :error-handler error-handler}))
 
+(defn get-all-orgs-handler
+  [response]
+  (.log js/console (str "get-all-orgs-handler response: " response))
+  (let [hits-vector (get-in response [:hits :hits])]
+    (doseq [hit hits-vector]
+      (render-org (:_source hit) "org-col"))))
+
+(defn get-all-orgs []
+  (POST (route-calculator)
+        {:params {:method "get-all-from-index"}
+         :handler get-all-orgs-handler
+         :error-handler error-handler}))
+
+(defn load-orgs []
+  (get-all-orgs))
+
+(defn refresh-organisations-button []
+  [:div.btn.btn-primary
+   {:on-click #(load-orgs)}
+   "Refresh Organisations"])
+
 (defn organisation-id-contains-white-space [organisation-map]
   (boolean (re-find #" " (:organisation-id organisation-map))))
 
@@ -121,8 +142,8 @@
 
 
 (defn dashboard-page []
+  (load-orgs)
   [:div
-
    [:div#wrapper
     [sidebar/sidebar]
 
@@ -135,6 +156,7 @@
       [:div {:class "panel-body"}
        [:div {:class "row"}
         [:div {:class "col-sm-12"}
+         [refresh-organisations-button]
          [rmodals/modal-window]
          [create-org-button]
          [:div#org-col]]]]]]]])

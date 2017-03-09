@@ -58,6 +58,29 @@
          :handler       put-proj-by-id-handler
          :error-handler error-handler}))
 
+
+(defn query-projects-by-org-id-handler
+  [response]
+  (.log js/console (str "query-task-handler response: " response))
+  (let [hits-vector (get-in response [:hits :hits])]
+    (doseq [hit hits-vector]
+       (render-proj (:_source hit) "proj-col"))))
+
+(defn query-projects-by-org-id []
+  (POST (route-calculator)
+        {:params        {:data   {:organisation-id (session/get :organisation-id)}
+                         :method "query-by-term"}
+         :handler       query-projects-by-org-id-handler
+         :error-handler error-handler}))
+
+(defn load-projects []
+  (query-projects-by-org-id))
+
+(defn refresh-backlog-tasks-button []
+  [:div.btn.btn-primary
+   {:on-click #(load-projects)}
+   "Refresh Projects"])
+
 ;----------------------------------------------------------
 (defn project-id-contains-white-space [project-map]
 	(boolean (re-find #" " (:project-id project-map))))
@@ -135,8 +158,8 @@
 	 "Create Project"])
 
 (defn project-page []
-	[:div
-
+  (load-projects)
+  [:div
 	 [:div#wrapper
 		[sidebar/sidebar]
 
@@ -150,6 +173,8 @@
 			 [:div {:class "row"}
 				[:div {:class "col-sm-12"}
 				 [:p ""]
-				 [rmodals/modal-window]
+         [refresh-backlog-tasks-button]
+         [rmodals/modal-window]
 				 [create-proj-button]
+
 				 [:div#proj-col]]]]]]]])

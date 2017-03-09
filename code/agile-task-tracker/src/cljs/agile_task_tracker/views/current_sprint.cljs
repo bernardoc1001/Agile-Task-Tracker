@@ -10,6 +10,8 @@
             [reagent.session :as session]
             [clojure.string :as string]))
 
+(defn load-tasks []
+  (task-ajax/query-active-sprint-tasks (session/get :project-id)))
 
 (defn refresh-current-tasks-button []
   [:div.btn.btn-primary.btn-backlog-col
@@ -17,6 +19,7 @@
    "Refresh Tasks"])
 
 (defn current-sprint-page []
+  (load-tasks)
   [:div
    [:div#wrapper
     [sidebar/sidebar]
