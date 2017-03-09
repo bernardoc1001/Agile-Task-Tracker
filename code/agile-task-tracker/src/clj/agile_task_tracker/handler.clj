@@ -140,7 +140,7 @@
                                           {:status 200 :body response}
                                           response))
 
-                                      (= "get-active-sprint" (get-in request [:params :method]))
+                                      (= "get-zero-or-one-active-sprint" (get-in request [:params :method]))
                                       (let [response (attes/get-active-sprint "sprint-info" "sprint-info-mapping" (get-in request [:params :data :project-id]))
                                             num-of-hits (get-in response [:hits :total])]
                                         (if (= true (or (= 0 num-of-hits) (= 1 num-of-hits)))
@@ -196,11 +196,17 @@
                                           {:status 200 :body response}
                                           response))
 
-                                      ;TODO add this in for current sprint page
-                                      (= "get-active-sprint" (get-in request [:params :method]))
+
+                                      (= "get-zero-or-one-active-sprint" (get-in request [:params :method]))
                                       (let [response (attes/get-active-sprint "sprint-info" "sprint-info-mapping" (get-in request [:params :data :project-id]))
                                             num-of-hits (get-in response [:hits :total])]
                                         (if (= true (or (= 0 num-of-hits) (= 1 num-of-hits)))
+                                          {:status 200 :body response}
+                                          {:status 500 :body response}))
+
+                                      (= "get-all-active-sprints" (get-in request [:params :method]))
+                                      (let [response (attes/get-active-sprint "sprint-info" "sprint-info-mapping" (get-in request [:params :data :project-id]))]
+                                        (if (contains? (:hits response) :total)
                                           {:status 200 :body response}
                                           {:status 500 :body response}))
 
