@@ -21,7 +21,7 @@
                                              :epic               {:type "string"}
                                              :sprint-id          {:type "string" :index "not_analyzed"} ;not analyzed allows for the exact term to be queried
                                              :priority-level     {:type "string"}
-                                             :task-state         {:type "string"}
+                                             :task-state         {:type "string" :index "not_analyzed"}
                                              :logged-time        {:type "double"}
                                              :project-id         {:type "string" :index "not_analyzed"}}}}]
 
@@ -79,7 +79,7 @@
                                              :start-date         {:type "string"}
                                              :end-date           {:type "string"}
                                              :project-id         {:type "string" :index "not_analyzed"}
-                                             :sprint-state       {:type "string"}}}}]
+                                             :sprint-state       {:type "string" :index "not_analyzed"}}}}]
 
     (if (not (esi/exists? conn index-name))
       ;create index with mappings
@@ -94,6 +94,14 @@
     (esd/search conn index-name mapping :query {:bool {:should [{:term {:project-id project-id}}
                                                                 {:term {:sprint-state "active"}}]
                                                        :minimum_should_match 2}})))
+
+(defn get-unassigned-tasks
+  [index-name mapping project-id]
+  (let [conn (esr/connect db-address)]
+    (esd/search conn index-name mapping :query {:bool {:should [{:term {:project-id project-id}}
+                                                                {:term {:task-state "create-sprint-col"}}]
+                                                       :minimum_should_match 2}})))
+
 
 (defn get-doc-by-id
   [index-name mapping id]
