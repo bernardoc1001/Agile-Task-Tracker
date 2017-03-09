@@ -1,8 +1,7 @@
 (ns agile-task-tracker.task-ajax
   (:require  [ajax.core :refer [GET POST]]
              [agile-task-tracker.ajax :refer [handler error-handler route-calculator]]
-             [agile-task-tracker.task-portlet :as task-portlet]
-             [reagent.session :as session]))
+             [agile-task-tracker.task-portlet :as task-portlet]))
 
 (defn get-task-by-id-handler
   [response]
@@ -56,7 +55,7 @@
   (.log js/console (str "query-active-sprint-tasks-handler response: " response))
   (if (= 1 (get-in response [:hits :total]))
     (query-tasks-by-sprint-id (get-in (first (get-in response [:hits :hits])) [:_source :sprint-id]))
-    ;TODO how to set some sort of active sprint flag
+    ;TODO how to set some sort of active sprint flag for edits
     ))
 
 (defn active-sprint-tasks-error-handler
@@ -67,6 +66,6 @@
   [project-id]
   (POST (route-calculator)
         {:params        {:data   {:project-id project-id}
-                         :method "get-active-sprint"}
+                         :method "get-zero-or-one-active-sprint"}
          :handler       query-active-sprint-tasks-handler
          :error-handler active-sprint-tasks-error-handler}))

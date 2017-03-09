@@ -8,6 +8,7 @@
             [agile-task-tracker.ajax :refer [handler error-handler route-calculator]]
             [agile-task-tracker.task-ajax :as task-ajax]
             [agile-task-tracker.sprint-ajax :as sprint-ajax]
+            [agile-task-tracker.deactivate-sprint :as deactivate-sprint]
             [agile-task-tracker.sortable :as sortable]
             [reagent.session :as session]
             [clojure.string :as string]))
@@ -141,6 +142,8 @@
                                {:show (reset! new-task {})})}
    "Create Task"])
 
+
+;-----------------------------------------------------------------------------------------------------
 (defn update-unassociated-task
   [string-map]
   (hash-map :task-id (:task-id string-map)
@@ -228,9 +231,14 @@
    [:div.btn.btn-primary {:type         "button"
                           :data-dismiss "modal"
                           :on-click     #(save-sprint-procedure (:data @new-sprint))}
-    "Save"]])
+    "Save"]
 
+   [:div.btn.btn-primary {:type         "button"
+                          :data-dismiss "modal"
+                          :on-click     #(deactivate-sprint/deactivate-sprints (session/get :project-id))}
+    "End Sprint"]])
 
+;;-------------------------------------------------------------------------------------------------------------------
 
 ;;----------------Get doc by ID example -------------------------------------------
 
