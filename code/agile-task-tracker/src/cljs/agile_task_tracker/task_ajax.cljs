@@ -59,7 +59,7 @@
     ;TODO how to set some sort of active sprint flag
     ))
 
-(defn active-sprint-error-handler
+(defn active-sprint-tasks-error-handler
   [response]
   (.error js/console (str "Active Sprint error handler: " response)))
 
@@ -69,4 +69,4 @@
         {:params        {:data   {:project-id project-id}
                          :method "get-active-sprint"}
          :handler       query-active-sprint-tasks-handler
-         :error-handler active-sprint-error-handler}))
+         :error-handler active-sprint-tasks-error-handler}))

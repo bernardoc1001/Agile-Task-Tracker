@@ -98,6 +98,7 @@
   [task-state]
   (let [current-page-name (session/get :current-page-name)
         ;TODO add in sprint page
+        ;to-do-col in-progress-col completed-col
         ]
     (cond
       (and (= current-page-name "backlog-page") (or (= task-state "backlog-col") (string/blank? task-state)))

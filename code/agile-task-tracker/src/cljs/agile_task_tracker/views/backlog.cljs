@@ -4,6 +4,8 @@
             [agile-task-tracker.common :as common]
             [goog.string :as gstring]
             [agile-task-tracker.sidebar :as sidebar]
+            [ajax.core :refer [GET POST]]
+            [agile-task-tracker.ajax :refer [handler error-handler route-calculator]]
             [agile-task-tracker.task-ajax :as task-ajax]
             [agile-task-tracker.sprint-ajax :as sprint-ajax]
             [agile-task-tracker.sortable :as sortable]
@@ -17,6 +19,9 @@
 
 (defonce new-sprint
          (r/atom {:sprint {}}))
+
+(defonce current-sprint-id
+         (r/atom {:sprint-id ""}))
 
 (defn refresh-tasks-button []
   [:div.btn.btn-primary.btn-backlog-col
@@ -137,6 +142,38 @@
                                {:show (reset! new-task {})})}
    "Create Task"])
 
+(defn update-unassociated-task
+  [string-map]
+  (hash-map :task-id (:task-id string-map)
+            :task-title (:task-title string-map)
+            :description (:description string-map)
+            :created-by (:created-by string-map)
+            :assignees (:assignees string-map)
+            :estimated-time (js/parseFloat (:estimated-time string-map))
+            :epic (:epic string-map)
+            :sprint-id (:sprint-id @current-sprint-id)      ;update the sprint-id here
+            :priority-level (:priority-level string-map)
+            :task-state "to-do-col"                         ;update the task-state here
+            :logged-time (js/parseFloat (:logged-time string-map))
+            :project-id (:project-id string-map)))
+
+(defn associate-tasks-with-sprint-handler
+  [response]
+  (.log js/console (str "associate-tasks-with-sprint-handler response: " response))
+  (let [hits-vector (get-in response [:hits :hits])]
+    (if (not (empty? hits-vector))
+      (doseq [hit hits-vector]
+        (task-ajax/put-task-by-id (update-unassociated-task (:_source hit)))))))
+
+(defn associate-tasks-with-sprint
+  [sprint-map]
+  (swap! current-sprint-id assoc :sprint-id (:sprint-id sprint-map))
+  (POST (route-calculator)
+        {:params        {:data   {:project-id (session/get :project-id)}
+                         :method "get-unassigned-tasks"}
+         :handler associate-tasks-with-sprint-handler
+         :error-handler error-handler}))
+
 (defn validate-sprint
   "Checks sprint for required info, returns true if correct."
   [sprint-map]
@@ -156,7 +193,9 @@
     (if (sprint-id-contains-white-space sprint-map)
       (js/alert "Please remove whitespace from id")
 
-      (sprint-ajax/put-sprint-by-id sprint-map))
+      (do
+        (sprint-ajax/put-sprint-by-id sprint-map)
+        (associate-tasks-with-sprint sprint-map)))
     (js/alert "Please fill out required details")))
 
 (defn sprint-creation-content []
