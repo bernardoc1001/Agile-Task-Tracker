@@ -18,3 +18,4 @@ builds
 .cljs*
 *.log
 /resources/public/js
+/resources/public/css/site.min.css
