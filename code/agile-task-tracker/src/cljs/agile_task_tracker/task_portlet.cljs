@@ -97,7 +97,6 @@
 (defn get-column-id-to-render-in
   [task-state]
   (let [current-page-name (session/get :current-page-name)
-        ;TODO add in sprint page
         ;to-do-col in-progress-col completed-col
         ]
     (cond
@@ -105,7 +104,16 @@
       (str "backlog-col")
 
       (= current-page-name "backlog-page")
-      (str "create-sprint-col"))))
+      (str "create-sprint-col")
+
+      (and (= current-page-name "current-sprint-page")(= task-state "to-do-col"))
+      (str "to-do-col")
+
+      (and (= current-page-name "current-sprint-page")(= task-state "in-progress-col"))
+      (str "in-progress-col")
+
+      (and (= current-page-name "current-sprint-page")(= task-state "completed-col"))
+      (str "completed-col"))))
 
 (defn render-task
   [task-map]
