@@ -24,10 +24,13 @@
 (defonce current-sprint-id
          (r/atom {:sprint-id ""}))
 
+(defn load-tasks []
+  (task-ajax/query-tasks-by-sprint-id "backlog")
+  (task-ajax/query-active-sprint-tasks (session/get :project-id)))
+
 (defn refresh-backlog-tasks-button []
   [:div.btn.btn-primary.btn-backlog-col
-   {:on-click #(do (task-ajax/query-tasks-by-sprint-id "backlog")
-                   (task-ajax/query-active-sprint-tasks (session/get :project-id)))}
+   {:on-click #(load-tasks)}
    "Refresh Tasks"])
 
 (defn task-id-contains-white-space [task-map]
@@ -308,6 +311,7 @@
 
 ;--------------------Backlog Page----------------------------------------------------------
 (defn backlog-page []
+  (load-tasks)
   [:div
    [:div#wrapper
     [sidebar/sidebar]
