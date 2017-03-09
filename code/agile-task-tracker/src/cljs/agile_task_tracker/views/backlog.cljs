@@ -23,9 +23,8 @@
 (defonce current-sprint-id
          (r/atom {:sprint-id ""}))
 
-(defn refresh-tasks-button []
+(defn refresh-backlog-tasks-button []
   [:div.btn.btn-primary.btn-backlog-col
-   ;TODO query both backlog tasks and the active sprint
    {:on-click #(do (task-ajax/query-tasks-by-sprint-id "backlog")
                    (task-ajax/query-active-sprint-tasks (session/get :project-id)))}
    "Refresh Tasks"])
@@ -323,7 +322,7 @@
             [rmodals/modal-window]
             [query-tasks-button]
             ;---------------------------------------------------------
-            [refresh-tasks-button]
+            [refresh-backlog-tasks-button]
 
             ]
            ;portlet stuff

@@ -97,6 +97,56 @@
                                           response))))
 
            (GET "/current-sprint/:project-id" [project-id] (loading-page))
+           (POST "/current-sprint" request (cond
+                                      (= "get-by-id" (get-in request [:params :method]))
+                                      (let [response (attes/get-doc-by-id "task-info" "task-info-mapping" (get-in request [:params :data :task-id]))]
+                                        (if (= true (:found response))
+                                          {:status 200 :body response}
+                                          response))
+
+                                      (= "delete-by-id" (get-in request [:params :method]))
+                                      (let [response (attes/delete-doc-by-id "task-info" "task-info-mapping" (get-in request [:params :data :task-id]))]
+                                        (if (= true (:found response))
+                                          {:status 200 :body response}
+                                          {:status 500 :body response}))
+
+                                      (= "query-by-term" (get-in request [:params :method]))
+                                      (let [response (attes/query-by-term "task-info" "task-info-mapping" (keyword "sprint-id") (get-in request [:params :data :sprint-id]))]
+                                        (if (>= (get-in response [:hits :total]) 0)
+                                          {:status 200 :body response}
+                                          {:status 500 :body response}))
+
+                                      (= "put-by-id" (get-in request [:params :method]))
+                                      (let [response (attes/put-task-info (get-in request [:params :data]))]
+                                        (if (= true (contains? response :created))
+                                          {:status 200 :body response}
+                                          response))
+
+                                      (= "get-sprint-by-id" (get-in request [:params :method]))
+                                      (let [response (attes/get-doc-by-id "sprint-info" "sprint-info-mapping" (get-in request [:params :data :sprint-id]))]
+                                        (if (= true (:found response))
+                                          {:status 200 :body response}
+                                          response))
+
+                                      (= "put-sprint-by-id" (get-in request [:params :method]))
+                                      (let [response (attes/put-sprint-info (get-in request [:params :data]))]
+                                        (if (= true (contains? response :created))
+                                          {:status 200 :body response}
+                                          response))
+
+                                      (= "get-active-sprint" (get-in request [:params :method]))
+                                      (let [response (attes/get-active-sprint "sprint-info" "sprint-info-mapping" (get-in request [:params :data :project-id]))
+                                            num-of-hits (get-in response [:hits :total])]
+                                        (if (= true (or (= 0 num-of-hits) (= 1 num-of-hits)))
+                                          {:status 200 :body response}
+                                          {:status 500 :body response}))
+
+                                      (= "get-unassigned-tasks" (get-in request [:params :method]))
+                                      (let [response (attes/get-unassigned-tasks "task-info" "task-info-mapping" (get-in request [:params :data :project-id]))
+                                            num-of-hits (get-in response [:hits :total])]
+                                        (if (> num-of-hits 0)
+                                          {:status 200 :body response}
+                                          {:status 500 :body response}))))
            (GET "/sprints/:project-id" [project-id] (loading-page))
            (GET "/backlog/:project-id" [project-id] (loading-page))
            (POST "/backlog" request (cond
