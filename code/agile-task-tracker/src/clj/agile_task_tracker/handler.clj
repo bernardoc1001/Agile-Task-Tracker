@@ -42,7 +42,9 @@
 
 
 (defroutes routes
-           (GET "/" [] (loading-page))
+           (GET "/" [] (do
+                         (attes/create-all-indices)
+                         (loading-page)))
            (POST "/"  request (cond
                                 (= "get-by-id" (get-in request [:params :method]))
                                 (let [response (attes/get-doc-by-id "org-info" "org-info-mapping" (get-in request [:params :data :organisation-id]))]
@@ -69,7 +71,9 @@
                                   (if (= true (contains? response :created))
                                     {:status 200 :body response}
                                     response))))
-           (GET "/project/:organisation-id" [organisation-id] (loading-page))
+           (GET "/project/:organisation-id" [organisation-id] (do
+                                                                (attes/create-all-indices)
+                                                                (loading-page)))
            (POST "/project" request (cond
                                       (= "get-by-id" (get-in request [:params :method]))
                                       (let [response (attes/get-doc-by-id "proj-info" "proj-info-mapping" (get-in request [:params :data :project-id]))]
@@ -96,7 +100,9 @@
                                           {:status 200 :body response}
                                           response))))
 
-           (GET "/current-sprint/:project-id" [project-id] (loading-page))
+           (GET "/current-sprint/:project-id" [project-id] (do
+                                                             (attes/create-all-indices)
+                                                             (loading-page)))
            (POST "/current-sprint" request (cond
                                       (= "get-by-id" (get-in request [:params :method]))
                                       (let [response (attes/get-doc-by-id "task-info" "task-info-mapping" (get-in request [:params :data :task-id]))]
@@ -147,8 +153,12 @@
                                         (if (> num-of-hits 0)
                                           {:status 200 :body response}
                                           {:status 500 :body response}))))
-           (GET "/sprints/:project-id" [project-id] (loading-page))
-           (GET "/backlog/:project-id" [project-id] (loading-page))
+           (GET "/sprints/:project-id" [project-id] (do
+                                                      (attes/create-all-indices)
+                                                      (loading-page)))
+           (GET "/backlog/:project-id" [project-id] (do
+                                                      (attes/create-all-indices)
+                                                      (loading-page)))
            (POST "/backlog" request (cond
                                       (= "get-by-id" (get-in request [:params :method]))
                                       (let [response (attes/get-doc-by-id "task-info" "task-info-mapping" (get-in request [:params :data :task-id]))]
