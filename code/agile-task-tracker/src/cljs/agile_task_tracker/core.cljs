@@ -10,13 +10,9 @@
 							[agile-task-tracker.views.sprints :refer [sprints-page]]))
 
 
-;; -------------------------
-;; Views
 (defn current-page []
   [:div [(session/get :current-page)]])
 
-;; -------------------------
-;; Routes
 (secretary/defroute "/" []
                     (session/put! :current-page #'dashboard-page)
                     (session/put! :current-page-name "dashboard-page"))
@@ -41,8 +37,6 @@
                     (session/put! :current-page #'sprints-page)
                     (session/put! :current-page-name "sprints-page"))
 
-;; -------------------------
-;; Initialize app
 (defn mount-root []
   (reagent/render [current-page] (.getElementById js/document "app")))
 

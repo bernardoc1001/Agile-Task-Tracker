@@ -18,9 +18,6 @@
 (defonce page-state
 				 (r/atom {:projs []}))
 
-
-
-
 (defn render-proj
 	[proj-map col-id]
 	(if (nil? (.getElementById js/document (:project-id proj-map)))
@@ -29,9 +26,6 @@
 			(.appendChild (.getElementById js/document col-id) proj-pill))
 		(.error js/console (str "Could not add proj, already exists"))))
 
-
-;---------------------ajax stuff----------------------------
-;TODO refactor into another file?
 (defn get-proj-by-id-handler
 	[response]
 	(.log js/console (str "get-task-by-id-handler response: " response))
@@ -81,7 +75,6 @@
    {:on-click #(load-projects)}
    "Refresh Projects"])
 
-;----------------------------------------------------------
 (defn project-id-contains-white-space [project-map]
 	(boolean (re-find #" " (:project-id project-map))))
 
@@ -101,7 +94,6 @@
 			(put-proj-by-id project-map))
 		(js/alert "Please fill out required details")))
 
-
 (defn modal-proj-creation-content []
 	(swap! new-proj assoc-in [:data :organisation-id] (session/get :organisation-id))
 	[:div
@@ -115,7 +107,6 @@
 					:id    "proj-modal-title"}
 		 "Create an Project"]]
 	 [:div {:class "modal-body"}
-		;TODO Form validation
 		[:form
 		 [:div {:class "form-group"}
 			[:label {:for "proj-id-form"} "Project ID: "]
