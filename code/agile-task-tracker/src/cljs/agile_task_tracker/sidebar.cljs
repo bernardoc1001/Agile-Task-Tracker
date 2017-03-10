@@ -10,9 +10,7 @@
           home-link [:li>a {:href "/"} "Home"]
           project-link [:li>a {:href (str "/project/" (session/get :organisation-id))} "Projects"]
           backlog-link [:li>a {:href (str "/backlog/" (session/get :project-id))} "Backlog"]
-          current-sprint-link [:li>a {:href (str "/current-sprint/" (session/get :project-id))} "Current Sprint"]
-          create-sprint-link [:li>a {:href (str "/backlog/" (session/get :project-id))} "Create A Sprint"]
-          all-sprints-link [:li>a {:href (str "/sprints/" (session/get :project-id))} "All Sprints"]]
+          current-sprint-link [:li>a {:href (str "/current-sprint/" (session/get :project-id))} "Current Sprint"]]
       
       (cond
         (= current-page-name "dashboard-page")
@@ -28,9 +26,7 @@
          home-link
          project-link
          backlog-link
-         current-sprint-link
-         create-sprint-link
-         all-sprints-link]))]])
+         current-sprint-link]))]])
 
 (defn menu-toggle-render []
   [:div.btn.btn-default "Toggle Menu"])
