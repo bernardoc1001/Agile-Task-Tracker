@@ -196,7 +196,8 @@
 
       (do
         (sprint-ajax/put-sprint-by-id sprint-map)
-        (associate-tasks-with-sprint sprint-map)))
+        (associate-tasks-with-sprint sprint-map)
+        (js/alert "Sprint Created")))
     (js/alert "Please fill out required details")))
 
 (defn sprint-creation-content []
