@@ -29,7 +29,6 @@
 
 
 ;---------------------ajax stuff----------------------------
-;TODO refactor into another file?
 (defn get-org-by-id-handler
   [response]
   (.log js/console (str "get-task-by-id-handler response: " response))

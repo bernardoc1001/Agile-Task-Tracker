@@ -1,7 +1,7 @@
 (ns agile-task-tracker.proj-org
   (:require [reagent.core :as r]))
 
-;TODO Possibly refactor into one method. Is this worth having its own cljs?
+
 (defn create-org-pill
   [org-map]
   (let [org-id (:organisation-id org-map)

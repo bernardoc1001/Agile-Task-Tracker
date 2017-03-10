@@ -1,14 +1,10 @@
 (ns agile-task-tracker.views.current-sprint
   (:require [reagent.core :as r]
             [reagent-modals.modals :as rmodals]
-            [agile-task-tracker.common :as common]
-            [goog.string :as gstring]
             [agile-task-tracker.sidebar :as sidebar]
             [agile-task-tracker.task-ajax :as task-ajax]
-    ;[agile-task-tracker.sprint-ajax :as sprint-ajax]
             [agile-task-tracker.sortable :as sortable]
-            [reagent.session :as session]
-            [clojure.string :as string]))
+            [reagent.session :as session]))
 
 (defn load-tasks []
   (task-ajax/query-active-sprint-tasks (session/get :project-id)))
@@ -36,7 +32,6 @@
             [rmodals/modal-window]
             [refresh-current-tasks-button]
             ]
-           ;portlet stuff
            [:div
             [:div.column {:id "to-do-col"}]]]]]]]
 
@@ -46,7 +41,6 @@
         [:div {:class "panel-body"}
          [:div {:class "panel panel-default"}
           [:div {:class "panel-body"}
-           ;portlet stuff
            [:div
             [:div.column {:id "in-progress-col"}]]]]]]]
 
@@ -56,7 +50,6 @@
         [:div {:class "panel-body"}
          [:div {:class "panel panel-default"}
           [:div {:class "panel-body"}
-           ;portlet stuff
            [:div
             [:div.column {:id "completed-col"}]]]]]]]]]
 

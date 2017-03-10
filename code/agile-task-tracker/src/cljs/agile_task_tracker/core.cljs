@@ -9,7 +9,6 @@
               [agile-task-tracker.views.current-sprint :refer [current-sprint]]
 							[agile-task-tracker.views.sprints :refer [sprints-page]]))
 
-;TODO add history-browser-navigation and # prefix with secretary
 
 ;; -------------------------
 ;; Views

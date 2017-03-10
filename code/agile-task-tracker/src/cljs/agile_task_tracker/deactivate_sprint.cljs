@@ -2,7 +2,6 @@
   (:require [ajax.core :refer [GET POST]]
             [agile-task-tracker.ajax :refer [handler error-handler route-calculator]]
             [agile-task-tracker.sprint-ajax :as sprint-ajax]
-            [agile-task-tracker.task-portlet :as task-portlet]
             [agile-task-tracker.task-ajax :as task-ajax]))
 
 (defn deactivate-task
