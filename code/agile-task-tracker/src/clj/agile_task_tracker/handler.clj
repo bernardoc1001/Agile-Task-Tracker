@@ -152,9 +152,6 @@
                                         (if (> num-of-hits 0)
                                           {:status 200 :body response}
                                           {:status 500 :body response}))))
-           (GET "/sprints/:project-id" [project-id] (do
-                                                      (attes/create-all-indices)
-                                                      (loading-page)))
            (GET "/backlog/:project-id" [project-id] (do
                                                       (attes/create-all-indices)
                                                       (loading-page)))
@@ -217,6 +214,6 @@
                                           {:status 500 :body response}))))
            
            (resources "/")
-           (not-found "Not Found, has it been included in both the handler.clj and core.cljs?")) ;TODO change not found message before demo
+           (not-found "Not Found"))
 
 (def app (wrap-middleware #'routes))

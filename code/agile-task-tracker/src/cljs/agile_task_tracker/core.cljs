@@ -6,8 +6,7 @@
               [agile-task-tracker.views.dashboard :refer [dashboard-page]]
               [agile-task-tracker.views.backlog :refer [backlog]]
 							[agile-task-tracker.views.project :refer [project-page]]
-              [agile-task-tracker.views.current-sprint :refer [current-sprint]]
-							[agile-task-tracker.views.sprints :refer [sprints-page]]))
+              [agile-task-tracker.views.current-sprint :refer [current-sprint]]))
 
 
 (defn current-page []
@@ -31,11 +30,6 @@
                     (session/put! :project-id project-id)
                     (session/put! :current-page #'current-sprint)
                     (session/put! :current-page-name "current-sprint-page"))
-
-(secretary/defroute "/sprints/:project-id" [project-id]
-                    (session/put! :project-id project-id)
-                    (session/put! :current-page #'sprints-page)
-                    (session/put! :current-page-name "sprints-page"))
 
 (defn mount-root []
   (reagent/render [current-page] (.getElementById js/document "app")))

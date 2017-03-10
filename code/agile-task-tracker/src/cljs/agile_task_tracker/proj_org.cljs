@@ -16,4 +16,4 @@
         proj-name (:project-name proj-map)]
 
     [:div {:class "proj-org-pill" :id proj-id}
-     [:a {:href (str "/sprints/" proj-id)} proj-name]]))
+     [:a {:href (str "/backlog/" proj-id)} proj-name]]))
