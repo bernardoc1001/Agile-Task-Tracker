@@ -27,7 +27,8 @@
   :plugins [[lein-environ "1.0.2"]
             [lein-cljsbuild "1.1.1"]
             [lein-asset-minifier "0.2.7"
-             :exclusions [org.clojure/clojure]]]
+             :exclusions [org.clojure/clojure]]
+            [lein-cloverage "1.0.9"]]
 
   :ring {:handler agile-task-tracker.handler/app
          :uberwar-name "agile-task-tracker.war"}

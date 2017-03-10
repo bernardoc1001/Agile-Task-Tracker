@@ -17,5 +17,5 @@
 builds
 .cljs*
 *.log
-/resources/public/js
+/resources/public/js/compiled
 /resources/public/css/site.min.css

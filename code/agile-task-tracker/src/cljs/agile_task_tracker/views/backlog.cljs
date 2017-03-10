@@ -41,8 +41,8 @@
   [task-map]
   (let  [tid-blank? (string/blank? (:task-id task-map))
          name-blank? (string/blank? (:task-title task-map))
-         assign-blank? (string/blank? (:assignees task-map))]
-    (and (not tid-blank?) (not name-blank?) (not assign-blank?))))
+         creator-blank? (string/blank? (:created-by task-map))]
+    (and (not tid-blank?) (not name-blank?) (not creator-blank?))))
 
 
 (defn save-task-procedure
@@ -95,13 +95,13 @@
      [:div {:class "form-group"}
       [:label {:for "created-by"} "Created by: "]
       [:input {:type "text", :class "form-control", :id "Created-by",
-               :placeholder "Enter Creator" :on-change #(common/onclick-swap-atom! new-task [:data :created-by]%)}]]
+               :placeholder "Enter Creator" :on-change #(common/onclick-swap-atom! new-task [:data :created-by]%)}]
+      [:small {:class "form-text text-muted"} "Required"]]
 
      [:div {:class "form-group"}
       [:label {:for "assignees"} "Assignees: "]
       [:input {:type "text", :class "form-control", :id "Assignees",
-               :placeholder "Whoever is assigned to this task" :on-change #(common/onclick-swap-atom! new-task [:data :assignees]%)}]
-      [:small {:class "form-text text-muted"} "Required"]]
+               :placeholder "Whoever is assigned to this task" :on-change #(common/onclick-swap-atom! new-task [:data :assignees]%)}]]
 
      [:div {:class "form-group"}
       [:label {:for "estimated-time"} "Estimated time: "]

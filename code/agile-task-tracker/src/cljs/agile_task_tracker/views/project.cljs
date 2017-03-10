@@ -172,9 +172,9 @@
 			[:div {:class "panel-body"}
 			 [:div {:class "row"}
 				[:div {:class "col-sm-12"}
-				 [:p ""]
-         [refresh-backlog-tasks-button]
+
          [rmodals/modal-window]
 				 [create-proj-button]
+				 [refresh-backlog-tasks-button]
 
 				 [:div#proj-col]]]]]]]])
