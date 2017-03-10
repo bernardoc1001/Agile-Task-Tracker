@@ -13,10 +13,12 @@ put these into practice for their third and fourth year projects.
 
 So, let’s start with some jargon busting for some of the features of this app.
 
+
 **Product backlog:**
 
 This is the list of tasks that are to be completed to bring about the next
 iteration or prototype of the product to be made.
+
 
 **Epic:**  
 A large task that can be further broken up into subtasks. They are often
@@ -24,12 +26,14 @@ compared to stories, which details the requirements of a project. Example,
 “Shopping cart page” can be broken up into subtasks like, “create ui”
 “add/remove items from cart” and so on so forth.
 
+
 **Task:**  
 A task is the smallest unit of a sprint; this is an objective belonging to the
 product backlog that must be completed to advance project development.
 Information concerning a task includes the creator of the task, the people
 assigned to it, the estimation of how long it will take, the current logged
 hours on it, and then the priority of the task.
+
 
 **Sprint:**
 
@@ -54,7 +58,7 @@ Tracker.
 
 ### **The Home page**
 
-![](media/945d496ee42618b795222fa965d7bf1b.png)
+![](http://i.imgur.com/Za33d9E.png)
 
 When you first land on the web app, this is the first page you’ll find, here you
 can manage your “Organisations” which can be viewed as course modules, which in
@@ -69,8 +73,7 @@ you can manage your current projects and add new ones.
 
 ###  **Project page**
 
-![](media/e61124eeb1a6af74375cd178843ee3c0.png)
-
+![](http://i.imgur.com/3aOOlhJ.png)
 From the organisation page, you’ll end up on the projects page, detailing any
 projects associated with the organisation/module. Same as organisation, click
 create project and you’ll be prompted to enter the project-id, name, the number
@@ -84,7 +87,7 @@ where we can start creating tasks.
 
 ### **Product Backlog**
 
-![](media/b2d78e4512a5cce1235e16c6759d1bb6.png)
+![](http://i.imgur.com/HUZBIhF.png)
 
 This is where things start to get a little interesting. On the left side, you
 have your product backlog, which allows you to create new tasks that are added
@@ -105,7 +108,7 @@ are more important than others at a glance. If a task is part of an epic you can
 specify it also, but is not required. Once you are happy with the task info, you
 can hit save. And you should have your very first task.
 
-![](media/790d7a1800d3add0ced00061651cfa3a.png)
+![](http://i.imgur.com/LEnKenK.png)
 
 To review any of the info within the task just click the plus symbol to maximise
 the tasklet. You also have the option to edit any of the info, or delete the
@@ -127,11 +130,11 @@ previous tasks
   
 
 
-![](media/189c8d57460784daa1077a4623478d3e.png)
+![](http://i.imgur.com/2WOHTRl.png)
 
 ### **Current Sprint Page**
 
-![](media/fcd6627e36a8b77dfa4426952b4fa2f0.png)
+![](http://i.imgur.com/A7DFN3C.png)
 
 The sprint page is basically a glorified notice board. You will have the three
 aforementioned columns, “To Do”, “In Progress” and “Completed”. Any tasks you
@@ -148,7 +151,7 @@ time, give a new estimate. This is all a good practice in Agile development.
 Once you have completed a task, move it to the “Completed” column to flag it as
 done on the database.
 
-![](media/f539b1a17881ccac7f9253b0913a903a.png)
+![](http://i.imgur.com/Ki3mh8Z.png)
 
   
 Another good practice is to keep to a sprint’s timeframe. When the deadline has
@@ -159,4 +162,4 @@ sprint column, so you don’t have to remake them, or pull them from your backlo
 again. Now when you start a new sprint, you can assign new tasks along with any
 uncompleted tasks from the previous one.
 
-![](media/cd6b920e12406c5c06789c32e5344a33.png)
+![](http://i.imgur.com/gerCR75.png)
