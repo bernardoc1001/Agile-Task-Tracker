@@ -61,6 +61,7 @@
   (swap! new-task assoc-in [:data :sprint-id] "backlog")
   (swap! new-task assoc-in [:data :priority-level] "Low")
   (swap! new-task assoc-in [:data :project-id] (session/get :project-id))
+  (swap! new-task assoc-in [:data :logged-time] 0)
 
   [:div
    [:div {:class "modal-header"}
@@ -119,13 +120,7 @@
      [:div {:class "form-group"}
       [:label {:for "epic"} "Epic: "]
       [:input {:type "text", :class "form-control", :id "epic",
-               :placeholder "Enter Epic of task" :on-change #(common/onclick-swap-atom! new-task [:data :epic]%)}]]
-
-
-     [:div {:class "form-group"}
-      [:label {:for "logged-time"} "Logged-time: "]
-      [:input {:type "text", :class "form-control", :id "Logged-time",
-               :placeholder "Enter logged time on task" :on-change #(common/onclick-swap-atom! new-task [:data :logged-time]%)}]]]]
+               :placeholder "Enter Epic of task" :on-change #(common/onclick-swap-atom! new-task [:data :epic]%)}]]]]
 
 
     [:div {:class "modal-footer"}
