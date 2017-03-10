@@ -53,12 +53,13 @@
   (.log js/console (str "query-active-sprint-tasks-handler response: " response))
   (let [hits-vector (get-in response [:hits :hits])]
     (if (not (empty? hits-vector))
-      (doseq [hit hits-vector]
-        ;deactivate the tasks
-        (deactivate-tasks-by-sprint-id (get-in hit [:_source :sprint-id]))
+      (do (doseq [hit hits-vector]
+            ;deactivate the tasks
+            (deactivate-tasks-by-sprint-id (get-in hit [:_source :sprint-id]))
 
-        ;deactivate the sprint
-        (sprint-ajax/put-sprint-by-id (deactivate-sprint (:_source hit)))))))
+            ;deactivate the sprint
+            (sprint-ajax/put-sprint-by-id (deactivate-sprint (:_source hit))))
+          (js/alert "Sprint Ended")))))
 
 (defn deactivate-sprints-error-handler
   [response]
