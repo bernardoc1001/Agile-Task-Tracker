@@ -69,11 +69,11 @@
                          :logged-time 3
                          :project-id "pro-id-1"}
 
-        nil-assignees {:task-id "task-id-1"
+        nil-created-by {:task-id "task-id-1"
                         :task-title "task title 1"
                         :description "This is a description"
-                        :created-by "Ben"
-                        :assignees nil
+                        :created-by nil
+                        :assignees "John"
                         :estimated-time 5
                         :epic "First Epic"
                         :sprint-id "sprint-id-1"
@@ -90,7 +90,7 @@
       (testing "...with required field as all whitespaces"
         (is (= false (backlog/validate-task whitespace-title))))
       (testing "...with required field as nil"
-        (is (= false (backlog/validate-task nil-assignees)))))))
+        (is (= false (backlog/validate-task nil-created-by)))))))
 
 
 (deftest test-update-unassociated-task
