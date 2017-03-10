@@ -141,7 +141,6 @@
 
 
 (defn dashboard-page []
-  (load-orgs)
   [:div
    [:div#wrapper
     [sidebar/sidebar]
@@ -159,5 +158,12 @@
          [create-org-button]
          [refresh-organisations-button]
          [:div#org-col]]]]]]]])
+
+(defn dashboard-did-mount []
+  (load-orgs))
+
+(defn dashboard []
+  (r/create-class {:reagent-render      dashboard-page
+                   :component-did-mount dashboard-did-mount}))
 
 

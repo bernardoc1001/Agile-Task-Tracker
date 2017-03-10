@@ -48,7 +48,6 @@
 
 (defn save-task-procedure
   "Posts task info if true, alerts user if false"
-  ;TODO deactivate old sprints when creating new sprint
   [task-map]
   (if (validate-task task-map)
     (if (task-id-contains-white-space task-map)
@@ -56,8 +55,7 @@
       (task-ajax/put-task-by-id task-map))
     (js/alert "Please fill out required details")))
 
-
-;TODO validate times.
+.
 (defn modal-task-creation-content []
   (swap! new-task assoc-in [:data :sprint-id] "backlog")
   (swap! new-task assoc-in [:data :priority-level] "Low")
@@ -75,7 +73,6 @@
           :id "task-modal-title"}
      "Create a task"]]
    [:div {:class "modal-body"}
-    ;TODO remove white space from id
     [:form
      [:div {:class "form-group"}
       [:label {:for "task-id-form"} "Task ID: "]
@@ -142,7 +139,6 @@
    "Create Task"])
 
 
-;-----------------------------------------------------------------------------------------------------
 (defn update-unassociated-task
   [string-map]
   (hash-map :task-id (:task-id string-map)
@@ -238,77 +234,8 @@
                           :on-click     #(deactivate-sprint/deactivate-sprints (session/get :project-id))}
     "End Sprint"]])
 
-;;-------------------------------------------------------------------------------------------------------------------
 
-;;----------------Get doc by ID example -------------------------------------------
-
-(defn modal-get-task-by-id []
-  [:div
-   [:div {:class "modal-header"}
-    [:button {:type         "button"
-              :class        "close"
-              :data-dismiss "modal"
-              :aria-label   "Close"}
-     [:span {:aria-hidden "true"} (gstring/unescapeEntities "&times;")]]
-    [:h4 {:class "modal-title"
-          :id    "get-task-modal-title"}
-     "Get a task"]]
-   [:div {:class "modal-body"}
-
-    [:div [common/atom-input-field "Task ID: " new-task [:data :task-id]]]
-
-    [:div {:class "modal-footer"}
-     [:div.btn.btn-secondary {:type         "button"
-                              :data-dismiss "modal"}
-      "Close"]
-     [:div.btn.btn-primary {:type         "button"
-                            :data-dismiss "modal"
-                            :on-click     #(task-ajax/get-task-by-id (get-in @new-task [:data :task-id]))}
-      "Get Task"]]]])
-
-(defn get-task-button []
-  [:div.btn.btn-primary.btn-backlog-col
-   {:on-click #(rmodals/modal! [modal-get-task-by-id]
-                               {:show (reset! new-task {})})}
-   "Get Task By ID"])
-;--------------------------------------------------------------------------------------
-
-
-
-(defn modal-query-tasks-by-sprint []
-  [:div
-   [:div {:class "modal-header"}
-    [:button {:type "button"
-              :class "close"
-              :data-dismiss "modal"
-              :aria-label "Close"}
-     [:span {:aria-hidden "true"} (gstring/unescapeEntities "&times;")]]
-    [:h4 {:class "modal-title"
-          :id "query-modal-title"}
-     "Query A Sprint"]]
-   [:div {:class "modal-body"}
-
-    [:div [common/atom-input-field "Sprint ID: " new-task [:data :sprint-id]]]
-
-    [:div {:class "modal-footer"}
-     [:div.btn.btn-secondary {:type         "button"
-                              :data-dismiss "modal"}
-      "Close"]
-     [:div.btn.btn-primary {:type         "button"
-                            :data-dismiss "modal"
-                            :on-click     #(task-ajax/query-tasks-by-sprint-id (get-in @new-task [:data :sprint-id]))}
-      "Query"]]]])
-
-(defn query-tasks-button []
-  [:div.btn.btn-primary.btn-backlog-col
-   {:on-click #(rmodals/modal! [modal-query-tasks-by-sprint]
-                               {:show (reset! new-task {})})}
-   "Query By Sprint"])
-
-
-;--------------------Backlog Page----------------------------------------------------------
 (defn backlog-page []
-  (load-tasks)
   [:div
    [:div#wrapper
     [sidebar/sidebar]
@@ -324,12 +251,6 @@
            [:div
             [rmodals/modal-window]
             [create-task-button]
-
-            ;----------temporary examples-----------------------------
-
-            [get-task-button]
-            [query-tasks-button]
-            ;---------------------------------------------------------
             [refresh-backlog-tasks-button]
 
             ]
@@ -357,14 +278,12 @@
 
 
 
-     [sidebar/menu-toggle]
-     ;TODO ask Renaat about debug info
-     [:p (str "new-task: " @new-task)]
-     [:p (str "new-sprint: " @new-sprint)]]])
+     [sidebar/menu-toggle]]])
 
 
 
 (defn backlog-did-mount []
+  (load-tasks)
   (sortable/sortable-column))
 
 (defn backlog []

@@ -149,7 +149,6 @@
 	 "Create Project"])
 
 (defn project-page []
-  (load-projects)
   [:div
 	 [:div#wrapper
 		[sidebar/sidebar]
@@ -169,3 +168,11 @@
 				 [refresh-backlog-tasks-button]
 
 				 [:div#proj-col]]]]]]]])
+
+
+(defn project-did-mount []
+  (load-projects))
+
+(defn project []
+  (r/create-class {:reagent-render      project-page
+                   :component-did-mount project-did-mount}))

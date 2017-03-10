@@ -15,7 +15,6 @@
    "Refresh Tasks"])
 
 (defn current-sprint-page []
-  (load-tasks)
   [:div
    [:div#wrapper
     [sidebar/sidebar]
@@ -58,6 +57,7 @@
     [sidebar/menu-toggle]]])
 
 (defn current-sprint-did-mount []
+  (load-tasks)
   (sortable/sortable-column))
 
 (defn current-sprint []

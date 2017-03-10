@@ -3,9 +3,9 @@
               [reagent.session :as session]
               [secretary.core :as secretary :include-macros true]
               [accountant.core :as accountant]
-              [agile-task-tracker.views.dashboard :refer [dashboard-page]]
+              [agile-task-tracker.views.dashboard :refer [dashboard]]
               [agile-task-tracker.views.backlog :refer [backlog]]
-							[agile-task-tracker.views.project :refer [project-page]]
+							[agile-task-tracker.views.project :refer [project]]
               [agile-task-tracker.views.current-sprint :refer [current-sprint]]))
 
 
@@ -13,12 +13,12 @@
   [:div [(session/get :current-page)]])
 
 (secretary/defroute "/" []
-                    (session/put! :current-page #'dashboard-page)
+                    (session/put! :current-page #'dashboard)
                     (session/put! :current-page-name "dashboard-page"))
 
 (secretary/defroute "/project/:organisation-id" [organisation-id]
                     (session/put! :organisation-id organisation-id)
-                    (session/put! :current-page #'project-page)
+                    (session/put! :current-page #'project)
                     (session/put! :current-page-name "project-page"))
 
 (secretary/defroute "/backlog/:project-id" [project-id]
