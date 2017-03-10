@@ -149,14 +149,14 @@
       [:label {:for "created-by"} "Created by: "]
       [:input {:type "text", :class "form-control", :id "Created-by",
                :default-Value (get-in @edit-task [:data :created-by]),
-               :placeholder "Enter Creator" :on-change #(common/onclick-swap-atom! edit-task [:data :created-by] %)}]]
+               :placeholder "Enter Creator" :on-change #(common/onclick-swap-atom! edit-task [:data :created-by] %)}]
+      [:small {:class "form-text text-muted"} "Required"]]
 
      [:div {:class "form-group"}
       [:label {:for "assignees"} "Assignees: "]
       [:input {:type "text", :class "form-control", :id "Assignees",
                :default-Value (get-in @edit-task [:data :assignees]),
-               :placeholder "Whoever is assigned to this task" :on-change #(common/onclick-swap-atom! edit-task [:data :assignees] %)}]
-      [:small {:class "form-text text-muted"} "Required"]]
+               :placeholder "Whoever is assigned to this task" :on-change #(common/onclick-swap-atom! edit-task [:data :assignees] %)}]]
 
      [:div {:class "form-group"}
       [:label {:for "estimated-time"} "Estimated time: "]

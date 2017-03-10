@@ -130,6 +130,9 @@ body {
  display: block;
  margin: 1px;
 }
+.btn-primary {
+ margin-right: 5px;
+}
 
 .btn-tasklet {
  display: inline-block;

@@ -156,9 +156,9 @@
       [:div {:class "panel-body"}
        [:div {:class "row"}
         [:div {:class "col-sm-12"}
-         [refresh-organisations-button]
          [rmodals/modal-window]
          [create-org-button]
+         [refresh-organisations-button]
          [:div#org-col]]]]]]]])
 
 
