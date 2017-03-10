@@ -152,11 +152,9 @@
   [:div
 	 [:div#wrapper
 		[sidebar/sidebar]
-
+    [:div {:class "jumbotron"}
+     [:h2 "Projects"]]
 		[:div.page-content-wrapper>div.container-fluid>div.row>div.col-xs-12
-		 [sidebar/menu-toggle]
-		 [:p (str "page-state: " @page-state)]
-		 [:p (str "new-proj: " @new-proj)]
 		 [:div {:class "panel panel-default"}
 			[:div {:class "panel-heading"} "Projects"]
 			[:div {:class "panel-body"}

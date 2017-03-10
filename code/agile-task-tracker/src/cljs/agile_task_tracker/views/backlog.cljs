@@ -13,8 +13,6 @@
             [reagent.session :as session]
             [clojure.string :as string]))
 
-;TODO rename atoms. This isn't turning yellow. THE SKY IS FALLING. Wait
-; nevermind there we go
 (defonce new-task
          (r/atom {:data {}}))
 
@@ -239,7 +237,8 @@
   [:div
    [:div#wrapper
     [sidebar/sidebar]
-
+    [:div {:class "jumbotron"}
+     [:h2 "Backlog"]]
     [:div.page-content-wrapper>div.container>div.row>div.col-lg-12
      [:div {:class "row"}
       [:div {:class "col-sm-4"}
@@ -251,13 +250,10 @@
            [:div
             [rmodals/modal-window]
             [create-task-button]
-            [refresh-backlog-tasks-button]
-
-            ]
+            [refresh-backlog-tasks-button]]
            ;portlet stuff
            [:div
             [:div.column {:id "backlog-col"}]]]]]]]
-
 
       [:div {:class "col-sm-8"}
        [:div {:class "panel panel-default"}
@@ -274,11 +270,7 @@
           [:div {:class "panel panel-default"}
            [:div {:class "panel-body"}
             [:div
-             [sprint-creation-content]]]]]]]]]]
-
-
-
-     [sidebar/menu-toggle]]])
+             [sprint-creation-content]]]]]]]]]]]])
 
 
 

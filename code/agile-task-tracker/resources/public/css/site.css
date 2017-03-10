@@ -50,6 +50,13 @@ img {
  padding: 2px;
 }
 
+.jumbotron h2{
+    margin-left: 5px;
+}
+
+.jumbotron .btn.default{
+    display: inline;
+}
 
 
 /* Portlet stuff */
