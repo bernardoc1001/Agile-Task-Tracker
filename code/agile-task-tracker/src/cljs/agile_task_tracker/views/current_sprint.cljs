@@ -18,7 +18,8 @@
   [:div
    [:div#wrapper
     [sidebar/sidebar]
-
+    [:div {:class "jumbotron"}
+     [:h2 "Current Sprint"]]
     [:div.page-content-wrapper>div.container>div.row>div.col-lg-12
      [:div {:class "row"}
       [:div {:class "col-sm-4"}
@@ -29,8 +30,7 @@
           [:div {:class "panel-body"}
            [:div
             [rmodals/modal-window]
-            [refresh-current-tasks-button]
-            ]
+            [refresh-current-tasks-button]]
            [:div
             [:div.column {:id "to-do-col"}]]]]]]]
 
@@ -50,11 +50,7 @@
          [:div {:class "panel panel-default"}
           [:div {:class "panel-body"}
            [:div
-            [:div.column {:id "completed-col"}]]]]]]]]]
-
-
-
-    [sidebar/menu-toggle]]])
+            [:div.column {:id "completed-col"}]]]]]]]]]]])
 
 (defn current-sprint-did-mount []
   (load-tasks)

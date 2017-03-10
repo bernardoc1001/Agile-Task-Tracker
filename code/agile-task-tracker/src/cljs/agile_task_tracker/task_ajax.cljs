@@ -22,7 +22,6 @@
   [response]
   (.log js/console (str "put-task-handler response: " response))
   ;task will be rendered in the get response handler
-  ;TODO calculate the route here for get-task-by-id
   (get-task-by-id (:_id response)))
 
 (defn put-task-by-id
