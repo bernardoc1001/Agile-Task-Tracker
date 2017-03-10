@@ -27,7 +27,12 @@ Elastisch - This is a clojure client for Elasticsearch
 **2. System Architecture**
 --------------------------
 
-![](media/8323e2f2996ba3aa4507abdf8eb33f87.png)
+![](http://i.imgur.com/C0d31gw.png)
+
+
+
+
+
 
 Here you can see the architecture of our system. The frontend is all written in
 Clojurescript.
@@ -80,7 +85,9 @@ interacting with.
 **High Level Design**
 ---------------------
 
-![](media/38f10991a8d6f1fd1ffc69637c141b68.png)
+![](http://i.imgur.com/4DylnuA.png)
+
+
 
 **4. Problems and Resolution**
 ------------------------------
