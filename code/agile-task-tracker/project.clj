@@ -42,7 +42,10 @@
   :clean-targets ^{:protect false}
   [:target-path
    [:cljsbuild :builds :app :compiler :output-dir]
-   [:cljsbuild :builds :app :compiler :output-to]]
+   [:cljsbuild :builds :app :compiler :output-to]
+   [:cljsbuild :builds :test :compiler :output-to]          ;I added these two
+   [:cljsbuild :builds :test :compiler :output-to]          ;I added these two
+   ]
 
   :source-paths ["src/clj" "src/cljc"]
   :resource-paths ["resources" "target/cljsbuild"]
@@ -76,10 +79,9 @@
                         :asset-path "/js/out"
                         :output-to "target/test.js"
                         :output-dir "target/cljstest/public/js/out"
-                        :optimizations :whitespace
+                        :externs ["resources/public/js/includes/externs.js"]
+                        :optimizations :simple
                         :pretty-print true}}
-
-
             }
    }
 

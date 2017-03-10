@@ -33,7 +33,8 @@
    {:on-click #(load-tasks)}
    "Refresh Tasks"])
 
-(defn task-id-contains-white-space [task-map]
+(defn task-id-contains-white-space
+  [task-map]
   (boolean (re-find #" " (:task-id task-map))))
 
 (defn validate-task
