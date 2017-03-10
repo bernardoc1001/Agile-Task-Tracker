@@ -32,7 +32,7 @@
                       :epic "First Epic"
                       :sprint-id "backlog"
                       :priority-level "medium"
-                      :task-state "to-do-col"
+                      :task-state "create-sprint-col"
                       :logged-time 3
                       :project-id "pro-id-1"}]
     (is (= expected-out (deactivate-sprint/deactivate-task valid-task)))))
