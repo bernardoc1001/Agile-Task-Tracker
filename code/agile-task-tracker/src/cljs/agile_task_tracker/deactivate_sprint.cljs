@@ -15,7 +15,12 @@
             :epic (:epic task-map)
             :sprint-id "backlog"
             :priority-level (:priority-level task-map)
-            :task-state (:task-state task-map)
+            :task-state (cond
+                          (= "completed-col" (:task-state task-map))
+                          (:task-state task-map)
+
+                          :else
+                          "create-sprint-col")                             
             :logged-time (js/parseFloat (:logged-time task-map))
             :project-id (:project-id task-map)))
 
