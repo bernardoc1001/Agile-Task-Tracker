@@ -1,6 +1,11 @@
-# agile-task-tracker
+# Agile Task Tracker
+The system, written in Clojure(Script), is a RESTful web-application
+designed to assist in the tracking of tasks in an Agile Software Development
+Environment, based on a SCRUM like approach.
 
-A [reagent](https://github.com/reagent-project/reagent) application designed to ... well, that part is up to you.
+See the technical specification in the technical manual for an
+installation guide.
+
 
 ## Development Mode
 

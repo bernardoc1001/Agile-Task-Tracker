@@ -53,9 +53,7 @@
   [response]
   (.log js/console (str "query-active-sprint-tasks-handler response: " response))
   (if (= 1 (get-in response [:hits :total]))
-    (query-tasks-by-sprint-id (get-in (first (get-in response [:hits :hits])) [:_source :sprint-id]))
-    ;TODO how to set some sort of active sprint flag for edits
-    ))
+    (query-tasks-by-sprint-id (get-in (first (get-in response [:hits :hits])) [:_source :sprint-id]))))
 
 (defn active-sprint-tasks-error-handler
   [response]

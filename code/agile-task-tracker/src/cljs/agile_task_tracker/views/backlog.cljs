@@ -182,7 +182,6 @@
 
 (defn save-sprint-procedure
   "Posts sprint info if true, alerts user if false"
-  ;TODO deactivate old sprints when creating new sprint
   [sprint-map]
   (if (validate-sprint sprint-map)
     (if (sprint-id-contains-white-space sprint-map)
